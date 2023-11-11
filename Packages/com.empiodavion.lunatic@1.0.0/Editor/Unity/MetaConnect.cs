@@ -9,9 +9,10 @@ public class MetaConnect : EditorWindow
 	public bool copyDLLs = true;
 	public bool copyAssets = true;
 
-	public string RippedDataPath;
-	public string LunacidPath;
-	public string LunaticPath;
+	public static string RippedDataPath;
+	public static string LunacidPath;
+	public static string LunacidDataPath;
+	public static string LunaticPath;
 
 	public MetaConnections meta;
 
@@ -30,7 +31,8 @@ public class MetaConnect : EditorWindow
 	{
 		PackageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(MetaConnect).Assembly);
 		RippedDataPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\GameAssets\\LUNACID\\ExportedProject\\Assets\\";
-		LunacidPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\..\\\\LUNACID_Data\\Managed\\";
+		LunacidPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\..\\\\LUNACID.exe";
+		LunacidDataPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\..\\\\LUNACID_Data\\Managed\\";
 		LunaticPath = $"{PackageInfo.resolvedPath}\\";
 
 		if (meta == null)
@@ -119,16 +121,16 @@ public class MetaConnect : EditorWindow
 				LunaticPath = folder;
 			}
 
-			if (!Directory.Exists(LunacidPath))
+			if (!File.Exists(LunacidPath))
 			{
-				string file = EditorUtility.OpenFolderPanel("LUNACID.exe File", LunacidPath, "LUNACID.exe");
+				LunacidPath = EditorUtility.OpenFilePanel("LUNACID.exe File", LunacidDataPath, "exe");
 
-				if (string.IsNullOrEmpty(file))
+				if (string.IsNullOrEmpty(LunacidPath))
 					return;
-
-				LunacidPath = Path.GetDirectoryName(file);
-				LunacidPath = Path.Combine(LunacidPath, "\\LUNACID_Data\\Managed\\");
 			}
+
+			LunacidDataPath = Path.GetDirectoryName(LunacidPath);
+			LunacidDataPath = Path.Combine(LunacidDataPath, "\\LUNACID_Data\\Managed\\");
 
 			if (copyDLLs)
 			{
@@ -197,7 +199,7 @@ public class MetaConnect : EditorWindow
 		Directory.CreateDirectory(dest);
 		dest = Path.Combine(dest, $"{dllName}.dll");
 
-		File.Copy(Path.Combine(LunacidPath, $"{dllName}.dll"), dest, true);
+		File.Copy(Path.Combine(LunacidDataPath, $"{dllName}.dll"), dest, true);
 	}
 
 	private void CopyAssetDirectory(string dirName)
