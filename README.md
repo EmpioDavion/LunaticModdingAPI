@@ -45,7 +45,7 @@ Clicking on the button for your script class will instantiate a prefab or asset 
 ![Script class prefab](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/Step6.png "Script class prefab")
 
 
-NPCs created are based off Demi's GameObject in the HUB_01 scene (Wing's Rest).
+NPCs created are based off a copy of Demi's GameObject in the HUB_01 scene (Wing's Rest).
 
 Weapons created are based off a copy of the "Lunacid/Resources/weps/HERITAGE SWORD" prefab.
 
