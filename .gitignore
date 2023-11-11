@@ -1,0 +1,8 @@
+.vs/*
+Library/*
+Logs/*
+obj/*
+Temp/*
+Packages/com.empiodavion.lunatic*/Plugins*
+Packages/com.empiodavion.lunatic*/Lunacid*
+Assets/AssetBundles*

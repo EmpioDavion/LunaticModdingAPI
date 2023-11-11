@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb8fed9b469ef0b47b240760bb3b5206, type: 3}
+  m_Name: Meta Connections
+  m_EditorClassIdentifier: 
+  connections:
+  - lunacidScript: AREA_SAVED_ITEM
+    lunaticScript: ModNPC
+  - lunacidScript: Magic_scr
+    lunaticScript: ModMagic
+  - lunacidScript: Useable_Item
+    lunaticScript: ModItem
+  - lunacidScript: Head_Track
+    lunaticScript: ModHeadTrack
+  - lunacidScript: Spawn_Class_Item
+    lunaticScript: ModSpawnClassItem
+  - lunacidScript: Act_other_scr
+    lunaticScript: ModSimpleActivator
+  - lunacidScript: Random_Anim_list_scr
+    lunaticScript: ModRandomAnimList
+  - lunacidScript: Random_Snd_scr
+    lunaticScript: ModRandomSound
+  - lunacidScript: Kill_Other
+    lunaticScript: ModKillOther
+  - lunacidScript: AREA_ITEM_ACT
+    lunaticScript: ModActivator
+  - lunacidScript: ACT_RAND
+    lunaticScript: ModRandomActivator
+  - lunacidScript: weapon_scr
+    lunaticScript: ModWeapon
+  - lunacidScript: Play_Anim
+    lunaticScript: ModPlayAnim
+  - lunacidScript: NPC_Play_Music
+    lunaticScript: ModNPCPlayMusic
+  - lunacidScript: Item_Pickup_scr
+    lunaticScript: ModItemPickup
+  - lunacidScript: Dialog
+    lunaticScript: ModDialog
+  - lunacidScript: Break_from_parent
+    lunaticScript: ModBreakFromParent
+  - lunacidScript: AI_simple
+    lunaticScript: ModSimpleAI
+  - lunacidScript: Auto_Kill
+    lunaticScript: ModAutoKill
+  - lunacidScript: Loot_scr
+    lunaticScript: ModLoot
+  - lunacidScript: NPC_Scaling
+    lunaticScript: ModNPCScaling
+  - lunacidScript: AI_feet
+    lunaticScript: ModAIFeet
+  - lunacidScript: Spawn_on_enable
+    lunaticScript: ModSpawnOnEnable
+  - lunacidScript: OBJ_Health
+    lunaticScript: ModObjectHealth
+  - lunacidScript: DynamicBone
+    lunaticScript: ModDynamicBone
+  - lunacidScript: Shake_OnEnable
+    lunaticScript: ModShakeOnEnable
+  - lunacidScript: Damage_Trigger
+    lunaticScript: ModDamageTrigger
+  - lunacidScript: Idle_Sounds
+    lunaticScript: ModIdleSounds
+  - lunacidScript: HuntPOS_Place
+    lunaticScript: ModHuntPOSPlace
+  - lunacidScript: Rotate_Constant
+    lunaticScript: ModRotateConstant
+  - lunacidScript: FULL_bill_scr
+    lunaticScript: ModFullBill
+  - lunacidScript: Status_effect
+    lunaticScript: ModStatusEffect
+  - lunacidScript: Material_Flash
+    lunaticScript: ModMaterialFlash
+  - lunacidScript: Lerp_effect
+    lunaticScript: ModLerpEffect
+  - lunacidScript: Mid_Attack_Stat
+    lunaticScript: ModMidAttackStat
+  - lunacidScript: MoonHeal
+    lunaticScript: ModMoonHeal
+  - lunacidScript: Blink_scr
+    lunaticScript: ModBlink
+  - lunacidScript: LunacyGain
+    lunaticScript: ModLunacyGain
+  - lunacidScript: Wiggle_scr
+    lunaticScript: ModWiggle
+  - lunacidScript: AlertOther
+    lunaticScript: ModAlertOther
+  - lunacidScript: Anim_Speed
+    lunaticScript: ModAnimSpeed
+  - lunacidScript: Bill_scr
+    lunaticScript: ModBill
+  - lunacidScript: DynamicBoneCollider
+    lunaticScript: ModDynamicBoneCollider
+  - lunacidScript: Material_Effect
+    lunaticScript: ModMaterialEffect
+  - lunacidScript: LVG_obj
+    lunaticScript: ModLivingObject
+  - lunacidScript: BloodTrigger
+    lunaticScript: ModBloodTrigger
+  - lunacidScript: Money_Damage
+    lunaticScript: ModMoneyDamage
+  - lunacidScript: Act_Button_scr
+    lunaticScript: ModProximityActivator
+  - lunacidScript: Alert_Trig
+    lunaticScript: ModAlertTrigger
+  - lunacidScript: Anim_Die_scr
+    lunaticScript: ModDeathAnimation
+  - lunacidScript: rename
+    lunaticScript: ModRename
+  - lunacidScript: AI_adjust_move
+    lunaticScript: ModAIAdjustBehaviour
+  - lunacidScript: DynamicBonePlaneCollider
+    lunaticScript: ModDynamicBonePlaneCollider
+  - lunacidScript: RAND_scale
+    lunaticScript: ModRandomScale
+  - lunacidScript: Ghost_Disapper
+    lunaticScript: ModGhostDisappear
+  - lunacidScript: AI_Use_Move
+    lunaticScript: ModAIUseBehaviour
+  - lunacidScript: Set_Other_Scale
+    lunaticScript: ModChangeScale
+  - lunacidScript: Audio_fade_in
+    lunaticScript: ModAudioFadeIn
+  - lunacidScript: Anim_Order
+    lunaticScript: ModPlayAnimsInOrder

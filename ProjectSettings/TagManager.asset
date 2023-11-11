@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - AHH
+  - WOOD
+  - STONE
+  - METAL
+  - FLESH
+  - DIRT
+  - WATER
+  - INVISIBLE
+  - ASH
+  - GHOST
+  - FIRE
+  - MAGIC
+  - PAPER
+  - SNAIL
+  - DEAD
+  - SLIME
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - PostProcessing
+  - Weapon
+  - Player
+  - NPC
+  - Volumes
+  - Zone
+  - NPC_ATTACK
+  - ACT_TRIG
+  - Default_No_Same
+  - Hide
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: HUD
+    uniqueID: 2436853123
+    locked: 0

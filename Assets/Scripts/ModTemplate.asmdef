@@ -1,0 +1,20 @@
+{
+    "name": "ModTemplate",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8e9d72a06be6f484f88e6ba1073dff9e"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone32",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
