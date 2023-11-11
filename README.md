@@ -51,7 +51,7 @@ Weapons created are based off a copy of the "Lunacid/Resources/weps/HERITAGE SWO
 
 Magics created are based off a copy of the "Lunacid/Resources/magic/FLAME FLARE" prefab.
 
-Items create are based off a copy of the "Lunacid/Resources/items/Crystal Shard" prefab.
+Items created are based off a copy of the "Lunacid/Resources/items/Crystal Shard" prefab.
 
 
 I recommend **creating new scripts derived from Lunatic scripts**, rather than using Lunatic's Mod### scripts directly.
