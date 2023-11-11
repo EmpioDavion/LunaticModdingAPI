@@ -4,7 +4,7 @@ The mod template project has all layers, sorting layers and tags set up to match
 
 Lunatic relies on [BepInEx](https://github.com/BepInEx/BepInEx/) for loading your script dlls at runtime.
 
-Install it into your Lunacid game directory.
+Install BepInEx into your Lunacid game directory.
 
 
 Before starting modding, you'll want to download and run [AssetRipper](https://github.com/AssetRipper/AssetRipper) on the Lunacid game directory.
