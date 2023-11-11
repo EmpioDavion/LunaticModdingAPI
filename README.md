@@ -63,6 +63,10 @@ This may still happen due to some prefabs targeting Lunatic scripts, since I don
 I will have to investigate retargeting scripts in prefabs.
 
 
-Once you are ready to package your mod, you can do so by going to "Assets/Build Mod". This will build your asset bundles and copy your mod dlls into LunaticModTemplate/Build folder.
+Once you are ready to package your mod, you can do so by going to "Assets/Build Mod". This will build your asset bundles and copy your mod dll(s) into "LunaticModTemplate/Build" folder.
 
-Copy these files into your "Lunacid/BepInEx/plugins" folder, and then launch Lunacid normally.
+You can also run "Asset/Build Mod and Deploy" to have your mod files automatically copied into the "Lunacid/BepInEx/plugins" folder.
+
+This will also copy the Lunatic dlls to the "Lunacid/BepInEx/plugins" folder.
+
+Launching Lunacid normally should have BepInEx run and load your mod dll(s).
