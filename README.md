@@ -2,10 +2,16 @@
 Lunatic is a modding API for the Unity game Lunacid. This is the mod template Unity project that includes the Lunatic scripts.
 The mod template project has all layers, sorting layers and tags set up to match the game, and contains prefabs for quick mod asset creation.
 
+
+## BepInEx
+
 Lunatic relies on [BepInEx](https://github.com/BepInEx/BepInEx/) for loading your script dlls at runtime.
 
-Install it into your Lunacid game directory.
+Install BepInEx into your Lunacid game directory.
 
+
+
+## AssetRipper
 
 Before starting modding, you'll want to download and run [AssetRipper](https://github.com/AssetRipper/AssetRipper) on the Lunacid game directory.
 
@@ -15,6 +21,9 @@ I recommend pointing AssetRipper to the LUNACID_Data folder with "File/Open Fold
 
 ![AssetRipper](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/Step1.png "AssetRipper")
 
+
+
+## Meta Connect
 
 When you first open the mod template project, you'll have a few errors pop up. This is because Lunacid game assets are not packaged with the mod template.
 
@@ -34,6 +43,10 @@ This will also automatically replace Lunacid game scripts on Lunacid prefabs wit
 
 The main reason for this is that prefabs and GameObjects that contain a Component class from a dll will become missing scripts on reload.
 
+
+
+## Mod Asset Tool
+
 After creating your mod scripts, you can create prefabs and assets using them with the Mod Asset Tool by going to "Window/Mod Asset Tool" in the top menu.
 
 Clicking the tabs at the top of the Mod Asset Tool window will change between categories of assets and scripts.
@@ -45,14 +58,20 @@ Clicking on the button for your script class will instantiate a prefab or asset 
 ![Script class prefab](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/Step6.png "Script class prefab")
 
 
-NPCs created are based off Demi's GameObject in the HUB_01 scene (Wing's Rest).
+
+## Prefab Bases
+
+NPCs created are based off a copy of Demi's GameObject in the HUB_01 scene (Wing's Rest).
 
 Weapons created are based off a copy of the "Lunacid/Resources/weps/HERITAGE SWORD" prefab.
 
 Magics created are based off a copy of the "Lunacid/Resources/magic/FLAME FLARE" prefab.
 
-Items create are based off a copy of the "Lunacid/Resources/items/Crystal Shard" prefab.
+Items created are based off a copy of the "Lunacid/Resources/items/Crystal Shard" prefab.
 
+
+
+## Scripting Notes
 
 I recommend **creating new scripts derived from Lunatic scripts**, rather than using Lunatic's Mod### scripts directly.
 
@@ -63,10 +82,15 @@ This may still happen due to some prefabs targeting Lunatic scripts, since I don
 I will have to investigate retargeting scripts in prefabs.
 
 
+
+## Packaging Your Mod
+
+You can rename your mod by changing the product name in "Edit/Player Settings".
+
 Once you are ready to package your mod, you can do so by going to "Assets/Build Mod". This will build your asset bundles and copy your mod dll(s) into "LunaticModTemplate/Build" folder.
 
-You can also run "Asset/Build Mod and Deploy" to have your mod files automatically copied into the "Lunacid/BepInEx/plugins" folder.
+You can also run "Asset/Build Mod and Deploy" to have your mod files automatically copied into the "Lunacid/BepInEx/plugins/ProductName" folder.
 
-This will also copy the Lunatic dlls to the "Lunacid/BepInEx/plugins" folder.
+This will also copy the Lunatic dlls to the "Lunacid/BepInEx/plugins/Lunatic" folder.
 
 Launching Lunacid normally should have BepInEx run and load your mod dll(s).
