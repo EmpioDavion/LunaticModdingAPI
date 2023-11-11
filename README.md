@@ -50,6 +50,10 @@ Magics created are based off a copy of the "Lunacid/Resources/magic/FLAME FLARE"
 Items create are based off a copy of the "Lunacid/Resources/items/Crystal Shard" prefab.
 
 
-I recommend creating new scripts derived from Lunatic scripts, rather than using Lunatic's Mod* scripts directly.
+I recommend **creating new scripts derived from Lunatic scripts**, rather than using Lunatic's Mod### scripts directly.
 
-The reason for this is that attempting to update your mod with new content in future Lunacid updates may cause your prefabs to break due to different meta file GUIDs from a fresh AssetRipper export.
+The reason for this is that attempting to update your mod with new content in future Lunacid updates **may cause your prefabs to break** due to different meta file GUIDs from a fresh AssetRipper export.
+
+This may still happen due to some prefabs targeting Lunatic scripts, since I don't expect people to derive from and reassign every script.
+
+I will have to investigate retargeting scripts in prefabs.
