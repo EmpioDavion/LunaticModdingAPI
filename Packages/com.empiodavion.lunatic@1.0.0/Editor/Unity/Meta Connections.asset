@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connections:
   - lunacidScript: AREA_SAVED_ITEM
-    lunaticScript: ModNPC
+    lunaticScript: ModMultipleStates
   - lunacidScript: Magic_scr
     lunaticScript: ModMagic
   - lunacidScript: Useable_Item

@@ -154,7 +154,7 @@ public static class Lunatic
 		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
 
-		string lang = {PlayerPrefs.GetString("LANG", "ENG")}";
+		string lang = PlayerPrefs.GetString("LANG", "ENG");
 		TextAsset materialTxt = Resources.Load<TextAsset>($"txt/{lang}/MATERIALS");
 #endif
 

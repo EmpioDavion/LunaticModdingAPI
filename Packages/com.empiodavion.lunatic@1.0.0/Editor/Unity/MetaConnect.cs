@@ -28,14 +28,14 @@ public class MetaConnect : EditorWindow
 
 	private void OnEnable()
 	{
-		PackageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(Lunatic).Assembly);
+		PackageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(MetaConnect).Assembly);
 		RippedDataPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\GameAssets\\LUNACID\\ExportedProject\\Assets\\";
 		LunacidPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\..\\\\LUNACID_Data\\Managed\\";
 		LunaticPath = $"{PackageInfo.resolvedPath}\\";
 
 		if (meta == null)
 		{
-			string metaPath = $"{PackageInfo.assetPath}\\Editor\\Meta Connections.asset";
+			string metaPath = $"{PackageInfo.assetPath}\\Editor\\Unity\\Meta Connections.asset";
 			meta = AssetDatabase.LoadAssetAtPath<MetaConnections>(metaPath);
 		}
 	}
