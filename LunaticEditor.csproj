@@ -62,6 +62,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModWeaponEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\EditorTools.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModMultipleStatesEditor.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModItemEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LunaticEditor.asmdef" />

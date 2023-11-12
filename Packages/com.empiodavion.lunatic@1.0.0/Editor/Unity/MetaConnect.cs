@@ -134,7 +134,7 @@ public class MetaConnect : EditorWindow
 			}
 
 			LunacidDataPath = Path.GetDirectoryName(LunacidPath);
-			LunacidDataPath = Path.Combine(LunacidDataPath, "\\LUNACID_Data\\Managed\\");
+			LunacidDataPath = Path.Combine(LunacidDataPath, "LUNACID_Data\\Managed\\");
 
 			GUIDMap.Clear();
 
