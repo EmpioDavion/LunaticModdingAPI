@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,6 +19,8 @@ public class MetaConnect : EditorWindow
 	public MetaConnections meta;
 
 	private Vector2 scroll;
+
+	private readonly Dictionary<string, string> GUIDMap = new Dictionary<string, string>();
 
 	[MenuItem("Window/Meta Connect")]
 	private static void ShowWindow()
@@ -123,7 +127,7 @@ public class MetaConnect : EditorWindow
 
 			if (!File.Exists(LunacidPath))
 			{
-				LunacidPath = EditorUtility.OpenFilePanel("LUNACID.exe File", LunacidDataPath, "exe");
+				LunacidPath = EditorUtility.OpenFilePanel("LUNACID.exe File", LunaticPath, "exe");
 
 				if (string.IsNullOrEmpty(LunacidPath))
 					return;
@@ -132,12 +136,16 @@ public class MetaConnect : EditorWindow
 			LunacidDataPath = Path.GetDirectoryName(LunacidPath);
 			LunacidDataPath = Path.Combine(LunacidDataPath, "\\LUNACID_Data\\Managed\\");
 
+			GUIDMap.Clear();
+
 			if (copyDLLs)
 			{
 				CopyDLL("Assembly-CSharp");
 				CopyDLL("Assembly-CSharp-firstpass");
 				CopyDLL("NavMeshComponents");
 			}
+
+			CopyScriptMetas();
 
 			if (copyAssets)
 			{
@@ -157,33 +165,7 @@ public class MetaConnect : EditorWindow
 				CopyAssetDirectory("VideoClip");
 			}
 
-			string lunacidScriptPath = Path.Combine(RippedDataPath, "Scripts\\Assembly-CSharp\\");
-			string lunaticScriptPath = Path.Combine(LunaticPath, "Scripts\\");
-
-			foreach (MetaConnections.Connection connection in meta.connections)
-			{
-				if (string.IsNullOrEmpty(connection.lunacidScript) || string.IsNullOrEmpty(connection.lunaticScript))
-					continue;
-
-				string source = $"{connection.lunacidScript}.cs.meta";
-				string dest = $"{connection.lunaticScript}.cs.meta";
-
-				if (!File.Exists(source) || !File.Exists(dest))
-					continue;
-
-				string[] lines = File.ReadAllLines(Path.Combine(lunacidScriptPath, source));
-
-				string guid = System.Array.Find(lines, (x) => x.StartsWith("guid: "));
-
-				string lunatic = Path.Combine(lunaticScriptPath, dest);
-				lines = File.ReadAllLines(lunatic);
-
-				int index = System.Array.FindIndex(lines, (x) => x.StartsWith("guid: "));
-
-				lines[index] = guid;
-
-				File.WriteAllLines(lunatic, lines);
-			}
+			ReplaceAssetGUIDs();
 		}
 		catch (System.Exception e)
 		{
@@ -193,7 +175,36 @@ public class MetaConnect : EditorWindow
 		AssetDatabase.Refresh();
 	}
 
-	private void CopyDLL(string dllName)
+	private void CopyScriptMetas()
+	{
+		string lunacidScriptPath = Path.Combine(RippedDataPath, "Scripts\\Assembly-CSharp\\");
+		string lunaticScriptPath = Path.Combine(LunaticPath, "Scripts\\");
+
+		foreach (MetaConnections.Connection connection in meta.connections)
+		{
+			if (string.IsNullOrEmpty(connection.lunacidScript) || string.IsNullOrEmpty(connection.lunaticScript))
+				continue;
+
+			string source = $"{connection.lunacidScript}.cs.meta";
+			string dest = $"{connection.lunaticScript}.cs.meta";
+
+			if (!File.Exists(source))
+				continue;
+
+			if (!File.Exists(dest))
+			{
+				File.Copy(source, dest);
+				continue;
+			}
+
+			string lunacid = ReadMetaGUID(Path.Combine(lunacidScriptPath, source));
+			string lunatic = ReadMetaGUID(Path.Combine(lunaticScriptPath, dest));
+
+			GUIDMap.Add(lunacid, lunatic);
+		}
+	}
+
+	private static void CopyDLL(string dllName)
 	{
 		string dest = Path.Combine(LunaticPath, "Plugins\\");
 		Directory.CreateDirectory(dest);
@@ -226,12 +237,94 @@ public class MetaConnect : EditorWindow
 		DirectoryInfo[] subDirs = source.GetDirectories();
 
 		foreach (FileInfo file in files)
-			file.CopyTo(Path.Combine(dest.FullName, file.Name), true);
+		{
+			string target = Path.Combine(dest.FullName, file.Name);
+
+			if (file.FullName.EndsWith(".meta") && File.Exists(target))
+			{
+				string lunacid = ReadMetaGUID(file.FullName);
+				string lunatic = ReadMetaGUID(target);
+
+				GUIDMap.Add(lunacid, lunatic);
+			}
+			else
+				file.CopyTo(target, true);
+		}
 
 		foreach (DirectoryInfo sourceSubDir in subDirs)
 		{
 			DirectoryInfo destSubDir = dest.CreateSubdirectory(sourceSubDir.Name);
 			CopyRecursive(sourceSubDir, destSubDir);
 		}
+	}
+
+	private void ReplaceAssetGUIDs()
+	{
+		string copiedAssetsPath = Path.Combine(LunaticPath, "Lunacid\\");
+		DirectoryInfo dir = new DirectoryInfo(copiedAssetsPath);
+
+		ReplaceAssetGUIDsRecursive(dir);
+	}
+
+	private void ReplaceAssetGUIDsRecursive(DirectoryInfo dir)
+	{
+		FileInfo[] files = dir.GetFiles();
+		DirectoryInfo[] subDirs = dir.GetDirectories();
+
+		foreach (FileInfo file in files)
+		{
+			if (file.FullName.EndsWith(".meta"))
+				continue;
+
+			string[] lines = File.ReadAllLines(file.FullName);
+
+			bool modified = false;
+
+			for (int i = 0; i < lines.Length; i++)
+				modified |= ReplaceAssetGUID(ref lines[i]);
+
+			if (modified)
+				File.WriteAllLines(file.FullName, lines);
+		}
+
+		foreach (DirectoryInfo subDir in subDirs)
+			ReplaceAssetGUIDsRecursive(subDir);
+	}
+
+	private bool ReplaceAssetGUID(ref string line)
+	{
+		const string PATTERN = /* {fileID: ### */", guid: " /* xxx, type: #} */;
+
+		int index = line.IndexOf(PATTERN);
+
+		if (index >= 0)
+		{
+			int start = index + PATTERN.Length;
+
+			int comma = line.IndexOf(',', start);
+
+			if (comma >= 0)
+			{
+				string pre = line.Substring(0, start);
+				string guid = line.Substring(start, comma - start);
+				string post = line.Substring(comma);
+
+				if (GUIDMap.TryGetValue(guid, out string replacement))
+					line = string.Concat(pre, replacement, post);
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static string ReadMetaGUID(string path)
+	{
+		string[] lines = File.ReadAllLines(path);
+
+		string guid = System.Array.Find(lines, (x) => x.StartsWith("guid: "));
+
+		return guid.Substring("guid: ".Length);
 	}
 }
