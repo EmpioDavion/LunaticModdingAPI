@@ -1,15 +1,66 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
 
 public class MetaConnect : EditorWindow
 {
+	private class MetaGUID
+	{
+		public Dictionary<string, string> FileToGUID;
+		public Dictionary<string, string> GUIDToFile;
+
+		private readonly string baseFolder;
+		private int startIndex;
+
+		public MetaGUID(string _baseFolder)
+		{
+			FileToGUID = new Dictionary<string, string>();
+			GUIDToFile = new Dictionary<string, string>();
+			baseFolder = _baseFolder;
+		}
+
+		public void Add(string file)
+		{
+			string guid = ReadMetaGUID(file);
+			string relative = GetRelativePath(file);
+
+			FileToGUID.Add(relative, guid);
+			GUIDToFile.Add(guid, relative);
+		}
+
+		public void Clear()
+		{
+			FileToGUID.Clear();
+			GUIDToFile.Clear();
+		}
+
+		public void SetIndex(string path)
+		{
+			startIndex = path.LastIndexOf(baseFolder) + baseFolder.Length;
+		}
+
+		private string GetRelativePath(string path)
+		{
+			return path.Substring(startIndex);
+		}
+
+		public bool GetGUID(string fullPath, out string guid)
+		{
+			string relative = GetRelativePath(fullPath);
+
+			return FileToGUID.TryGetValue(relative, out guid);
+		}
+	}
+
 	private UnityEditor.PackageManager.PackageInfo PackageInfo;
 
 	public bool copyDLLs = true;
 	public bool copyAssets = true;
+	public bool copyScripts = true;
+
+	private bool trackMetas = true;
 
 	public static string RippedDataPath;
 	public static string LunacidPath;
@@ -20,7 +71,8 @@ public class MetaConnect : EditorWindow
 
 	private Vector2 scroll;
 
-	private readonly Dictionary<string, string> GUIDMap = new Dictionary<string, string>();
+	private readonly MetaGUID rippedDataGUIDs = new MetaGUID("Assets");
+	private readonly MetaGUID lunaticGUIDs = new MetaGUID("Lunacid");
 
 	[MenuItem("Window/Meta Connect")]
 	private static void ShowWindow()
@@ -38,6 +90,10 @@ public class MetaConnect : EditorWindow
 		LunacidPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\..\\\\LUNACID.exe";
 		LunacidDataPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\..\\\\LUNACID_Data\\Managed\\";
 		LunaticPath = $"{PackageInfo.resolvedPath}\\";
+
+		RippedDataPath = Path.GetFullPath(RippedDataPath);
+		LunacidPath = Path.GetFullPath(LunacidPath);
+		LunacidDataPath = Path.GetFullPath(LunacidDataPath);
 
 		if (meta == null)
 		{
@@ -107,6 +163,7 @@ public class MetaConnect : EditorWindow
 
 		copyDLLs = GUILayout.Toggle(copyDLLs, "Copy Lunacid DLLs");
 		copyAssets = GUILayout.Toggle(copyAssets, "Copy Lunacid Assets");
+		copyScripts = GUILayout.Toggle(copyScripts, "Copy Lunacid Scripts");
 
 		EditorGUILayout.EndHorizontal();
 	}
@@ -122,7 +179,7 @@ public class MetaConnect : EditorWindow
 				if (string.IsNullOrEmpty(folder))
 					return;
 
-				LunaticPath = folder;
+				RippedDataPath = folder;
 			}
 
 			if (!File.Exists(LunacidPath))
@@ -136,7 +193,11 @@ public class MetaConnect : EditorWindow
 			LunacidDataPath = Path.GetDirectoryName(LunacidPath);
 			LunacidDataPath = Path.Combine(LunacidDataPath, "LUNACID_Data\\Managed\\");
 
-			GUIDMap.Clear();
+			rippedDataGUIDs.Clear();
+			lunaticGUIDs.Clear();
+
+			rippedDataGUIDs.SetIndex(RippedDataPath);
+			lunaticGUIDs.SetIndex(Path.Combine(LunaticPath, "Lunacid\\"));
 
 			if (copyDLLs)
 			{
@@ -145,7 +206,8 @@ public class MetaConnect : EditorWindow
 				CopyDLL("NavMeshComponents");
 			}
 
-			CopyScriptMetas();
+			if (copyScripts)
+				CopyScriptMetas();
 
 			if (copyAssets)
 			{
@@ -158,7 +220,13 @@ public class MetaConnect : EditorWindow
 				CopyAssetDirectory("PrefabInstance");
 				CopyAssetDirectory("RenderTexture");
 				CopyAssetDirectory("Resources");
+
+				trackMetas = false;
+
 				CopyAssetDirectory("Scenes");
+
+				trackMetas = true;
+
 				CopyAssetDirectory("Shader");
 				CopyAssetDirectory("Sprite");
 				CopyAssetDirectory("Texture2D");
@@ -197,10 +265,8 @@ public class MetaConnect : EditorWindow
 				continue;
 			}
 
-			string lunacid = ReadMetaGUID(Path.Combine(lunacidScriptPath, source));
-			string lunatic = ReadMetaGUID(Path.Combine(lunaticScriptPath, dest));
-
-			GUIDMap.Add(lunacid, lunatic);
+			rippedDataGUIDs.Add(Path.Combine(lunacidScriptPath, source));
+			lunaticGUIDs.Add(Path.Combine(lunaticScriptPath, source));
 		}
 	}
 
@@ -240,12 +306,18 @@ public class MetaConnect : EditorWindow
 		{
 			string target = Path.Combine(dest.FullName, file.Name);
 
-			if (file.FullName.EndsWith(".meta") && File.Exists(target))
+			if (File.Exists(target))
 			{
-				string lunacid = ReadMetaGUID(file.FullName);
-				string lunatic = ReadMetaGUID(target);
-
-				GUIDMap.Add(lunacid, lunatic);
+				if (file.FullName.EndsWith(".meta"))
+				{
+					if (trackMetas)
+					{
+						rippedDataGUIDs.Add(file.FullName);
+						lunaticGUIDs.Add(target);
+					}
+				}
+				else if (!FilesMatch(file.FullName, target))
+					file.CopyTo(target, true);
 			}
 			else
 				file.CopyTo(target, true);
@@ -256,6 +328,27 @@ public class MetaConnect : EditorWindow
 			DirectoryInfo destSubDir = dest.CreateSubdirectory(sourceSubDir.Name);
 			CopyRecursive(sourceSubDir, destSubDir);
 		}
+	}
+
+	private bool FilesMatch(string file1, string file2)
+	{
+		FileInfo fi1 = new FileInfo(file1);
+		FileInfo fi2 = new FileInfo(file2);
+
+		if (fi1.Length != fi2.Length)
+			return false;
+
+		byte[] bytes = File.ReadAllBytes(file1);
+		byte[] h1 = MD5.Create().ComputeHash(bytes);
+
+		bytes = File.ReadAllBytes(file2);
+		byte[] h2 = MD5.Create().ComputeHash(bytes);
+
+		for (int i = 0; i < h1.Length; i++)
+			if (h1[i] != h2[i])
+				return false;
+
+		return true;
 	}
 
 	private void ReplaceAssetGUIDs()
@@ -309,8 +402,9 @@ public class MetaConnect : EditorWindow
 				string guid = line.Substring(start, comma - start);
 				string post = line.Substring(comma);
 
-				if (GUIDMap.TryGetValue(guid, out string replacement))
-					line = string.Concat(pre, replacement, post);
+				if (rippedDataGUIDs.GUIDToFile.TryGetValue(guid, out string file) &&
+					lunaticGUIDs.FileToGUID.TryGetValue(file, out guid))
+					line = string.Concat(pre, guid, post);
 
 				return true;
 			}

@@ -61,6 +61,7 @@
     <Compile Include="Assets\Scripts\TemplateScene.cs" />
     <Compile Include="Assets\Scripts\TemplateNPC.cs" />
     <Compile Include="Assets\Scripts\TemplateWeapon.cs" />
+    <Compile Include="Assets\Scripts\TemplateItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scripts\ModTemplate.asmdef" />
