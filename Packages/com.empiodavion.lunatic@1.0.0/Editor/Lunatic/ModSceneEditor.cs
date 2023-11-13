@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(ModScene), true)]
-public class ModSceneInspector : Editor
+public class ModSceneEditor : Editor
 {
 	public bool showHelp = true;
 
@@ -22,6 +22,8 @@ public class ModSceneInspector : Editor
 
 	public override void OnInspectorGUI()
 	{
+		serializedObject.Update();
+
 		GUI.enabled = false;
 		EditorGUILayout.PropertyField(script);
 		GUI.enabled = true;
@@ -29,9 +31,14 @@ public class ModSceneInspector : Editor
 		showHelp = EditorGUILayout.Toggle("Show Help", showHelp);
 
 		if (showHelp)
-			EditorGUILayout.HelpBox("The scene that this ModScene will track and operate on.", MessageType.Info);
+			EditorGUILayout.HelpBox("You can select a Lunacid scene by name here.", MessageType.Info);
 
-		//int index = GUILayout.drop(sceneName.displayName, scenes);
+		int index = EditorGUILayout.Popup(sceneName.displayName, -1, scenes);
+
+		if (index != -1)
+			sceneName.stringValue = Lunatic.GameScenes.NameToID[scenes[index]];
+
+		EditorTools.DrawHelpProperty(sceneName, "The scene that this ModScene will track and operate on.");
 
 		SerializedProperty prop = serializedObject.GetIterator();
 
@@ -40,5 +47,7 @@ public class ModSceneInspector : Editor
 
 		while (prop.NextVisible(true))
 			EditorGUILayout.PropertyField(prop);
+
+		serializedObject.ApplyModifiedProperties();
 	}
 }

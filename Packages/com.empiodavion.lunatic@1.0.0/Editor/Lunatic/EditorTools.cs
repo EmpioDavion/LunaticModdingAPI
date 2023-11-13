@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 
 public static class EditorTools
 {
@@ -28,6 +29,16 @@ public static class EditorTools
 			EditorGUILayout.HelpBox(help, MessageType.Info);
 
 		EditorGUILayout.PropertyField(prop);
+	}
+
+	public static void DrawArrayElement(SerializedProperty arrayProp, int index, string displayName, string help)
+	{
+		SerializedProperty element = arrayProp.GetArrayElementAtIndex(index);
+
+		if (ShowHelp)
+			EditorGUILayout.HelpBox(help, MessageType.Info);
+
+		EditorGUILayout.PropertyField(element, new GUIContent(displayName));
 	}
 
 	public static void DrawRemainingProperties(SerializedObject obj, SerializedProperty propsAfter)

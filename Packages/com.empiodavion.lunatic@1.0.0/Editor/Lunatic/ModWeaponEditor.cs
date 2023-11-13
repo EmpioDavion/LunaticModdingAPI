@@ -88,8 +88,8 @@ public class ModWeaponEditor : Editor
 			if (soundPitches.arraySize != 2)
 				soundPitches.arraySize = 2;
 
-			DrawArrayElement(soundPitches, 0, "Minimum Pitch", "Minimum random pitch to use for weapon swing sounds.");
-			DrawArrayElement(soundPitches, 1, "Maximum Pitch", "Maximum random pitch to use for weapon swing sounds.");
+			EditorTools.DrawArrayElement(soundPitches, 0, "Minimum Pitch", "Minimum random pitch to use for weapon swing sounds.");
+			EditorTools.DrawArrayElement(soundPitches, 1, "Maximum Pitch", "Maximum random pitch to use for weapon swing sounds.");
 
 			EditorGUI.indentLevel--;
 		}
@@ -146,16 +146,16 @@ public class ModWeaponEditor : Editor
 			if (blockAnims.arraySize != 4)
 				blockAnims.arraySize = 4;
 
-			DrawArrayElement(blockAnims, 0, "Successful Block Anim", "Animation to play on a successful block.");
-			DrawArrayElement(blockAnims, 1, "Mid Block Anim", "Animation to play when the player is hit before the weapon cooldown finishes from a previous block.");
-			DrawArrayElement(blockAnims, 2, "Deflect Block Anim", "Animation to play when the player is hit when blocking.");
-			DrawArrayElement(blockAnims, 3, "Guard Broken Anim", "Animation to play when the player's guard is broken.");
+			EditorTools.DrawArrayElement(blockAnims, 0, "Successful Block Anim", "Animation to play on a successful block.");
+			EditorTools.DrawArrayElement(blockAnims, 1, "Mid Block Anim", "Animation to play when the player is hit before the weapon cooldown finishes from a previous block.");
+			EditorTools.DrawArrayElement(blockAnims, 2, "Deflect Block Anim", "Animation to play when the player is hit when blocking.");
+			EditorTools.DrawArrayElement(blockAnims, 3, "Guard Broken Anim", "Animation to play when the player's guard is broken.");
 
 			if (blockSounds.arraySize != 2)
 				blockSounds.arraySize = 2;
 
-			DrawArrayElement(blockSounds, 0, "Block Deflect Sound", "Sound to play on successful blocking of an attack.");
-			DrawArrayElement(blockSounds, 1, "Guard Broken Sound", "Sound to play when the player's guard is broken.");
+			EditorTools.DrawArrayElement(blockSounds, 0, "Block Deflect Sound", "Sound to play on successful blocking of an attack.");
+			EditorTools.DrawArrayElement(blockSounds, 1, "Guard Broken Sound", "Sound to play when the player's guard is broken.");
 
 			EditorGUI.indentLevel--;
 		}
@@ -163,15 +163,5 @@ public class ModWeaponEditor : Editor
 		EditorTools.DrawRemainingProperties(serializedObject, animationSpeed);
 
 		serializedObject.ApplyModifiedProperties();
-	}
-
-	private void DrawArrayElement(SerializedProperty arrayProp, int index, string displayName, string help)
-	{
-		SerializedProperty element = arrayProp.GetArrayElementAtIndex(index);
-
-		if (EditorTools.ShowHelp)
-			EditorGUILayout.HelpBox(help, MessageType.Info);
-
-		EditorGUILayout.PropertyField(element, new GUIContent(displayName));
 	}
 }

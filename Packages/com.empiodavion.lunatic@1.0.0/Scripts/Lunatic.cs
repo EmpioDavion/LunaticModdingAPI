@@ -115,6 +115,17 @@ public static class Lunatic
 		Ranged
 	}
 
+	public enum MagicTypes
+	{
+		Conjuring_Summoning,
+		Aggressive_Damage,
+		Force,
+		Healing,
+		Esotericism,
+		Abjuration,
+		Lunar
+	}
+
 	private static Dictionary<string, Object> AssetReplacement = new Dictionary<string, Object>();
 
 	private static readonly List<Mod> Mods = new List<Mod>();

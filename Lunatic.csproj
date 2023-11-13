@@ -123,6 +123,14 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAudioFadeIn.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModStatusEffect.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModSpawnOnEnable.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLightSpinUI.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModColourPalettePreset.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModColourFadeLinear.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModForceOnEnable.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModNPCSliderBar.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModCompassControl.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomSoundDelay.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLantern.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\Lunatic.asmdef" />

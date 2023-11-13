@@ -131,3 +131,17 @@ MonoBehaviour:
     lunaticScript: ModAudioFadeIn
   - lunacidScript: Anim_Order
     lunaticScript: ModPlayAnimsInOrder
+  - lunacidScript: Lant_scr
+    lunaticScript: ModLantern
+  - lunacidScript: ColorPalettePreset
+    lunaticScript: ModColourPalettePreset
+  - lunacidScript: Material_A_fade_scr
+    lunaticScript: ModColourFadeLinear
+  - lunacidScript: Random_Snd_Delay
+    lunaticScript: ModRandomSoundDelay
+  - lunacidScript: Compass_control
+    lunaticScript: ModCompassControl
+  - lunacidScript: NPC_Bar
+    lunaticScript: ModNPCSliderBar
+  - lunacidScript: TXT_light_Spin
+    lunaticScript: ModLightSpinUI
