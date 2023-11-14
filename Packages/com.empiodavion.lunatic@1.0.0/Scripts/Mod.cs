@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Lunatic/Mod Asset")]
 public class Mod : ScriptableObject
 {
 	[System.NonSerialized]
@@ -15,9 +16,9 @@ public class Mod : ScriptableObject
 	public readonly List<ModRecipe> recipes = new List<ModRecipe>();
 	public readonly List<ModClass> classes = new List<ModClass>();
 
-	internal void Init()
+	internal void Init(AssetBundle _bundle)
 	{
-		bundle = Lunatic.LoadAssetBundle(name);
+		bundle = _bundle;
 
 		games.AddRange(bundle.LoadAllAssets<ModGame>());
 		scenes.AddRange(bundle.LoadAllAssets<ModScene>());
@@ -27,6 +28,15 @@ public class Mod : ScriptableObject
 		materials.AddRange(bundle.LoadAllAssets<ModMaterial>());
 		recipes.AddRange(bundle.LoadAllAssets<ModRecipe>());
 		classes.AddRange(bundle.LoadAllAssets<ModClass>());
+
+		Debug.Log($"Added {games.Count} games.");
+		Debug.Log($"Added {scenes.Count} scenes.");
+		Debug.Log($"Added {weapons.Count} weapons.");
+		Debug.Log($"Added {magics.Count} magics.");
+		Debug.Log($"Added {items.Count} items.");
+		Debug.Log($"Added {materials.Count} materials.");
+		Debug.Log($"Added {recipes.Count} recipes.");
+		Debug.Log($"Added {classes.Count} classes.");
 
 		InitWeapons();
 		InitMagics();

@@ -16,12 +16,12 @@ public class TemplateScene : ModScene
 	// when this scene is entered
 	public override void OnSceneLoaded(Scene oldScene)
 	{
-		base.OnSceneLoaded(oldScene);
+
 	}
 
 	// when this scene is exited
 	public override void OnSceneLeave(Scene newScene)
 	{
-		base.OnSceneLeave(newScene);
+		
 	}
 }

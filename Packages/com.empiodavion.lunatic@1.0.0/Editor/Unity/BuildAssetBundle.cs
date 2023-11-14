@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.Compilation;
 using UnityEngine;
 
 public class BuildAssetBundle
@@ -59,31 +60,52 @@ public class BuildAssetBundle
 				return;
 		}
 
+		BuildLunaticPlayer();
+	}
+
+	private static void BuildLunaticPlayer()
+	{
+		UnityEditor.PackageManager.PackageInfo packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(BuildAssetBundle).Assembly);
+		string[] scripts = Directory.GetFiles(Path.Combine(packageInfo.resolvedPath, "Scripts\\"), "*.cs");
+
+		AssemblyBuilder builder = new AssemblyBuilder("Lunatic/Lunatic.dll", scripts)
+		{
+			buildTarget = BuildTarget.StandaloneWindows64,
+			buildTargetGroup = BuildTargetGroup.Standalone,
+			compilerOptions = new ScriptCompilerOptions()
+			{
+				ApiCompatibilityLevel = ApiCompatibilityLevel.NET_Standard_2_0,
+				CodeOptimization = CodeOptimization.Release,
+			},
+			referencesOptions = ReferencesOptions.UseEngineModules
+		};
+
+		builder.buildFinished += CopyDLLS;
+
+		builder.Build();
+	}
+
+	private static void CopyDLLS(string path, CompilerMessage[] messages)
+	{
 		string gameFolder = Path.GetDirectoryName(MetaConnect.LunacidPath);
 		string pluginsFolder = Path.Combine(gameFolder, $"BepInEx/plugins/");
-		string lunaticFolder = Path.Combine(pluginsFolder, "Lunatic");
 		string deployFolder = Path.Combine(pluginsFolder, PlayerSettings.productName);
+		string lunaticFolder = Path.Combine(pluginsFolder, "Lunatic");
 
-		Directory.CreateDirectory(deployFolder);
+		CopyFiles("Build/", deployFolder, "*");
+		CopyFiles("Lunatic/", lunaticFolder, "*.dll");
+	}
 
-		string[] files = Directory.GetFiles("Build/");
+	private static void CopyFiles(string sourceFolder, string destFolder, string searchPattern)
+	{
+		Directory.CreateDirectory(destFolder);
 
-		foreach (string file in files)
-		{
-			string filename = Path.GetFileName(file);
-			string dest = Path.Combine(deployFolder, filename);
-
-			File.Copy(file, dest, true);
-		}
-
-		Directory.CreateDirectory(lunaticFolder);
-
-		files = Directory.GetFiles("Lunatic/");
+		string[] files = Directory.GetFiles(sourceFolder, searchPattern);
 
 		foreach (string file in files)
 		{
 			string filename = Path.GetFileName(file);
-			string dest = Path.Combine(lunaticFolder, filename);
+			string dest = Path.Combine(destFolder, filename);
 
 			File.Copy(file, dest, true);
 		}

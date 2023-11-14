@@ -64,6 +64,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModItemPickup.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModProximityActivator.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModBlink.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomSoundDelay.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAIAdjustBehaviour.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModSimpleActivator.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModMidAttackStat.cs" />
@@ -75,12 +76,14 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModMaterialFlash.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRecipe.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModWiggle.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLantern.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomActivator.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRotateConstant.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModBloodTrigger.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModHuntPOSPlace.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\Mod.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModFullBill.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModForceOnEnable.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModWeapon.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomAnimList.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomScale.cs" />
@@ -91,9 +94,13 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomSound.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDeathAnimation.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModNPCPlayMusic.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModCompassControl.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModNPCSliderBar.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModColourFadeLinear.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModGame.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModGhostDisappear.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModMagic.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModColourPalettePreset.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModMultipleStates.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModShakeOnEnable.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModActivator.cs" />
@@ -107,6 +114,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAutoKill.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDynamicBonePlaneCollider.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLivingObject.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLightSpinUI.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModIdleSounds.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModChangeScale.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModScene.cs" />
@@ -123,14 +131,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAudioFadeIn.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModStatusEffect.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModSpawnOnEnable.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLightSpinUI.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModColourPalettePreset.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModColourFadeLinear.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModForceOnEnable.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModNPCSliderBar.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModCompassControl.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomSoundDelay.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLantern.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModKeyTrigger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\Lunatic.asmdef" />

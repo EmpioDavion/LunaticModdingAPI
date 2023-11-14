@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -143,6 +143,8 @@ public static class Lunatic
 
 	private static Dictionary<string, string> ModData = new Dictionary<string, string>();
 
+	private static readonly Dictionary<string, AssetBundle> AssetBundles = new Dictionary<string, AssetBundle>();
+
 	private static bool Initialised = false;
 
 	public static void Init()
@@ -153,13 +155,17 @@ public static class Lunatic
 		Initialised = true;
 
 #if UNITY_EDITOR
+		
 		UnityEditor.PackageManager.PackageInfo package;
 		package = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(Lunatic).Assembly);
 
 		string txtPath = System.IO.Path.Combine(package.assetPath, "Lunacid\\Resources\\txt\\eng\\MATERIALS.txt");
-		
-		TextAsset materialTxt = AssetDatabase.LoadAssetAtPath<TextAsset>(txtPath);
+
+		TextAsset materialTxt = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>(txtPath);
+
 #else
+		LoadMods();
+
 		SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
@@ -178,9 +184,62 @@ public static class Lunatic
 		MaterialNames = materialNames.ToArray();
 	}
 
-	public static void AddMod(Mod mod)
+	private static void LoadMods()
 	{
-		mod.Init();
+		string[] dlls = System.IO.Directory.GetFiles("BepInEx/plugins/", "*.dll", System.IO.SearchOption.AllDirectories);
+
+		// load assemblies before loading asset bundles to ensure script types are loaded
+		foreach (string dll in dlls)
+			System.Reflection.Assembly.LoadFile(dll);
+
+		string[] manifests = System.IO.Directory.GetFiles("BepInEx/plugins/", "*.manifest", System.IO.SearchOption.AllDirectories);
+		
+		Debug.Log($"Loading {manifests.Length} Lunatic mod(s)...");
+
+		foreach (string manifest in manifests)
+		{
+			Debug.Log("Found manifest " + manifest);
+
+			string bundlePath = manifest.Substring(0, manifest.LastIndexOf('.'));
+
+			try
+			{
+				Debug.Log("Loading AssetBundle " + bundlePath);
+
+				AssetBundle bundle = AssetBundle.LoadFromFile(bundlePath);
+				string[] assetNames = bundle.GetAllAssetNames();
+				Mod[] mods = bundle.LoadAllAssets<Mod>();
+
+				AssetBundles.Add(bundle.name, bundle);
+
+				if (mods.Length == 0)
+				{
+					Debug.LogError("AssetBundle contains no Mod object, adding default Mod object for it.");
+					Mod mod = ScriptableObject.CreateInstance<Mod>();
+					mod.name = System.IO.Path.GetFileName(bundlePath);
+
+					AddMod(mod, bundle);
+				}
+				else
+				{
+					foreach (Mod mod in mods)
+					{
+						Debug.Log("Initialising mod " + mod.name);
+
+						AddMod(mod, bundle);
+					}
+				}
+			}
+			catch (System.Exception e)
+			{
+				Debug.LogError(e.Message);
+			}
+		}
+	}
+
+	private static void AddMod(Mod mod, AssetBundle bundle)
+	{
+		mod.Init(bundle);
 		Mods.Add(mod);
 	}
 
@@ -219,6 +278,21 @@ public static class Lunatic
 
 	private static void SceneManager_sceneLoaded(Scene current, LoadSceneMode loadSceneMode)
 	{
+		Debug.Log("Loaded scene " + current.name);
+
+		Debug.Log(Mods.Count + " mods");
+
+		if (Mods.Count > 0)
+		{
+			Debug.Log(Mods[0].scenes.Count + " scenes");
+
+			if (Mods[0].scenes.Count > 0)
+			{
+				Debug.Log("Scene name is " + Mods[0].scenes[0].sceneName);
+				Debug.Log($"Names are {(Mods[0].scenes[0].sceneName == current.name ? "" : "not ")}matching");
+			}
+		}
+
 		Control = GetControl();
 		Player = GetPlayer();
 
@@ -253,11 +327,28 @@ public static class Lunatic
 
 		foreach (Mod mod in Mods)
 			foreach (ModScene scene in mod.scenes)
-				if (scene.name == current.name)
+				if (scene.sceneName == current.name)
 					scene.OnSceneLoaded(LastScene);
 	}
 
-	public static AssetBundle LoadAssetBundle(string name)
+	public static AssetBundle GetAssetBundle()
+	{
+		System.Reflection.Assembly mod = System.Reflection.Assembly.GetCallingAssembly();
+		string dir = System.IO.Path.GetDirectoryName(mod.Location);
+		string name = System.IO.Path.GetFileNameWithoutExtension(mod.Location);
+		string path = System.IO.Path.Combine(dir, name);
+
+		Debug.Log($"Loading asset bundle located at {path}");
+
+		if (AssetBundles.TryGetValue(name, out AssetBundle bundle))
+			return bundle;
+		else
+			Debug.LogError("Could not find AssetBundle " + name);
+
+		return null;
+	}
+
+	public static AssetBundle GetAssetBundle(string name)
 	{
 		System.Reflection.Assembly mod = System.Reflection.Assembly.GetCallingAssembly();
 		string dir = System.IO.Path.GetDirectoryName(mod.Location);
@@ -265,7 +356,12 @@ public static class Lunatic
 
 		Debug.Log($"Loading asset bundle located at {path}");
 
-		return AssetBundle.LoadFromFile(path);
+		if (AssetBundles.TryGetValue(name, out AssetBundle bundle))
+			return bundle;
+		else
+			Debug.LogError("Could not find AssetBundle " + name);
+
+		return null;
 	}
 
 	internal static void TrackWeapon(ModWeapon weapon)

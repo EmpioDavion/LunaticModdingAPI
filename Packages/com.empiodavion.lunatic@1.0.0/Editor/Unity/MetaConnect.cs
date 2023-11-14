@@ -41,7 +41,7 @@ public class MetaConnect : EditorWindow
 			startIndex = path.LastIndexOf(baseFolder) + baseFolder.Length;
 		}
 
-		private string GetRelativePath(string path)
+		public string GetRelativePath(string path)
 		{
 			return path.Substring(startIndex);
 		}
@@ -54,6 +54,12 @@ public class MetaConnect : EditorWindow
 		}
 	}
 
+	private class ThreadData
+	{
+		public string lunaticPackage;
+		public string tmpPackage;
+	}
+
 	private UnityEditor.PackageManager.PackageInfo PackageInfo;
 
 	public bool copyDLLs = true;
@@ -61,6 +67,9 @@ public class MetaConnect : EditorWindow
 	public bool copyScripts = true;
 
 	private bool trackMetas = true;
+
+	private volatile bool running = false;
+	private volatile bool threadFinished = false;
 
 	public static string RippedDataPath;
 	public static string LunacidPath;
@@ -74,6 +83,17 @@ public class MetaConnect : EditorWindow
 	private readonly MetaGUID rippedDataGUIDs = new MetaGUID("Assets");
 	private readonly MetaGUID lunaticGUIDs = new MetaGUID("Lunacid");
 
+	private string rippedDataTMP;
+	private string lunaticTMP;
+	private string lunaticFont;
+
+	private int textMesh;
+	private int fontAsset;
+
+	private volatile float progress = 0.0f;
+
+	private ThreadData activeData;
+
 	[MenuItem("Window/Meta Connect")]
 	private static void ShowWindow()
 	{
@@ -85,6 +105,10 @@ public class MetaConnect : EditorWindow
 
 	private void OnEnable()
 	{
+		running = false;
+		threadFinished = false;
+		progress = 0.0f;
+
 		PackageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(MetaConnect).Assembly);
 		RippedDataPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\GameAssets\\LUNACID\\ExportedProject\\Assets\\";
 		LunacidPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\..\\\\LUNACID.exe";
@@ -100,10 +124,15 @@ public class MetaConnect : EditorWindow
 			string metaPath = $"{PackageInfo.assetPath}\\Editor\\Unity\\Meta Connections.asset";
 			meta = AssetDatabase.LoadAssetAtPath<MetaConnections>(metaPath);
 		}
+
+		textMesh = FileIDUtil.Compute<TMPro.TextMeshProUGUI>();
+		fontAsset = FileIDUtil.Compute<TMPro.TMP_FontAsset>();
 	}
 
 	public void OnGUI()
 	{
+		GUI.enabled = !running;
+
 		meta = (MetaConnections)EditorGUILayout.ObjectField("Meta Connections", meta, typeof(MetaConnections), false);
 
 		if (meta == null)
@@ -159,17 +188,46 @@ public class MetaConnect : EditorWindow
 		}
 
 		if (GUILayout.Button("Run"))
-			RunAssetCopy();
+		{
+			running = true;
+
+			System.Threading.ThreadPool.QueueUserWorkItem(RunAssetCopy, new ThreadData()
+			{
+				tmpPackage = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(TMPro.TextMeshProUGUI).Assembly).resolvedPath,
+				lunaticPackage = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(MetaConnect).Assembly).resolvedPath
+			});
+			//RunAssetCopy();
+		}
 
 		copyDLLs = GUILayout.Toggle(copyDLLs, "Copy Lunacid DLLs");
 		copyAssets = GUILayout.Toggle(copyAssets, "Copy Lunacid Assets");
 		copyScripts = GUILayout.Toggle(copyScripts, "Copy Lunacid Scripts");
 
 		EditorGUILayout.EndHorizontal();
+
+		GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(32.0f));
+
+		Rect rect = GUILayoutUtility.GetLastRect();
+		EditorGUI.ProgressBar(rect, progress, running ? "Running Meta Connect" : "Ready");
+
+		GUI.enabled = true;
+
+		if (running)
+			Repaint();
+		else if (threadFinished)
+		{
+			threadFinished = false;
+			EditorUtility.SetDirty(meta);
+			Repaint();
+		}
 	}
 
-	private void RunAssetCopy()
+	private void RunAssetCopy(object state)
 	{
+		running = true;
+
+		activeData = (ThreadData)state;
+
 		try
 		{
 			if (!Directory.Exists(RippedDataPath))
@@ -206,34 +264,54 @@ public class MetaConnect : EditorWindow
 				CopyDLL("NavMeshComponents");
 			}
 
+			progress = 0.1f; // 0.1
+
 			if (copyScripts)
 				CopyScriptMetas();
+
+			progress += 0.1f; // 0.2
 
 			if (copyAssets)
 			{
 				CopyAssetDirectory("AnimationClip");
+				progress += 0.05f; // 0.25
 				CopyAssetDirectory("AudioClip");
+				progress += 0.05f; // 0.3
 				CopyAssetDirectory("Cubemap");
+				progress += 0.05f; // 0.35
 				CopyAssetDirectory("Material");
+				progress += 0.05f; // 0.4
 				CopyAssetDirectory("Mesh");
+				progress += 0.05f; // 0.45
 				CopyAssetDirectory("PhysicMaterial");
+				progress += 0.05f; // 0.5
 				CopyAssetDirectory("PrefabInstance");
+				progress += 0.05f; // 0.55
 				CopyAssetDirectory("RenderTexture");
+				progress += 0.05f; // 0.6
 				CopyAssetDirectory("Resources");
 
 				trackMetas = false;
 
+				progress += 0.05f; // 0.65
 				CopyAssetDirectory("Scenes");
 
 				trackMetas = true;
 
+				progress += 0.05f; // 0.7
 				CopyAssetDirectory("Shader");
+				progress += 0.05f; // 0.75
 				CopyAssetDirectory("Sprite");
+				progress += 0.05f; // 0.8
 				CopyAssetDirectory("Texture2D");
+				progress += 0.05f; // 0.85
 				CopyAssetDirectory("VideoClip");
+				progress += 0.05f; // 0.9
 			}
 
 			ReplaceAssetGUIDs();
+
+			progress += 0.1f; // 1.0
 		}
 		catch (System.Exception e)
 		{
@@ -241,11 +319,15 @@ public class MetaConnect : EditorWindow
 		}
 
 		AssetDatabase.Refresh();
+
+		progress = 0.0f;
+		threadFinished = true;
+		running = false;
 	}
 
 	private void CopyScriptMetas()
 	{
-		string lunacidScriptPath = Path.Combine(RippedDataPath, "Scripts\\Assembly-CSharp\\");
+		string rippedDataScriptPath = Path.Combine(RippedDataPath, "Scripts\\Assembly-CSharp\\");
 		string lunaticScriptPath = Path.Combine(LunaticPath, "Scripts\\");
 
 		foreach (MetaConnections.Connection connection in meta.connections)
@@ -265,9 +347,19 @@ public class MetaConnect : EditorWindow
 				continue;
 			}
 
-			rippedDataGUIDs.Add(Path.Combine(lunacidScriptPath, source));
+			rippedDataGUIDs.Add(Path.Combine(rippedDataScriptPath, source));
 			lunaticGUIDs.Add(Path.Combine(lunaticScriptPath, source));
 		}
+
+		//UnityEditor.PackageManager.PackageInfo lunaticTMPPackage = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(TMPro.TextMeshProUGUI).Assembly);
+
+		string rippedTMPPath = Path.Combine(RippedDataPath, "Plugins\\Unity.TextMeshPro.dll.meta");
+		string lunaticTMPPath = Path.Combine(activeData.tmpPackage, "Scripts\\Runtime\\TextMeshProUGUI.cs.meta");
+		string lunaticFontPath = Path.Combine(activeData.tmpPackage, "Scripts\\Runtime\\TMP_FontAsset.cs.meta");
+
+		rippedDataTMP = ReadMetaGUID(rippedTMPPath);
+		lunaticTMP = ReadMetaGUID(lunaticTMPPath);
+		lunaticFont = ReadMetaGUID(lunaticFontPath);
 	}
 
 	private static void CopyDLL(string dllName)
@@ -335,18 +427,34 @@ public class MetaConnect : EditorWindow
 		FileInfo fi1 = new FileInfo(file1);
 		FileInfo fi2 = new FileInfo(file2);
 
-		if (fi1.Length != fi2.Length)
-			return false;
-
 		byte[] bytes = File.ReadAllBytes(file1);
 		byte[] h1 = MD5.Create().ComputeHash(bytes);
 
-		bytes = File.ReadAllBytes(file2);
-		byte[] h2 = MD5.Create().ComputeHash(bytes);
+		string relativePath = lunaticGUIDs.GetRelativePath(file2);
+
+		if (fi1.Length != fi2.Length)
+		{
+			meta.SetFileHash(relativePath, h1);
+			return false;
+		}
+
+		if (!meta.GetFileHash(relativePath, out byte[] h2))
+		{
+			bytes = File.ReadAllBytes(file2);
+			h2 = MD5.Create().ComputeHash(bytes);
+		}
 
 		for (int i = 0; i < h1.Length; i++)
+		{
 			if (h1[i] != h2[i])
+			{
+				meta.SetFileHash(relativePath, h1);
+
 				return false;
+			}
+		}
+
+		meta.SetFileHash(relativePath, h2);
 
 		return true;
 	}
@@ -405,6 +513,24 @@ public class MetaConnect : EditorWindow
 				if (rippedDataGUIDs.GUIDToFile.TryGetValue(guid, out string file) &&
 					lunaticGUIDs.FileToGUID.TryGetValue(file, out guid))
 					line = string.Concat(pre, guid, post);
+				else if (guid == rippedDataTMP)
+				{
+					const string ID_PATTERN = "fileID: ";
+
+					index = line.IndexOf(ID_PATTERN);
+					start = index + ID_PATTERN.Length;
+					comma = line.IndexOf(',', start);
+					string preFileID = pre.Substring(0, start);
+					string fileIDStr = pre.Substring(start, comma - start);
+					int fileID = int.Parse(fileIDStr);
+
+					if (fileID == textMesh)
+						guid = lunaticTMP;
+					else if (fileID == fontAsset)
+						guid = lunaticFont;
+
+					line = string.Concat(preFileID, "11500000", PATTERN, guid, post);
+				}
 
 				return true;
 			}

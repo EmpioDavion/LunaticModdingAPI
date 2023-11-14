@@ -52,8 +52,11 @@ public class TemplateGame : ModGame
 		// if your mod is disabled, Lunatic will still load and save the json text,
 		// so your mod save data won't disappear
 
-		// load asset bundle, this takes a name as your mod may have more than one AssetBundle
-		Lunatic.LoadAssetBundle("modtemplate");
+		// Lunatic will load your AssetBundle in order to add your mod objects to the game
+		// so you should retrieve your AssetBundle with GetAssetBundle as attempting to load
+		// it a second time with AssetBundle.LoadFromFile will throw an error
+		if (MyAssets == null)
+			MyAssets = Lunatic.GetAssetBundle("modtemplate");
 	}
 
 	public override void OnSaveFileSaved()

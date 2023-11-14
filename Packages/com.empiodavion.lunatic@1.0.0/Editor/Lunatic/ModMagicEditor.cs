@@ -41,7 +41,6 @@ public class ModMagicEditor : Editor
 		fadeSpeed = serializedObject.FindProperty("MAG_FADE");
 		isBlood = serializedObject.FindProperty("MAG_BL");
 		sounds = serializedObject.FindProperty("snds");
-
 	}
 
 	public override void OnInspectorGUI()
