@@ -9,6 +9,7 @@ public class MetaConnections : ScriptableObject
 	{
 		public string lunacidScript;
 		public string lunaticScript;
+		public bool isFirstPass;
 	}
 
 	[System.Serializable]
@@ -19,6 +20,8 @@ public class MetaConnections : ScriptableObject
 	}
 
 	public List<Connection> connections;
+
+	private readonly Dictionary<string, string> lunacidToLunaticDict = new Dictionary<string, string>();
 
 	[SerializeField]
 	private List<FileHash> fileHashes;
@@ -31,6 +34,19 @@ public class MetaConnections : ScriptableObject
 
 		foreach (FileHash hash in fileHashes)
 			fileHashDict[hash.file] = hash.hash;
+	}
+
+	public void Rebuild()
+	{
+		lunacidToLunaticDict.Clear();
+
+		foreach (Connection conn in connections)
+			lunacidToLunaticDict.Add($"{conn.lunacidScript}.cs.meta", $"{conn.lunaticScript}.cs.meta");
+	}
+
+	public bool LunacidToLunatic(string file, out string result)
+	{
+		return lunacidToLunaticDict.TryGetValue(file, out result);
 	}
 
 	public bool GetFileHash(string file, out byte[] hash)

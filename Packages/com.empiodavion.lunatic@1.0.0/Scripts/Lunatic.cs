@@ -126,6 +126,14 @@ public static class Lunatic
 		Lunar
 	}
 
+	public enum DevMagicEffects
+	{
+		Gain100XP,
+		ResetPlayerLevel,
+		ToggleGodMode,
+		MoveForward
+	}
+
 	private static Dictionary<string, Object> AssetReplacement = new Dictionary<string, Object>();
 
 	private static readonly List<Mod> Mods = new List<Mod>();

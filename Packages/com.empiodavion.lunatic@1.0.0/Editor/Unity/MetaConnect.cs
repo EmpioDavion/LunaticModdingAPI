@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,23 +9,34 @@ public class MetaConnect : EditorWindow
 {
 	private class MetaGUID
 	{
+		private struct SubFolder
+		{
+			public string relativePath;
+			public int startIndex;
+		}
+
 		public Dictionary<string, string> FileToGUID;
 		public Dictionary<string, string> GUIDToFile;
 
-		private readonly string baseFolder;
-		private int startIndex;
+		private readonly SubFolder[] subFolders;
 
-		public MetaGUID(string _baseFolder)
+		public MetaGUID(params string[] _subFolders)
 		{
 			FileToGUID = new Dictionary<string, string>();
 			GUIDToFile = new Dictionary<string, string>();
-			baseFolder = _baseFolder;
+
+			subFolders = new SubFolder[_subFolders.Length];
+
+			for (int i = 0; i < _subFolders.Length; i++)
+				subFolders[i].relativePath = _subFolders[i];
 		}
 
-		public void Add(string file)
+		public string GetSubFolder(int subFolder) => subFolders[subFolder].relativePath;
+
+		public void Add(string file, int subFolder = 0)
 		{
 			string guid = ReadMetaGUID(file);
-			string relative = GetRelativePath(file);
+			string relative = GetRelativePath(file, subFolder);
 
 			FileToGUID.Add(relative, guid);
 			GUIDToFile.Add(guid, relative);
@@ -38,19 +50,16 @@ public class MetaConnect : EditorWindow
 
 		public void SetIndex(string path)
 		{
-			startIndex = path.LastIndexOf(baseFolder) + baseFolder.Length;
+			for (int i = 0; i < subFolders.Length; i++)
+			{
+				string fullPath = Path.Combine(path, subFolders[i].relativePath);
+				subFolders[i].startIndex = fullPath.Length;
+			}
 		}
 
-		public string GetRelativePath(string path)
+		public string GetRelativePath(string path, int subFolder)
 		{
-			return path.Substring(startIndex);
-		}
-
-		public bool GetGUID(string fullPath, out string guid)
-		{
-			string relative = GetRelativePath(fullPath);
-
-			return FileToGUID.TryGetValue(relative, out guid);
+			return path.Substring(subFolders[subFolder].startIndex);
 		}
 	}
 
@@ -58,6 +67,31 @@ public class MetaConnect : EditorWindow
 	{
 		public string lunaticPackage;
 		public string tmpPackage;
+		public ThreadState state;
+		public float progress;
+		public int progressID;
+		public Task task;
+	}
+
+	private enum ThreadState
+	{
+		Ready,
+		Running,
+		TaskEnded,
+		Finished
+	}
+
+	private enum RippedDataSubFolders
+	{
+		Base,
+		AssemblyCSharp,
+		AssemblyCSharpFirstPass
+	}
+
+	private enum LunaticSubFolders
+	{
+		Base,
+		Scripts
 	}
 
 	private UnityEditor.PackageManager.PackageInfo PackageInfo;
@@ -68,9 +102,6 @@ public class MetaConnect : EditorWindow
 
 	private bool trackMetas = true;
 
-	private volatile bool running = false;
-	private volatile bool threadFinished = false;
-
 	public static string RippedDataPath;
 	public static string LunacidPath;
 	public static string LunacidDataPath;
@@ -80,19 +111,28 @@ public class MetaConnect : EditorWindow
 
 	private Vector2 scroll;
 
-	private readonly MetaGUID rippedDataGUIDs = new MetaGUID("Assets");
-	private readonly MetaGUID lunaticGUIDs = new MetaGUID("Lunacid");
+	private readonly MetaGUID rippedDataGUIDs = new MetaGUID("", "Scripts\\Assembly-CSharp\\", "Plugins\\Assembly-CSharp-firstpass\\");
+	private readonly MetaGUID lunaticGUIDs = new MetaGUID("Lunacid\\", "Scripts\\");
+
+	#region TextMeshPro
 
 	private string rippedDataTMP;
 	private string lunaticTMP;
 	private string lunaticFont;
+	private string lunaticSprite;
+	private string lunaticStyle;
 
 	private int textMesh;
 	private int fontAsset;
+	private int spriteAsset;
+	private int styleSheet;
 
-	private volatile float progress = 0.0f;
+	#endregion
 
-	private ThreadData activeData;
+	private string searchLunacid;
+	private string searchLunatic;
+
+	private readonly ThreadData threadData = new ThreadData();
 
 	[MenuItem("Window/Meta Connect")]
 	private static void ShowWindow()
@@ -105,9 +145,10 @@ public class MetaConnect : EditorWindow
 
 	private void OnEnable()
 	{
-		running = false;
-		threadFinished = false;
-		progress = 0.0f;
+		threadData.state = ThreadState.Ready;
+		threadData.progress = 0.0f;
+		threadData.tmpPackage = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(TMPro.TextMeshProUGUI).Assembly).resolvedPath;
+		threadData.lunaticPackage = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(MetaConnect).Assembly).resolvedPath;
 
 		PackageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(MetaConnect).Assembly);
 		RippedDataPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\GameAssets\\LUNACID\\ExportedProject\\Assets\\";
@@ -127,32 +168,103 @@ public class MetaConnect : EditorWindow
 
 		textMesh = FileIDUtil.Compute<TMPro.TextMeshProUGUI>();
 		fontAsset = FileIDUtil.Compute<TMPro.TMP_FontAsset>();
+		spriteAsset = FileIDUtil.Compute<TMPro.TMP_SpriteAsset>();
+		styleSheet = FileIDUtil.Compute<TMPro.TMP_StyleSheet>();
 	}
 
 	public void OnGUI()
 	{
-		GUI.enabled = !running;
+		GUI.enabled = threadData.state != ThreadState.Running;
 
 		meta = (MetaConnections)EditorGUILayout.ObjectField("Meta Connections", meta, typeof(MetaConnections), false);
 
 		if (meta == null)
 			return;
 
+		EditorGUILayout.BeginHorizontal();
+
+		EditorGUILayout.LabelField("Search", GUILayout.Width(100.0f));
+		searchLunacid = EditorGUILayout.TextField(searchLunacid, GUILayout.Width(150.0f));
+
+		EditorGUILayout.Separator();
+
+		EditorGUILayout.LabelField("Search", GUILayout.Width(100.0f));
+		searchLunatic = EditorGUILayout.TextField(searchLunatic, GUILayout.Width(150.0f));
+
+		EditorGUILayout.LabelField("", GUILayout.Width(40.0f));
+
+		EditorGUILayout.Separator();
+
+		EditorGUILayout.LabelField("", GUILayout.Width(32.0f));
+		EditorGUILayout.LabelField("", GUILayout.Width(10.0f));
+
+		EditorGUILayout.EndHorizontal();
+
+		EditorGUILayout.Separator();
+
+		EditorGUILayout.BeginHorizontal();
+
+		EditorGUILayout.LabelField("", GUILayout.Width(100.0f));
+
+		if (GUILayout.Button("Sort", GUILayout.Width(150.0f)))
+		{
+			meta.connections.Sort((x, y) => x.lunacidScript.CompareTo(y.lunacidScript));
+			EditorUtility.SetDirty(meta);
+		}
+
+		EditorGUILayout.Separator();
+
+		EditorGUILayout.LabelField("", GUILayout.Width(100.0f));
+
+		if (GUILayout.Button("Sort", GUILayout.Width(150.0f)))
+		{
+			meta.connections.Sort((x, y) => x.lunaticScript.CompareTo(y.lunaticScript));
+			EditorUtility.SetDirty(meta);
+		}
+
+		EditorGUILayout.LabelField("", GUILayout.Width(40.0f));
+
+		EditorGUILayout.Separator();
+
+		EditorGUILayout.LabelField("", GUILayout.Width(32.0f));
+		EditorGUILayout.LabelField("", GUILayout.Width(10.0f));
+
+		EditorGUILayout.EndHorizontal();
+
+		EditorGUILayout.Separator();
+
 		scroll = GUILayout.BeginScrollView(scroll);
+
+		System.Func<string, bool> searchFuncLunacid = SearchNull;
+		System.Func<string, bool> searchFuncLunatic = SearchNull;
+
+		if (!string.IsNullOrEmpty(searchLunacid))
+			searchFuncLunacid = SearchLunacid;
+
+		if (!string.IsNullOrEmpty(searchLunatic))
+			searchFuncLunatic = SearchLunatic;
 
 		for (int i = 0; i < meta.connections.Count; i++)
 		{
 			MetaConnections.Connection connection = meta.connections[i];
 
+			if (!searchFuncLunacid(connection.lunacidScript) ||
+				!searchFuncLunatic(connection.lunaticScript))
+				continue;
+
 			EditorGUILayout.BeginHorizontal();
 
 			EditorGUI.BeginChangeCheck();
 
-			EditorGUILayout.LabelField("Lunacid Script");
-			connection.lunacidScript = EditorGUILayout.TextField(connection.lunacidScript);
+			EditorGUILayout.LabelField("Lunacid Script", GUILayout.Width(100.0f));
+			connection.lunacidScript = EditorGUILayout.TextField(connection.lunacidScript, GUILayout.Width(150.0f));
+			
+			EditorGUILayout.Separator();
 
-			EditorGUILayout.LabelField("Lunatic Script");
-			connection.lunaticScript = EditorGUILayout.TextField(connection.lunaticScript);
+			EditorGUILayout.LabelField("Lunatic Script", GUILayout.Width(100.0f));
+			connection.lunaticScript = EditorGUILayout.TextField(connection.lunaticScript, GUILayout.Width(150.0f));
+
+			connection.isFirstPass = EditorGUILayout.Toggle("First Pass", connection.isFirstPass, GUILayout.Width(40.0f));
 
 			if (EditorGUI.EndChangeCheck())
 			{
@@ -160,9 +272,11 @@ public class MetaConnect : EditorWindow
 				EditorUtility.SetDirty(meta);
 			}
 
+			EditorGUILayout.Separator();
+
 			GUI.color = Color.red;
 
-			if (GUILayout.Button("X"))
+			if (GUILayout.Button("X", GUILayout.Width(32.0f)))
 			{
 				Undo.RecordObject(meta, "Deleted script connection");
 
@@ -189,14 +303,10 @@ public class MetaConnect : EditorWindow
 
 		if (GUILayout.Button("Run"))
 		{
-			running = true;
+			threadData.state = ThreadState.Running;
+			threadData.progressID = Progress.Start("Running Meta Connect");
 
-			System.Threading.ThreadPool.QueueUserWorkItem(RunAssetCopy, new ThreadData()
-			{
-				tmpPackage = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(TMPro.TextMeshProUGUI).Assembly).resolvedPath,
-				lunaticPackage = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(MetaConnect).Assembly).resolvedPath
-			});
-			//RunAssetCopy();
+			threadData.task = Task.Run(RunAssetCopy);
 		}
 
 		copyDLLs = GUILayout.Toggle(copyDLLs, "Copy Lunacid DLLs");
@@ -208,25 +318,31 @@ public class MetaConnect : EditorWindow
 		GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(32.0f));
 
 		Rect rect = GUILayoutUtility.GetLastRect();
-		EditorGUI.ProgressBar(rect, progress, running ? "Running Meta Connect" : "Ready");
+		EditorGUI.ProgressBar(rect, threadData.progress, threadData.state.ToString());
 
 		GUI.enabled = true;
 
-		if (running)
+		if (threadData.state == ThreadState.Running)
 			Repaint();
-		else if (threadFinished)
+		else if (threadData.state == ThreadState.TaskEnded)
 		{
-			threadFinished = false;
+			threadData.state = ThreadState.Finished;
+
 			EditorUtility.SetDirty(meta);
 			Repaint();
+
+			AssetDatabase.Refresh();
 		}
 	}
 
-	private void RunAssetCopy(object state)
-	{
-		running = true;
+	private bool SearchNull(string str) => true;
 
-		activeData = (ThreadData)state;
+	private bool SearchLunacid(string str) => str.Contains(searchLunacid);
+	private bool SearchLunatic(string str) => str.Contains(searchLunatic);
+
+	private Task RunAssetCopy()
+	{
+		threadData.state = ThreadState.Running;
 
 		try
 		{
@@ -235,7 +351,7 @@ public class MetaConnect : EditorWindow
 				string folder = EditorUtility.OpenFolderPanel("AssetRipper Exported Project Folder", LunaticPath, "ExportedProject");
 
 				if (string.IsNullOrEmpty(folder))
-					return;
+					return null;
 
 				RippedDataPath = folder;
 			}
@@ -245,17 +361,19 @@ public class MetaConnect : EditorWindow
 				LunacidPath = EditorUtility.OpenFilePanel("LUNACID.exe File", LunaticPath, "exe");
 
 				if (string.IsNullOrEmpty(LunacidPath))
-					return;
+					return null;
 			}
 
 			LunacidDataPath = Path.GetDirectoryName(LunacidPath);
 			LunacidDataPath = Path.Combine(LunacidDataPath, "LUNACID_Data\\Managed\\");
 
+			meta.Rebuild();
+
 			rippedDataGUIDs.Clear();
 			lunaticGUIDs.Clear();
 
 			rippedDataGUIDs.SetIndex(RippedDataPath);
-			lunaticGUIDs.SetIndex(Path.Combine(LunaticPath, "Lunacid\\"));
+			lunaticGUIDs.SetIndex(LunaticPath);
 
 			if (copyDLLs)
 			{
@@ -264,72 +382,76 @@ public class MetaConnect : EditorWindow
 				CopyDLL("NavMeshComponents");
 			}
 
-			progress = 0.1f; // 0.1
+			AddProgress(0.1f); // 0.1
 
 			if (copyScripts)
 				CopyScriptMetas();
 
-			progress += 0.1f; // 0.2
+			AddProgress(0.1f); // 0.2
 
 			if (copyAssets)
 			{
 				CopyAssetDirectory("AnimationClip");
-				progress += 0.05f; // 0.25
+				AddProgress(0.05f); // 0.25
 				CopyAssetDirectory("AudioClip");
-				progress += 0.05f; // 0.3
+				AddProgress(0.05f); // 0.3
 				CopyAssetDirectory("Cubemap");
-				progress += 0.05f; // 0.35
+				AddProgress(0.05f); // 0.35
 				CopyAssetDirectory("Material");
-				progress += 0.05f; // 0.4
+				AddProgress(0.05f); // 0.4
 				CopyAssetDirectory("Mesh");
-				progress += 0.05f; // 0.45
+				AddProgress(0.05f); // 0.45
 				CopyAssetDirectory("PhysicMaterial");
-				progress += 0.05f; // 0.5
+				AddProgress(0.05f); // 0.5
 				CopyAssetDirectory("PrefabInstance");
-				progress += 0.05f; // 0.55
+				AddProgress(0.05f); // 0.55
 				CopyAssetDirectory("RenderTexture");
-				progress += 0.05f; // 0.6
+				AddProgress(0.05f); // 0.6
 				CopyAssetDirectory("Resources");
 
 				trackMetas = false;
 
-				progress += 0.05f; // 0.65
+				AddProgress(0.05f); // 0.65
 				CopyAssetDirectory("Scenes");
 
 				trackMetas = true;
 
-				progress += 0.05f; // 0.7
+				AddProgress(0.05f); // 0.7
 				CopyAssetDirectory("Shader");
-				progress += 0.05f; // 0.75
+				AddProgress(0.05f); // 0.75
 				CopyAssetDirectory("Sprite");
-				progress += 0.05f; // 0.8
+				AddProgress(0.05f); // 0.8
 				CopyAssetDirectory("Texture2D");
-				progress += 0.05f; // 0.85
+				AddProgress(0.05f); // 0.85
 				CopyAssetDirectory("VideoClip");
-				progress += 0.05f; // 0.9
+				AddProgress(0.05f); // 0.9
 			}
 
 			ReplaceAssetGUIDs();
 
-			progress += 0.1f; // 1.0
+			AddProgress(0.1f); // 1.0
 		}
 		catch (System.Exception e)
 		{
 			Debug.Log(e);
 		}
 
-		AssetDatabase.Refresh();
+		Progress.Remove(threadData.progressID);
+		threadData.progress = 0.0f;
+		threadData.state = ThreadState.TaskEnded;
+		threadData.progressID = -1;
 
-		progress = 0.0f;
-		threadFinished = true;
-		running = false;
+		return null;
+	}
+
+	private void AddProgress(float amount)
+	{
+		threadData.progress += amount;
+		Progress.Report(threadData.progressID, threadData.progress);
 	}
 
 	private void CopyScriptMetas()
 	{
-		string rippedDataScriptPath = Path.Combine(RippedDataPath, "Scripts\\Assembly-CSharp\\");
-		string lunaticScriptPath = Path.Combine(LunaticPath, "Scripts\\");
-
 		foreach (MetaConnections.Connection connection in meta.connections)
 		{
 			if (string.IsNullOrEmpty(connection.lunacidScript) || string.IsNullOrEmpty(connection.lunaticScript))
@@ -338,28 +460,41 @@ public class MetaConnect : EditorWindow
 			string source = $"{connection.lunacidScript}.cs.meta";
 			string dest = $"{connection.lunaticScript}.cs.meta";
 
-			if (!File.Exists(source))
-				continue;
+			RippedDataSubFolders rippedSub = connection.isFirstPass ? RippedDataSubFolders.AssemblyCSharpFirstPass : RippedDataSubFolders.AssemblyCSharp;
+			string rippedSubFolder = rippedDataGUIDs.GetSubFolder((int)rippedSub);
 
-			if (!File.Exists(dest))
+			string lunaticSubFolder = lunaticGUIDs.GetSubFolder((int)LunaticSubFolders.Scripts);
+
+			string sourcePath = Path.Combine(RippedDataPath, rippedSubFolder, source);
+			string destPath = Path.Combine(LunaticPath, lunaticSubFolder, dest);
+
+			if (!File.Exists(sourcePath))
 			{
-				File.Copy(source, dest);
+				Debug.Log("Failed to find script meta file " + sourcePath);
 				continue;
 			}
 
-			rippedDataGUIDs.Add(Path.Combine(rippedDataScriptPath, source));
-			lunaticGUIDs.Add(Path.Combine(lunaticScriptPath, source));
+			if (!File.Exists(destPath))
+			{
+				File.Copy(sourcePath, destPath);
+				continue;
+			}
+
+			rippedDataGUIDs.Add(sourcePath, (int)(connection.isFirstPass ? RippedDataSubFolders.AssemblyCSharpFirstPass : RippedDataSubFolders.AssemblyCSharp));
+			lunaticGUIDs.Add(destPath, (int)LunaticSubFolders.Scripts);
 		}
 
-		//UnityEditor.PackageManager.PackageInfo lunaticTMPPackage = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(TMPro.TextMeshProUGUI).Assembly);
-
 		string rippedTMPPath = Path.Combine(RippedDataPath, "Plugins\\Unity.TextMeshPro.dll.meta");
-		string lunaticTMPPath = Path.Combine(activeData.tmpPackage, "Scripts\\Runtime\\TextMeshProUGUI.cs.meta");
-		string lunaticFontPath = Path.Combine(activeData.tmpPackage, "Scripts\\Runtime\\TMP_FontAsset.cs.meta");
-
+		string lunaticTMPPath = Path.Combine(threadData.tmpPackage, "Scripts\\Runtime\\TextMeshProUGUI.cs.meta");
+		string lunaticFontPath = Path.Combine(threadData.tmpPackage, "Scripts\\Runtime\\TMP_FontAsset.cs.meta");
+		string lunaticSpritePath = Path.Combine(threadData.tmpPackage, "Scripts\\Runtime\\TMP_SpriteAsset.cs.meta");
+		string lunaticStylePath = Path.Combine(threadData.tmpPackage, "Scripts\\Runtime\\TMP_StyleSheet.cs.meta");
+		
 		rippedDataTMP = ReadMetaGUID(rippedTMPPath);
 		lunaticTMP = ReadMetaGUID(lunaticTMPPath);
 		lunaticFont = ReadMetaGUID(lunaticFontPath);
+		lunaticSprite = ReadMetaGUID(lunaticSpritePath);
+		lunaticStyle = ReadMetaGUID(lunaticStylePath);
 	}
 
 	private static void CopyDLL(string dllName)
@@ -430,7 +565,7 @@ public class MetaConnect : EditorWindow
 		byte[] bytes = File.ReadAllBytes(file1);
 		byte[] h1 = MD5.Create().ComputeHash(bytes);
 
-		string relativePath = lunaticGUIDs.GetRelativePath(file2);
+		string relativePath = lunaticGUIDs.GetRelativePath(file2, 0);
 
 		if (fi1.Length != fi2.Length)
 		{
@@ -477,6 +612,9 @@ public class MetaConnect : EditorWindow
 			if (file.FullName.EndsWith(".meta"))
 				continue;
 
+			if (file.Name.Contains("_CAST"))
+				;
+
 			string[] lines = File.ReadAllLines(file.FullName);
 
 			bool modified = false;
@@ -510,9 +648,8 @@ public class MetaConnect : EditorWindow
 				string guid = line.Substring(start, comma - start);
 				string post = line.Substring(comma);
 
-				if (rippedDataGUIDs.GUIDToFile.TryGetValue(guid, out string file) &&
-					lunaticGUIDs.FileToGUID.TryGetValue(file, out guid))
-					line = string.Concat(pre, guid, post);
+				if (RippedDataGUIDToLunaticGUID(guid, out string lunaticGUID))
+					line = string.Concat(pre, lunaticGUID, post);
 				else if (guid == rippedDataTMP)
 				{
 					const string ID_PATTERN = "fileID: ";
@@ -528,12 +665,38 @@ public class MetaConnect : EditorWindow
 						guid = lunaticTMP;
 					else if (fileID == fontAsset)
 						guid = lunaticFont;
+					else if (fileID == spriteAsset)
+						guid = lunaticSprite;
+					else if (fileID == styleSheet)
+						guid = lunaticStyle;
 
 					line = string.Concat(preFileID, "11500000", PATTERN, guid, post);
 				}
 
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	private bool RippedDataGUIDToLunaticGUID(string rippedDataGUID, out string lunaticGUID)
+	{
+		lunaticGUID = null;
+
+		if (rippedDataGUIDs.GUIDToFile.TryGetValue(rippedDataGUID, out string rippedDataFile))
+		{
+			if (meta.LunacidToLunatic(rippedDataFile, out string lunaticFile))
+			{
+				if (lunaticGUIDs.FileToGUID.TryGetValue(lunaticFile, out lunaticGUID))
+					return true;
+				else
+					Debug.Log("Failed to find lunatic file " + lunaticFile);
+			}
+			else if (lunaticGUIDs.FileToGUID.TryGetValue(rippedDataFile, out lunaticGUID))
+				return true;
+			else
+				Debug.Log("Failed to find convert from ripped data file " + rippedDataFile);
 		}
 
 		return false;

@@ -1,0 +1,4 @@
+public class ModCheckInTrigger : InTrigger
+{
+    
+}

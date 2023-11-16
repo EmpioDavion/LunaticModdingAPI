@@ -13,135 +13,292 @@ MonoBehaviour:
   m_Name: Meta Connections
   m_EditorClassIdentifier: 
   connections:
-  - lunacidScript: AREA_SAVED_ITEM
-    lunaticScript: ModMultipleStates
-  - lunacidScript: Magic_scr
-    lunaticScript: ModMagic
-  - lunacidScript: Useable_Item
-    lunaticScript: ModItem
-  - lunacidScript: Head_Track
-    lunaticScript: ModHeadTrack
-  - lunacidScript: Spawn_Class_Item
-    lunaticScript: ModSpawnClassItem
-  - lunacidScript: Act_other_scr
-    lunaticScript: ModSimpleActivator
-  - lunacidScript: Random_Anim_list_scr
-    lunaticScript: ModRandomAnimList
-  - lunacidScript: Random_Snd_scr
-    lunaticScript: ModRandomSound
-  - lunacidScript: Kill_Other
-    lunaticScript: ModKillOther
-  - lunacidScript: AREA_ITEM_ACT
-    lunaticScript: ModActivator
-  - lunacidScript: ACT_RAND
-    lunaticScript: ModRandomActivator
-  - lunacidScript: weapon_scr
-    lunaticScript: ModWeapon
-  - lunacidScript: Play_Anim
-    lunaticScript: ModPlayAnim
-  - lunacidScript: NPC_Play_Music
-    lunaticScript: ModNPCPlayMusic
-  - lunacidScript: Item_Pickup_scr
-    lunaticScript: ModItemPickup
-  - lunacidScript: Dialog
-    lunaticScript: ModDialog
-  - lunacidScript: Break_from_parent
-    lunaticScript: ModBreakFromParent
-  - lunacidScript: AI_simple
-    lunaticScript: ModSimpleAI
-  - lunacidScript: Auto_Kill
-    lunaticScript: ModAutoKill
-  - lunacidScript: Loot_scr
-    lunaticScript: ModLoot
-  - lunacidScript: NPC_Scaling
-    lunaticScript: ModNPCScaling
-  - lunacidScript: AI_feet
-    lunaticScript: ModAIFeet
-  - lunacidScript: Spawn_on_enable
-    lunaticScript: ModSpawnOnEnable
-  - lunacidScript: OBJ_Health
-    lunaticScript: ModObjectHealth
-  - lunacidScript: DynamicBone
-    lunaticScript: ModDynamicBone
-  - lunacidScript: Shake_OnEnable
-    lunaticScript: ModShakeOnEnable
-  - lunacidScript: Damage_Trigger
-    lunaticScript: ModDamageTrigger
-  - lunacidScript: Idle_Sounds
-    lunaticScript: ModIdleSounds
-  - lunacidScript: HuntPOS_Place
-    lunaticScript: ModHuntPOSPlace
-  - lunacidScript: Rotate_Constant
-    lunaticScript: ModRotateConstant
-  - lunacidScript: FULL_bill_scr
-    lunaticScript: ModFullBill
-  - lunacidScript: Status_effect
-    lunaticScript: ModStatusEffect
-  - lunacidScript: Material_Flash
-    lunaticScript: ModMaterialFlash
-  - lunacidScript: Lerp_effect
-    lunaticScript: ModLerpEffect
-  - lunacidScript: Mid_Attack_Stat
-    lunaticScript: ModMidAttackStat
-  - lunacidScript: MoonHeal
-    lunaticScript: ModMoonHeal
-  - lunacidScript: Blink_scr
-    lunaticScript: ModBlink
-  - lunacidScript: LunacyGain
-    lunaticScript: ModLunacyGain
-  - lunacidScript: Wiggle_scr
-    lunaticScript: ModWiggle
-  - lunacidScript: AlertOther
-    lunaticScript: ModAlertOther
-  - lunacidScript: Anim_Speed
-    lunaticScript: ModAnimSpeed
-  - lunacidScript: Bill_scr
-    lunaticScript: ModBill
-  - lunacidScript: DynamicBoneCollider
-    lunaticScript: ModDynamicBoneCollider
-  - lunacidScript: Material_Effect
-    lunaticScript: ModMaterialEffect
-  - lunacidScript: LVG_obj
-    lunaticScript: ModLivingObject
-  - lunacidScript: BloodTrigger
-    lunaticScript: ModBloodTrigger
-  - lunacidScript: Money_Damage
-    lunaticScript: ModMoneyDamage
   - lunacidScript: Act_Button_scr
     lunaticScript: ModProximityActivator
-  - lunacidScript: Alert_Trig
-    lunaticScript: ModAlertTrigger
-  - lunacidScript: Anim_Die_scr
-    lunaticScript: ModDeathAnimation
-  - lunacidScript: rename
-    lunaticScript: ModRename
+    isFirstPass: 0
+  - lunacidScript: Act_other_scr
+    lunaticScript: ModSimpleActivator
+    isFirstPass: 0
+  - lunacidScript: ACT_RAND
+    lunaticScript: ModRandomActivator
+    isFirstPass: 0
+  - lunacidScript: Adjust_Player_Stats
+    lunaticScript: ModChangePlayerStats
+    isFirstPass: 0
   - lunacidScript: AI_adjust_move
     lunaticScript: ModAIAdjustBehaviour
-  - lunacidScript: DynamicBonePlaneCollider
-    lunaticScript: ModDynamicBonePlaneCollider
-  - lunacidScript: RAND_scale
-    lunaticScript: ModRandomScale
-  - lunacidScript: Ghost_Disapper
-    lunaticScript: ModGhostDisappear
+    isFirstPass: 0
+  - lunacidScript: AI_companion
+    lunaticScript: ModAICompanion
+    isFirstPass: 0
+  - lunacidScript: AI_feet
+    lunaticScript: ModAIFeet
+    isFirstPass: 0
+  - lunacidScript: AI_simple
+    lunaticScript: ModSimpleAI
+    isFirstPass: 0
   - lunacidScript: AI_Use_Move
     lunaticScript: ModAIUseBehaviour
-  - lunacidScript: Set_Other_Scale
-    lunaticScript: ModChangeScale
-  - lunacidScript: Audio_fade_in
-    lunaticScript: ModAudioFadeIn
+    isFirstPass: 0
+  - lunacidScript: Alert_Trig
+    lunaticScript: ModAlertTrigger
+    isFirstPass: 0
+  - lunacidScript: AlertOther
+    lunaticScript: ModAlertOther
+    isFirstPass: 0
+  - lunacidScript: Analyz_NPC
+    lunaticScript: ModAnalyseNPC
+    isFirstPass: 0
+  - lunacidScript: Anim_Die_scr
+    lunaticScript: ModDeathAnimation
+    isFirstPass: 0
   - lunacidScript: Anim_Order
     lunaticScript: ModPlayAnimsInOrder
-  - lunacidScript: Lant_scr
-    lunaticScript: ModLantern
-  - lunacidScript: ColorPalettePreset
-    lunaticScript: ModColourPalettePreset
-  - lunacidScript: Material_A_fade_scr
-    lunaticScript: ModColourFadeLinear
-  - lunacidScript: Random_Snd_Delay
-    lunaticScript: ModRandomSoundDelay
+    isFirstPass: 0
+  - lunacidScript: Anim_Speed
+    lunaticScript: ModAnimSpeed
+    isFirstPass: 0
+  - lunacidScript: AREA_ITEM_ACT
+    lunaticScript: ModActivator
+    isFirstPass: 0
+  - lunacidScript: AREA_SAVED_ITEM
+    lunaticScript: ModMultipleStates
+    isFirstPass: 0
+  - lunacidScript: Audio_fade_in
+    lunaticScript: ModAudioFadeIn
+    isFirstPass: 0
+  - lunacidScript: Auto_Kill
+    lunaticScript: ModAutoKill
+    isFirstPass: 0
+  - lunacidScript: Banner_Place
+    lunaticScript: ModBannerPlacement
+    isFirstPass: 0
+  - lunacidScript: Bill_scr
+    lunaticScript: ModBillboard
+    isFirstPass: 0
+  - lunacidScript: Blink_scr
+    lunaticScript: ModBlink
+    isFirstPass: 0
+  - lunacidScript: BloodTrigger
+    lunaticScript: ModBloodTrigger
+    isFirstPass: 0
+  - lunacidScript: Break_from_parent
+    lunaticScript: ModBreakFromParent
+    isFirstPass: 0
+  - lunacidScript: C_NPC_BILL
+    lunaticScript: ModNPCBillboard
+    isFirstPass: 0
   - lunacidScript: Compass_control
     lunaticScript: ModCompassControl
+    isFirstPass: 0
+  - lunacidScript: ContinuosForce
+    lunaticScript: ModContinuousForce
+    isFirstPass: 0
+  - lunacidScript: Damage_Trigger
+    lunaticScript: ModDamageTrigger
+    isFirstPass: 0
+  - lunacidScript: DevSpell
+    lunaticScript: ModDevMagicEffect
+    isFirstPass: 0
+  - lunacidScript: Dialog
+    lunaticScript: ModDialog
+    isFirstPass: 0
+  - lunacidScript: DynamicBone
+    lunaticScript: ModDynamicBone
+    isFirstPass: 0
+  - lunacidScript: DynamicBoneCollider
+    lunaticScript: ModDynamicBoneCollider
+    isFirstPass: 0
+  - lunacidScript: DynamicBonePlaneCollider
+    lunaticScript: ModDynamicBonePlaneCollider
+    isFirstPass: 0
+  - lunacidScript: EFF_on_HIT
+    lunaticScript: ModParticleEffectOnHit
+    isFirstPass: 0
+  - lunacidScript: FIX_Rot
+    lunaticScript: ModFreezeRotation
+    isFirstPass: 0
+  - lunacidScript: FULL_bill_scr
+    lunaticScript: ModFullBillboard
+    isFirstPass: 0
+  - lunacidScript: Ghost_Disapper
+    lunaticScript: ModGhostDisappear
+    isFirstPass: 0
+  - lunacidScript: GOTO_PL
+    lunaticScript: ModTeleportToCamera
+    isFirstPass: 0
+  - lunacidScript: Head_Track
+    lunaticScript: ModHeadTrack
+    isFirstPass: 0
+  - lunacidScript: Heal_on_Enable
+    lunaticScript: ModHealOnEnable
+    isFirstPass: 0
+  - lunacidScript: HuntPOS_Place
+    lunaticScript: ModHuntPOSPlace
+    isFirstPass: 0
+  - lunacidScript: Idle_Sounds
+    lunaticScript: ModIdleSounds
+    isFirstPass: 0
+  - lunacidScript: InSolid
+    lunaticScript: ModCheckInSolid
+    isFirstPass: 0
+  - lunacidScript: InTrigger
+    lunaticScript: ModCheckInTrigger
+    isFirstPass: 0
+  - lunacidScript: Item_Emit
+    lunaticScript: ModProjectile
+    isFirstPass: 0
+  - lunacidScript: Item_Follow
+    lunaticScript: ModFollowPlayer
+    isFirstPass: 0
+  - lunacidScript: Item_Pickup_scr
+    lunaticScript: ModItemPickup
+    isFirstPass: 0
+  - lunacidScript: KeyTrigger
+    lunaticScript: ModKeyTrigger
+    isFirstPass: 0
+  - lunacidScript: Kill_Other
+    lunaticScript: ModKillOther
+    isFirstPass: 0
+  - lunacidScript: Lant_scr
+    lunaticScript: ModLantern
+    isFirstPass: 0
+  - lunacidScript: Lerp_effect
+    lunaticScript: ModLerpEffect
+    isFirstPass: 0
+  - lunacidScript: LimitlessDev\RetroLookPro\ColorPalettePreset
+    lunaticScript: ModColourPalettePreset
+    isFirstPass: 0
+  - lunacidScript: LITNIN_WATER
+    lunaticScript: ModLightningFromWater
+    isFirstPass: 0
+  - lunacidScript: Loot_scr
+    lunaticScript: ModLoot
+    isFirstPass: 0
+  - lunacidScript: LunacyGain
+    lunaticScript: ModLunacyGain
+    isFirstPass: 0
+  - lunacidScript: LVG_obj
+    lunaticScript: ModLivingObject
+    isFirstPass: 0
+  - lunacidScript: Magic_scr
+    lunaticScript: ModMagic
+    isFirstPass: 0
+  - lunacidScript: Material_A_fade_scr
+    lunaticScript: ModColourFadeLinear
+    isFirstPass: 0
+  - lunacidScript: Material_Effect
+    lunaticScript: ModMaterialDistanceScale
+    isFirstPass: 0
+  - lunacidScript: Material_Flash
+    lunaticScript: ModMaterialFlash
+    isFirstPass: 0
+  - lunacidScript: MAX_CHECK
+    lunaticScript: ModObjectLimit
+    isFirstPass: 0
+  - lunacidScript: Mid_Attack_Stat
+    lunaticScript: ModMidAttackStat
+    isFirstPass: 0
+  - lunacidScript: Money_Damage
+    lunaticScript: ModMoneyDamage
+    isFirstPass: 0
+  - lunacidScript: MoonHeal
+    lunaticScript: ModMoonHeal
+    isFirstPass: 0
   - lunacidScript: NPC_Bar
     lunaticScript: ModNPCSliderBar
+    isFirstPass: 0
+  - lunacidScript: NPC_Play_Music
+    lunaticScript: ModNPCPlayMusic
+    isFirstPass: 0
+  - lunacidScript: NPC_Scaling
+    lunaticScript: ModNPCScaling
+    isFirstPass: 0
+  - lunacidScript: NPC_Turrent
+    lunaticScript: ModTurret
+    isFirstPass: 0
+  - lunacidScript: OBJ_Health
+    lunaticScript: ModObjectHealth
+    isFirstPass: 0
+  - lunacidScript: Objectmacy_scr
+    lunaticScript: ModObjectmancy
+    isFirstPass: 0
+  - lunacidScript: Place_on_Ground
+    lunaticScript: ModPlaceable
+    isFirstPass: 0
+  - lunacidScript: Play_Anim
+    lunaticScript: ModPlayAnim
+    isFirstPass: 0
+  - lunacidScript: RAND_scale
+    lunaticScript: ModRandomScale
+    isFirstPass: 0
+  - lunacidScript: Random_Anim_list_scr
+    lunaticScript: ModRandomAnimList
+    isFirstPass: 0
+  - lunacidScript: Random_Snd_Delay
+    lunaticScript: ModRandomSoundDelay
+    isFirstPass: 0
+  - lunacidScript: Random_Snd_scr
+    lunaticScript: ModRandomSound
+    isFirstPass: 0
+  - lunacidScript: RandomPosition
+    lunaticScript: ModRandomPosition
+    isFirstPass: 0
+  - lunacidScript: rename
+    lunaticScript: ModRename
+    isFirstPass: 0
+  - lunacidScript: rope
+    lunaticScript: ModRope
+    isFirstPass: 0
+  - lunacidScript: Rotate_Constant
+    lunaticScript: ModConstantRotation
+    isFirstPass: 0
+  - lunacidScript: Set_Other_Scale
+    lunaticScript: ModChangeScale
+    isFirstPass: 0
+  - lunacidScript: Shake_OnEnable
+    lunaticScript: ModShakeOnEnable
+    isFirstPass: 0
+  - lunacidScript: Spawn_Class_Item
+    lunaticScript: ModSpawnClassItem
+    isFirstPass: 0
+  - lunacidScript: Spawn_on_enable
+    lunaticScript: ModSpawnOnEnable
+    isFirstPass: 0
+  - lunacidScript: SpecialSpell
+    lunaticScript: ModSpecialProjectile
+    isFirstPass: 0
+  - lunacidScript: Status_effect
+    lunaticScript: ModStatusEffect
+    isFirstPass: 0
+  - lunacidScript: StickToCam
+    lunaticScript: ModAttachToCamera
+    isFirstPass: 0
+  - lunacidScript: Tent_Item
+    lunaticScript: ModTent
+    isFirstPass: 0
   - lunacidScript: TXT_light_Spin
     lunaticScript: ModLightSpinUI
+    isFirstPass: 0
+  - lunacidScript: Undeth_setter
+    lunaticScript: ModSetUndeathStatus
+    isFirstPass: 0
+  - lunacidScript: Unlock_Achievement
+    lunaticScript: ModUnlockAchievement
+    isFirstPass: 1
+  - lunacidScript: Useable_Item
+    lunaticScript: ModItem
+    isFirstPass: 0
+  - lunacidScript: WarpSpell
+    lunaticScript: ModWarpMagicEffect
+    isFirstPass: 0
+  - lunacidScript: weapon_scr
+    lunaticScript: ModWeapon
+    isFirstPass: 0
+  - lunacidScript: Wiggle_scr
+    lunaticScript: ModWiggle
+    isFirstPass: 0
+  - lunacidScript: World_Force
+    lunaticScript: ModVacuum
+    isFirstPass: 0
+  fileHashes: []
