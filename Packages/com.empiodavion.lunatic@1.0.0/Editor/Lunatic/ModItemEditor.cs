@@ -35,7 +35,7 @@ public class ModItemEditor : Editor
 		if (EditorTools.ShowHelp)
 			EditorGUILayout.HelpBox("If the item gets consumed on use.", MessageType.Info);
 
-		consumable = EditorGUILayout.Toggle(type.displayName, consumable);
+		consumable = EditorGUILayout.Toggle("Consumable", consumable);
 
 		type.intValue = consumable ? 0 : 1;
 

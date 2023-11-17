@@ -302,12 +302,7 @@ public class MetaConnect : EditorWindow
 		}
 
 		if (GUILayout.Button("Run"))
-		{
-			threadData.state = ThreadState.Running;
-			threadData.progressID = Progress.Start("Running Meta Connect");
-
-			threadData.task = Task.Run(RunAssetCopy);
-		}
+			BeginRunAssetCopy();
 
 		copyDLLs = GUILayout.Toggle(copyDLLs, "Copy Lunacid DLLs");
 		copyAssets = GUILayout.Toggle(copyAssets, "Copy Lunacid Assets");
@@ -340,30 +335,38 @@ public class MetaConnect : EditorWindow
 	private bool SearchLunacid(string str) => str.Contains(searchLunacid);
 	private bool SearchLunatic(string str) => str.Contains(searchLunatic);
 
+	private void BeginRunAssetCopy()
+	{
+		if (!Directory.Exists(RippedDataPath))
+		{
+			string sln = EditorUtility.OpenFilePanel("AssetRipper Exported Project Solution", LunaticPath, "sln");
+
+			if (string.IsNullOrEmpty(sln))
+				return;
+
+			RippedDataPath = Path.Combine(Path.GetDirectoryName(sln), "Assets\\");
+		}
+
+		if (!File.Exists(LunacidPath))
+		{
+			LunacidPath = EditorUtility.OpenFilePanel("LUNACID.exe File", LunaticPath, "exe");
+
+			if (string.IsNullOrEmpty(LunacidPath))
+				return;
+		}
+
+		threadData.state = ThreadState.Running;
+		threadData.progressID = Progress.Start("Running Meta Connect");
+
+		threadData.task = Task.Run(RunAssetCopy);
+	}
+
 	private Task RunAssetCopy()
 	{
 		threadData.state = ThreadState.Running;
 
 		try
 		{
-			if (!Directory.Exists(RippedDataPath))
-			{
-				string folder = EditorUtility.OpenFolderPanel("AssetRipper Exported Project Folder", LunaticPath, "ExportedProject");
-
-				if (string.IsNullOrEmpty(folder))
-					return null;
-
-				RippedDataPath = folder;
-			}
-
-			if (!File.Exists(LunacidPath))
-			{
-				LunacidPath = EditorUtility.OpenFilePanel("LUNACID.exe File", LunaticPath, "exe");
-
-				if (string.IsNullOrEmpty(LunacidPath))
-					return null;
-			}
-
 			LunacidDataPath = Path.GetDirectoryName(LunacidPath);
 			LunacidDataPath = Path.Combine(LunacidDataPath, "LUNACID_Data\\Managed\\");
 
