@@ -94,19 +94,6 @@ public static class Lunatic
 		public static GameObject PlayerResponseExit { get; internal set; }
 	}
 
-	internal struct ModMaterialSaveData
-	{
-		public string name;
-		public int count;
-
-		public override string ToString()
-		{
-			int id = GetMaterialID(name);
-			
-			return id + count.ToString("00");
-		}
-	}
-
 	public enum Elements
 	{
 		Normal,
@@ -148,7 +135,7 @@ public static class Lunatic
 
 	private static readonly Dictionary<string, Object> AssetReplacement = new Dictionary<string, Object>();
 
-	private static readonly List<Mod> Mods = new List<Mod>();
+	internal static readonly List<Mod> Mods = new List<Mod>();
 
 	public static readonly List<Renderer> Renderers = new List<Renderer>();
 	public static readonly HashSet<Material> Materials = new HashSet<Material>();
@@ -161,16 +148,24 @@ public static class Lunatic
 	// list of material item names
 	public static readonly List<string> MaterialNames = new List<string>();
 
+	internal static readonly List<ModWeapon> ModWeapons = new List<ModWeapon>();
+	internal static readonly List<ModMagic> ModMagics = new List<ModMagic>();
+	internal static readonly List<ModItem> ModItems = new List<ModItem>();
+	internal static readonly List<ModMaterial> ModMaterials = new List<ModMaterial>();
+	internal static readonly List<ModRecipe> ModRecipes = new List<ModRecipe>();
+
 	private static Dictionary<string, string> ModData = new Dictionary<string, string>();
 
 	private static readonly Dictionary<string, AssetBundle> AssetBundles = new Dictionary<string, AssetBundle>();
 
 	private static readonly Dictionary<int, Alki> AlchemyTables = new Dictionary<int, Alki>();
 
+	private static readonly Dictionary<string, Shader> LunacidShaders = new Dictionary<string, Shader>();
+
 	private static bool Initialised = false;
 	private static bool ModsLoaded = false;
 
-	private static int BaseMaterialCount;
+	public static int BaseMaterialCount { get; private set; }
 
 	private static AssetBundle Bundle;
 
@@ -207,6 +202,78 @@ public static class Lunatic
 			MaterialNames.Add(names[i].Replace("\r\n", ""));
 
 		BaseMaterialCount = MaterialNames.Count;
+
+		AddShader("Lunacid/Mix");
+		AddShader("Lunacid/Unlit Transparent No Fog");
+		AddShader("ProBuilder/Standard Vertex Color");
+		AddShader("ProBuilder/Unlit Vertex Color");
+		AddShader("Retro Look Pro/Analog TV Noise");
+		AddShader("Retro Look Pro/Bleed Effect");
+		AddShader("Retro Look Pro/Bottom Noise Effect");
+		AddShader("Retro Look Pro/Glitch 1 Retro Look");
+		AddShader("Retro Look Pro/Glitch 2 Retro Look");
+		AddShader("Retro Look Pro/Glitch 3");
+		AddShader("Retro Look Pro/Jitter Effect");
+		AddShader("Retro Look Pro/Low Res_RL Pro");
+		AddShader("Retro Look Pro/Noise");
+		AddShader("Retro Look Pro/NTSC_RL Pro");
+		AddShader("Retro Look Pro/Phosphor_RL Pro");
+		AddShader("Retro Look Pro/Picture Correction");
+		AddShader("Retro Look Pro/TV_Retro Look");
+		AddShader("Retro Look Pro/VHS_Retro Look");
+		AddShader("Retro Look Pro/VHS Scanlines_RL Pro");
+		AddShader("Shader Forge/Additive_Ignore_Fog");
+		AddShader("Shader Forge/CASMOON");
+		AddShader("Shader Forge/Clouds");
+		AddShader("Shader Forge/Fade to Image");
+		AddShader("Shader Forge/Fairy");
+		AddShader("Shader Forge/Fake_Caustics");
+		AddShader("Shader Forge/Fish_Shader");
+		AddShader("Shader Forge/flame_bill");
+		AddShader("Shader Forge/Gamma");
+		AddShader("Shader Forge/ghost");
+		AddShader("Shader Forge/Ghost Dark");
+		AddShader("Shader Forge/Glow Wave");
+		AddShader("Shader Forge/Hair");
+		AddShader("Shader Forge/Heatwave");
+		AddShader("Shader Forge/Ignore_Fog");
+		AddShader("Shader Forge/ITEM_FLARE");
+		AddShader("Shader Forge/Lava");
+		AddShader("Shader Forge/Light_Beam");
+		AddShader("Shader Forge/Light_Spot");
+		AddShader("Shader Forge/Lit_Vertex");
+		AddShader("Shader Forge/MIGO_shader");
+		AddShader("Shader Forge/MLGS");
+		AddShader("Shader Forge/Moon_Reflection");
+		AddShader("Shader Forge/Moon_shader");
+		AddShader("Shader Forge/New_Water_super");
+		AddShader("Shader Forge/Object");
+		AddShader("Shader Forge/Object_Clip");
+		AddShader("Shader Forge/Object_DBL");
+		AddShader("Shader Forge/Object_glow");
+		AddShader("Shader Forge/Oil");
+		AddShader("Shader Forge/Particle_Ignore_Fog");
+		AddShader("Shader Forge/Radiant");
+		AddShader("Shader Forge/Reflections");
+		AddShader("Shader Forge/Shiney Surf");
+		AddShader("Shader Forge/swim_shady");
+		AddShader("Shader Forge/Unlit_Object");
+		AddShader("Shader Forge/Water");
+		AddShader("Shader Forge/Water_alt");
+		AddShader("Shader Forge/Water_Flow");
+		AddShader("Shader Forge/Water_SWirl");
+		AddShader("Shader Forge/Wind");
+		AddShader("Shader Forge/Winder");
+		AddShader("Volumetric Cloud 3");
+
+		foreach (KeyValuePair<string, Shader> kvp in LunacidShaders)
+			if (kvp.Value == null)
+				Debug.Log($"Shader \"{kvp.Key}\" is null");
+	}
+
+	private static void AddShader(string shaderPath)
+	{
+		LunacidShaders.Add(shaderPath, Shader.Find(shaderPath));
 	}
 
 	private static void LoadMods()
@@ -291,6 +358,32 @@ public static class Lunatic
 	// due to truncation, don't need to bother with checking whether it's a mod material or not
 	public static string GetMaterialName(int id) => MaterialNames[id / 2];
 
+	public static ModWeapon GetModWeapon(string name)
+	{
+		return ModWeapons.Find((x) => x.name == name);
+	}
+
+	public static ModMagic GetModMagic(string name)
+	{
+		return ModMagics.Find((x) => x.name == name);
+	}
+
+	public static ModItem GetModItem(string name)
+	{
+		return ModItems.Find((x) => x.name == name);
+	}
+
+	public static ModMaterial GetModMaterial(string name)
+	{
+		return ModMaterials.Find((x) => x.name == name);
+	}
+
+	public static ModMaterial GetModMaterial(int id)
+	{
+		int index = id / 2 - BaseMaterialCount;
+		return ModMaterials[index];
+	}
+
 	public static int GetMaterialID(string name)
 	{
 		int index = MaterialNames.IndexOf(name);
@@ -301,6 +394,18 @@ public static class Lunatic
 			id++;
 
 		return id;
+	}
+
+	internal static string GetInternalName(IModObject modObject)
+	{
+		return $"L#{modObject.Mod.name}/{modObject.Name}";
+	}
+
+	public static void ReadInternalName(string internalName, out string modName, out string objectName, bool hasData)
+	{
+		int slash = internalName.IndexOf('/', 3);
+		modName = internalName.Substring(2, slash - 3);
+		objectName = internalName.Substring(slash + 1, internalName.Length - slash - (hasData ? 3 : 1));
 	}
 
 	public static void Internal_InitRecipesArray(Alki alki)
@@ -330,9 +435,12 @@ public static class Lunatic
 		}
 	}
 
-	public static T GetModData<T>(Mod mod)
+	public static T GetModData<T>()
 	{
-		if (ModData.TryGetValue(mod.name, out string json))
+		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetCallingAssembly();
+		string name = assembly.GetName().Name;
+
+		if (ModData.TryGetValue(name, out string json))
 			return JsonUtility.FromJson<T>(json);
 
 		return default;
@@ -435,9 +543,41 @@ public static class Lunatic
 		return null;
 	}
 
+	// TODO: Figure out what is null
 	internal static void TrackWeapon(ModWeapon weapon)
 	{
 		AssetReplacement.Add("WEPS/" + weapon.name, weapon.gameObject);
+
+		Debug.Log($"{weapon.name}, {LunacidShaders}");
+		Debug.Log($"{LunacidShaders["Shader Forge/Object"]}");
+
+		Renderer[] renderers = weapon.GetComponentsInChildren<Renderer>();
+
+		foreach (Renderer renderer in renderers)
+		{
+			if (renderer == null)
+			{
+				Debug.Log("Renderer was null?");
+
+				continue;
+			}
+
+			Material[] materials = renderer.sharedMaterials;
+
+			foreach (Material material in materials)
+			{
+				if (material == null)
+				{
+					Debug.Log("Material was null");
+					continue;
+				}
+
+				if (LunacidShaders.TryGetValue(material.shader.name, out Shader shader))
+					material.shader = shader;
+			}
+
+			renderer.sharedMaterials = materials;
+		}
 	}
 
 	internal static void TrackMagic(ModMagic magic)
@@ -568,23 +708,10 @@ public static class Lunatic
 
 	public static PlayerData Internal_OnPlayerDataLoad(PlayerData playerData)
 	{
-		if (ModData.TryGetValue("Lunatic", out string json))
-		{
-			List<ModMaterialSaveData> modMaterials = JsonUtility.FromJson<List<ModMaterialSaveData>>(json);
+		LPlayerData data = GetModData<LPlayerData>();
 
-			int index = System.Array.FindIndex(playerData.MATER, string.IsNullOrEmpty);
-
-			if (index >= 0)
-			{
-				foreach (ModMaterialSaveData modMaterial in modMaterials)
-				{
-					if (index >= playerData.MATER.Length)
-						break;
-
-					playerData.MATER[index++] = modMaterial.ToString();
-				}
-			}
-		}
+		if (data != null)
+			LPlayerData.Load(data, playerData);
 
 		return playerData;
 	}
@@ -592,50 +719,25 @@ public static class Lunatic
 	public static void Internal_OnPlayerDataSave(PlayerData playerData)
 	{
 		// TODO: remove mod objects
-		//List<string> weapons = new List<string>(playerData.WEPS.Length);
-		List<string> materials = new List<string>(playerData.MATER);
-		List<ModMaterialSaveData> modMaterials = new List<ModMaterialSaveData>();
+		LPlayerData data = LPlayerData.Save(playerData);
 
-		for (int i = 0; i < materials.Count; i++)
-		{
-			if (string.IsNullOrEmpty(materials[i]))
-				break;
-
-			int id = int.Parse(materials[i].Substring(0, materials[i].Length - 2));
-
-			if (id > BaseMaterialCount * 2)
-			{
-				materials[i] = "";
-
-				modMaterials.Add(new ModMaterialSaveData
-				{
-					name = GetMaterialName(id),
-					count = int.Parse(materials[i].Substring(materials[i].Length - 2))
-				});
-			}
-		}
-
-		// send empty strings to end of list
-		materials.Sort(PushBlankToEnd);
-
-		playerData.MATER = materials.ToArray();
-
-		SetModData(modMaterials);
+		SetModData(data);
 	}
 
-	private static int PushBlankToEnd(string a, string b)
+	public static void SortWeapons(List<string> list)
 	{
-		if (string.IsNullOrEmpty(a))
-		{
-			if (string.IsNullOrEmpty(b))
-				return 0;
+		list.Sort(Internal_SortWeapon);
+	}
 
-			return 1;
-		}
-		else if (string.IsNullOrEmpty(b))
-			return -1;
+	internal static int Internal_SortWeapon(string a, string b)
+	{
+		if (a.StartsWith("L#"))
+			a = a.Substring(a.IndexOf('/', 3) + 1);
 
-		return 0;
+		if (b.StartsWith("L#"))
+			b = b.Substring(b.IndexOf('/', 3) + 1);
+
+		return a.CompareTo(b);
 	}
 
 	public static void Internal_AddMaterialTexts(Menus menus)

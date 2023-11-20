@@ -81,17 +81,27 @@ public class Mod : ScriptableObject
 
 	internal void Init()
 	{
-		Debug.Log("Initialising mod objects");
+		Debug.Log($"Initialising mod objects");
 
+		Debug.Log($"Initialising mod weapons");
 		InitWeapons();
+
+		Debug.Log($"Initialising mod magics");
 		InitMagics();
+
+		Debug.Log($"Initialising mod items");
 		InitItems();
+
+		Debug.Log($"Initialising mod materials");
 		InitMaterials();
+
+		Debug.Log($"Initialising mod recipes");
 		InitRecipes();
+
+		Debug.Log($"Initialising mod classes");
 		InitClasses();
 
-		foreach (ModRecipe modRecipe in recipes)
-			Debug.Log($"{modRecipe.name} - {modRecipe.ingredient1.name}");
+		Debug.Log($"Initialised mod objects");
 	}
 
 	private void InitWeapons()
@@ -100,6 +110,8 @@ public class Mod : ScriptableObject
 		{
 			Lunatic.TrackWeapon(weapon);
 		}
+
+		Lunatic.ModWeapons.AddRange(weapons);
 	}
 
 	private void InitMagics()
@@ -108,6 +120,8 @@ public class Mod : ScriptableObject
 		{
 			Lunatic.TrackMagic(magic);
 		}
+
+		Lunatic.ModMagics.AddRange(magics);
 	}
 
 	private void InitItems()
@@ -116,6 +130,8 @@ public class Mod : ScriptableObject
 		{
 			Lunatic.TrackItem(item);
 		}
+
+		Lunatic.ModItems.AddRange(items);
 	}
 
 	private void InitMaterials()
@@ -125,12 +141,16 @@ public class Mod : ScriptableObject
 			material.id = Lunatic.MaterialNames.Count * 2 + 1;
 			Lunatic.MaterialNames.Add(material.name);
 		}
+
+		Lunatic.ModMaterials.AddRange(materials);
 	}
 
 	internal void InitRecipes()
 	{
 		foreach (ModRecipe modRecipe in recipes)
 			modRecipe.Init();
+
+		Lunatic.ModRecipes.AddRange(recipes);
 	}
 
 	internal void AddRecipes(Alki alki)

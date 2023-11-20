@@ -36,7 +36,7 @@ public class TemplateGame : ModGame
 		// and will load data for all active mods when a Lunacid save file is loaded
 		// the mod data will be stored as a string of text,
 		// all you have to do is deserialise it
-		ModData = Lunatic.GetModData<MyModData>(Mod);
+		ModData = Lunatic.GetModData<MyModData>();
 
 		// keep in mind that if you create more than one ModGame script in your mod,
 		// you will want only one of the scripts to serialise and deserialise data,

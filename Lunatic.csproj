@@ -56,7 +56,6 @@
     <Analyzer Include="E:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\GameModData.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRename.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDynamicBone.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModCheckInTrigger.cs" />
@@ -164,6 +163,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModStatusEffect.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModChangePlayerStats.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModSpawnOnEnable.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LPlayerData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\Lunatic.asmdef" />
@@ -766,11 +766,11 @@
     <Reference Include="Unity.TextMeshPro">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,11 @@ public class ModItemPickup : Item_Pickup_scr, IModObject
 
 	public Mod Mod { get; set; }
 	public UnityEngine.AssetBundle Bundle { get; set; }
+	string IModObject.Name => name;
 	public string AssetName { get; set; }
+	public string InternalName => Lunatic.GetInternalName(this);
+
+
 
 	public bool Internal_CheckStart()
 	{
