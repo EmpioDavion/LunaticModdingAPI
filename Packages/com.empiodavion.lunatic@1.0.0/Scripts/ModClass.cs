@@ -1,4 +1,4 @@
-﻿public class ModClass : UnityEngine.ScriptableObject
+﻿public class ModClass : UnityEngine.ScriptableObject, IModObject
 {
 	[System.Serializable]
 	public struct DamageMultipliers
@@ -12,6 +12,10 @@
 
 		// TODO: allow for new damage types
 	}
+
+	public Mod Mod { get; set; }
+	public UnityEngine.AssetBundle Bundle { get; set; }
+	public string AssetName { get; set; }
 
 	public string description;
 

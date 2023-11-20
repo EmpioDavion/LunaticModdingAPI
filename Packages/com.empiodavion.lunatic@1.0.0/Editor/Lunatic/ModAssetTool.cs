@@ -72,6 +72,7 @@ public class ModAssetTool : EditorWindow
 		new PrefabTypeCategory("Magics", typeof(ModMagic), "BASE MAGIC"),
 		new PrefabTypeCategory("Items", typeof(ModItem), "BASE ITEM"),
 		new TypeCategory("Materials", typeof(ModMaterial)),
+		new PrefabTypeCategory("Item Pickups", typeof(ModItemPickup), "BASE ITEM PICKUP"),
 		new TypeCategory("Recipes", typeof(ModRecipe)),
 		new TypeCategory("Classes", typeof(ModClass)),
 	};
@@ -176,7 +177,11 @@ public class ModAssetTool : EditorWindow
 			box.Add(listView);
 		}
 
+		category = 0;
 		box[0].visible = true;
+
+		for (int i = 1; i < box.childCount; i++)
+			box[i].visible = false;
 
 		RebuildTypeLists();
 		
@@ -207,5 +212,6 @@ public class ModAssetTool : EditorWindow
 		category = newCategory;
 
 		box.MarkDirtyRepaint();
+		Repaint();
 	}
 }

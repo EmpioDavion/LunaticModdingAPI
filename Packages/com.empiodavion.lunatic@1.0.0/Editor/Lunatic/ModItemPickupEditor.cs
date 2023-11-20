@@ -10,6 +10,8 @@ public class ModItemPickupEditor : Editor
 	private SerializedProperty inChest;
 	private SerializedProperty saved;
 
+	private string[] materials;
+
 	private void OnEnable()
 	{
 		script = serializedObject.FindProperty("m_Script");
@@ -25,6 +27,9 @@ public class ModItemPickupEditor : Editor
 
 		Lunatic.Init();
 
+		if (materials == null)
+			materials = Lunatic.MaterialNames.ToArray();
+
 		GUI.enabled = false;
 		EditorGUILayout.PropertyField(script);
 		GUI.enabled = true;
@@ -38,7 +43,7 @@ public class ModItemPickupEditor : Editor
 			if (EditorTools.ShowHelp)
 				EditorGUILayout.HelpBox("You can select one of Lunacid's materials from this list or type your own.", MessageType.Info);
 
-			int index = EditorGUILayout.Popup("Select Lunacid material", -1, Lunatic.MaterialNames);
+			int index = EditorGUILayout.Popup("Select Lunacid material", -1, materials);
 
 			if (index != -1)
 				itemName.stringValue = Lunatic.MaterialNames[index];

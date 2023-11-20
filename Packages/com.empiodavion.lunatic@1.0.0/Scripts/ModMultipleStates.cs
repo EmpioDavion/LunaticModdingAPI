@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 
-public class ModMultipleStates : AREA_SAVED_ITEM
+public class ModMultipleStates : AREA_SAVED_ITEM, IModObject
 {
+	public Mod Mod { get; set; }
+	public UnityEngine.AssetBundle Bundle { get; set; }
+	public string AssetName { get; set; }
+
 	public virtual void OnLoad()
 	{
 		

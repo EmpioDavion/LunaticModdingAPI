@@ -1,0 +1,106 @@
+ManifestFileVersion: 0
+CRC: 3378687478
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e700aff4a4853601778f0ac0fa132f4c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ea1493b48ab0741405857537cd9acbfc
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 82
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+- Class: 89
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: acdc25758cae55c32862930293b2be06, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4c4b25631e409485cf79282043d1c1fa, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5da4302e7aaf464e1c2c9f50c70d2e0c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c548abaf3451ae92f350f551a25dd92a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: af9a152361deeca6cc217f109b180433, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: eb23ed46aa7549e49ab39f4eff6430a5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 047fa371b6674e6d5a85da91090d4c5c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 92ead8762ef6cbdc0220452c7f9ceff5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d2ee001310ddc6ec5b037a93e7338c96, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3a634c37c40874a69a08481cf5766db8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a73cd9d367416cba19803144949929f3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 14068d07ccb4a7d99e233f50ed17ec16, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ecf58bd879a74b29657bd7d646f77ed9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 70d79ee0f2172b2aee15ae420f227914, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a7c0ac6d861eac817919a1d1c26ba707, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 622da397dc2201487e2ea1f8ce97f4f9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 74d2351b98faae0143a4570d8a7637d4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 62489d5c619266c77928d6c1bd708d34, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 241
+  Script: {instanceID: 0}
+- Class: 243
+  Script: {instanceID: 0}
+- Class: 245
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Packages/com.empiodavion.lunatic/Materials/Debug.mat
+- Packages/com.empiodavion.lunatic/Lunatic.asset
+- Packages/com.empiodavion.lunatic/Prefabs/BASE MAGIC.prefab
+- Packages/com.empiodavion.lunatic/Prefabs/BASE ITEM.prefab
+- Packages/com.empiodavion.lunatic/Prefabs/BASE WEAPON.prefab
+- Packages/com.empiodavion.lunatic/Prefabs/BASE ITEM PICKUP.prefab
+- Packages/com.empiodavion.lunatic/Prefabs/BASE NPC.prefab
+- Packages/com.empiodavion.lunatic/Materials/VertexLit.mat
+- Packages/com.empiodavion.lunatic/Materials/Inverted.mat
+- Packages/com.empiodavion.lunatic/Shaders/Inverted.shader
+Dependencies: []

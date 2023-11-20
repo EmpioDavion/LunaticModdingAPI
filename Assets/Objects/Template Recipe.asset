@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72d9ec4797f7c904f81e78b06a56500c, type: 3}
+  m_Name: Template Recipe
+  m_EditorClassIdentifier: 
+  description: Lunatic mod recipe
+  startsUnlocked: 1
+  ingredient1Name: TEMPLATE MATERIAL
+  ingredient2Name: TEMPLATE MATERIAL
+  ingredient3Name: FIRE OPAL
+  result: {fileID: 8301969622129118221, guid: f398ba881545def40bca521ae82cc29f, type: 3}

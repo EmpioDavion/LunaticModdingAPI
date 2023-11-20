@@ -615,9 +615,6 @@ public class MetaConnect : EditorWindow
 			if (file.FullName.EndsWith(".meta"))
 				continue;
 
-			if (file.Name.Contains("_CAST"))
-				;
-
 			string[] lines = File.ReadAllLines(file.FullName);
 
 			bool modified = false;

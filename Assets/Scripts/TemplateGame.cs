@@ -11,6 +11,11 @@ public class TemplateGame : ModGame
 		public int someIntValue;
 		public float someFloatValue;
 		public string someStringValue;
+
+		public override string ToString()
+		{
+			return $"{someIntValue}, {someFloatValue}, {someStringValue}";
+		}
 	}
 
 	// store the data in a static variable so you can access it elsewhere if needed,
@@ -31,12 +36,13 @@ public class TemplateGame : ModGame
 		// and will load data for all active mods when a Lunacid save file is loaded
 		// the mod data will be stored as a string of text,
 		// all you have to do is deserialise it
-		ModData = Lunatic.GetModData<MyModData>();
+		ModData = Lunatic.GetModData<MyModData>(Mod);
 
 		// keep in mind that if you create more than one ModGame script in your mod,
 		// you will want only one of the scripts to serialise and deserialise data,
 		// as calling GetModData creates a new object, and SetModData overwrites what is stored
 		// data is only stored per mod, not per ModGame
+		Debug.Log("ModData: " + ModData);
 
 		// if no data has been saved for this mod yet, setup the initial state for the mod
 		if (ModData == null)
@@ -47,6 +53,11 @@ public class TemplateGame : ModGame
 				someFloatValue = 3.0f,
 				someStringValue = "Test"
 			};
+		}
+		else
+		{
+			ModData.someIntValue++;
+			ModData.someFloatValue += 0.1f;
 		}
 
 		// if your mod is disabled, Lunatic will still load and save the json text,

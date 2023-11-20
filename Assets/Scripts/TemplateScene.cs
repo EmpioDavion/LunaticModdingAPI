@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // ModScene class that controls scene level functionality for a mod
@@ -5,6 +6,9 @@ public class TemplateScene : ModScene
 {
 	// this class has a sceneName string value which indicates which scene it should track
 	// you can see what the scene names are for the game at Lunatic.GameScenes
+
+	// item pickup spawn, can be assigned in unity
+	public TemplateItemPickup pickup;
 
 	private void Awake()
 	{
@@ -16,7 +20,15 @@ public class TemplateScene : ModScene
 	// when this scene is entered
 	public override void OnSceneLoaded(Scene oldScene)
 	{
+		if (pickup != null)
+		{
+			// spawn pickup one metre in front of player
+			Transform playerTr = Lunatic.Player.transform;
+			Vector3 pos = playerTr.position + playerTr.forward;
 
+			Instantiate(pickup, pos, Quaternion.identity);
+			Instantiate(pickup, pos, Quaternion.identity);
+		}
 	}
 
 	// when this scene is exited

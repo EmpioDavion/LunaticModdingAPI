@@ -56,6 +56,7 @@
     <Analyzer Include="E:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\GameModData.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRename.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDynamicBone.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModCheckInTrigger.cs" />
@@ -76,11 +77,13 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAIFeet.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDamageTrigger.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModMaterialFlash.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModSaveDataObject.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRecipe.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModWiggle.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLantern.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModKeyTrigger.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomPosition.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\IModObject.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModFreezeRotation.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAICompanion.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomActivator.cs" />
@@ -93,6 +96,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModFullBillboard.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModForceOnEnable.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModNPCBillboard.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModObjectData.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModWeapon.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomAnimList.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomScale.cs" />
@@ -145,7 +149,6 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModBannerPlacement.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModScene.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDynamicBoneCollider.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ReadOnlyAttribute.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModClass.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModSetUndeathStatus.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLunacyGain.cs" />

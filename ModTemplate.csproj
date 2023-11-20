@@ -60,6 +60,10 @@
     <Compile Include="Assets\Scripts\TemplateGame.cs" />
     <Compile Include="Assets\Scripts\TemplateScene.cs" />
     <Compile Include="Assets\Scripts\TemplateNPC.cs" />
+    <Compile Include="Assets\Scripts\TemplateClass.cs" />
+    <Compile Include="Assets\Scripts\TemplateRecipe.cs" />
+    <Compile Include="Assets\Scripts\TemplateMaterial.cs" />
+    <Compile Include="Assets\Scripts\TemplateItemPickup.cs" />
     <Compile Include="Assets\Scripts\TemplateWeapon.cs" />
     <Compile Include="Assets\Scripts\TemplateItem.cs" />
   </ItemGroup>

@@ -44,5 +44,7 @@ public class ModItemEditor : Editor
 		EditorTools.DrawHelpProperty(itemCast, "The path to the resource that will be spawned on use. 0 = nothing.");
 
 		EditorTools.DrawRemainingProperties(serializedObject, itemCast);
+
+		serializedObject.ApplyModifiedProperties();
 	}
 }

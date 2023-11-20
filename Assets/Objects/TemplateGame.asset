@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e813ae6958d5ab4d88210085c5863ca, type: 3}
   m_Name: TemplateGame
   m_EditorClassIdentifier: 
+  pickup: {fileID: 8228186115731763508, guid: 0ceb5bf6008b9ea4490091d702b3edb2, type: 3}

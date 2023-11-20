@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
-  ITEM_NAME: Mod_Item
+  ITEM_NAME: Template_Item
   SPR: {fileID: 21300000, guid: 79dce4c889178e941b73e4b1de8f008f, type: 2}
   Count: 0
   type: 0

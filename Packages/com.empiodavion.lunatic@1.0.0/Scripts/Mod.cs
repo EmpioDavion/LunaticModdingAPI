@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Lunatic/Mod Asset")]
@@ -9,34 +10,78 @@ public class Mod : ScriptableObject
 
 	public readonly List<ModGame> games = new List<ModGame>();
 	public readonly List<ModScene> scenes = new List<ModScene>();
+	public readonly List<ModMultipleStates> npcs = new List<ModMultipleStates>();
 	public readonly List<ModWeapon> weapons = new List<ModWeapon>();
 	public readonly List<ModMagic> magics = new List<ModMagic>();
 	public readonly List<ModItem> items = new List<ModItem>();
 	public readonly List<ModMaterial> materials = new List<ModMaterial>();
+	public readonly List<ModItemPickup> itemPickups = new List<ModItemPickup>();
 	public readonly List<ModRecipe> recipes = new List<ModRecipe>();
 	public readonly List<ModClass> classes = new List<ModClass>();
 
-	internal void Init(AssetBundle _bundle)
+	internal static int RecipesLoaded = 0;
+
+	internal void Load(AssetBundle _bundle)
 	{
 		bundle = _bundle;
 
-		games.AddRange(bundle.LoadAllAssets<ModGame>());
-		scenes.AddRange(bundle.LoadAllAssets<ModScene>());
-		weapons.AddRange(bundle.LoadAllAssets<ModWeapon>());
-		magics.AddRange(bundle.LoadAllAssets<ModMagic>());
-		items.AddRange(bundle.LoadAllAssets<ModItem>());
-		materials.AddRange(bundle.LoadAllAssets<ModMaterial>());
-		recipes.AddRange(bundle.LoadAllAssets<ModRecipe>());
-		classes.AddRange(bundle.LoadAllAssets<ModClass>());
+		string[] assetNames = bundle.GetAllAssetNames();
+		List<IModObject> assets = new List<IModObject>();
 
+		foreach (string assetName in assetNames)
+		{
+			Object asset = bundle.LoadAsset(assetName);
+			IModObject modObject;
+
+			if (asset is GameObject gameObject)
+				modObject = gameObject.GetComponent<IModObject>();
+			else
+				modObject = asset as IModObject;
+
+			if (modObject != null)
+			{
+				modObject.Mod = this;
+				modObject.Bundle = bundle;
+				modObject.AssetName = assetName;
+
+				assets.Add(modObject);
+			}
+		}
+
+		games.AddRange(assets.OfType<ModGame>());
 		Debug.Log($"Added {games.Count} games.");
+
+		scenes.AddRange(assets.OfType<ModScene>());
 		Debug.Log($"Added {scenes.Count} scenes.");
+
+		npcs.AddRange(assets.OfType<ModMultipleStates>());
+		Debug.Log($"Added {npcs.Count} NPCS.");
+
+		weapons.AddRange(assets.OfType<ModWeapon>());
 		Debug.Log($"Added {weapons.Count} weapons.");
+
+		magics.AddRange(assets.OfType<ModMagic>());
 		Debug.Log($"Added {magics.Count} magics.");
+
+		items.AddRange(assets.OfType<ModItem>());
 		Debug.Log($"Added {items.Count} items.");
+
+		materials.AddRange(assets.OfType<ModMaterial>());
 		Debug.Log($"Added {materials.Count} materials.");
+
+		itemPickups.AddRange(assets.OfType<ModItemPickup>());
+		Debug.Log($"Added {itemPickups.Count} item pickups.");
+
+		recipes.AddRange(assets.OfType<ModRecipe>());
 		Debug.Log($"Added {recipes.Count} recipes.");
+
+		classes.AddRange(assets.OfType<ModClass>());
 		Debug.Log($"Added {classes.Count} classes.");
+	}
+
+	internal void Init()
+	{
+		Debug.Log("Initialising mod objects");
 
 		InitWeapons();
 		InitMagics();
@@ -44,6 +89,9 @@ public class Mod : ScriptableObject
 		InitMaterials();
 		InitRecipes();
 		InitClasses();
+
+		foreach (ModRecipe modRecipe in recipes)
+			Debug.Log($"{modRecipe.name} - {modRecipe.ingredient1.name}");
 	}
 
 	private void InitWeapons()
@@ -74,24 +122,27 @@ public class Mod : ScriptableObject
 	{
 		foreach (ModMaterial material in materials)
 		{
-
+			material.id = Lunatic.MaterialNames.Count * 2 + 1;
+			Lunatic.MaterialNames.Add(material.name);
 		}
 	}
 
-	private void InitRecipes()
+	internal void InitRecipes()
 	{
-		if (recipes.Count > 0)
+		foreach (ModRecipe modRecipe in recipes)
+			modRecipe.Init();
+	}
+
+	internal void AddRecipes(Alki alki)
+	{
+		foreach (ModRecipe modRecipe in recipes)
 		{
-			Alki.Recipe[] curRecipes = Lunatic.Control.MENU.ALKI.Recipes;
-			int curSize = curRecipes.Length;
-			int newSize = curSize + recipes.Count;
-			Alki.Recipe[] newRecipes = new Alki.Recipe[newSize];
-			curRecipes.CopyTo(newRecipes, 0);
+			Alki.Recipe recipe = CreateRecipe(modRecipe);
 
-			for (int i = 0; i < recipes.Count; i++)
-				newRecipes[curSize + i] = CreateRecipe(recipes[i]);
+			Debug.Log($"Converting recipe: {modRecipe.AssetName} - {modRecipe.ingredient1.name}, {modRecipe.ingredient2.name}, {modRecipe.ingredient3.name}, ");
+			Debug.Log($"Adding recipe: {recipe.name} - {recipe.need_1}, {recipe.need_2}, {recipe.need_3}");
 
-			Lunatic.Control.MENU.ALKI.Recipes = newRecipes;
+			alki.Recipes[RecipesLoaded++] = recipe;
 		}
 	}
 
@@ -112,35 +163,33 @@ public class Mod : ScriptableObject
 		}
 	}
 
-	private Alki.Recipe CreateRecipe(ModRecipe recipe)
+	private Alki.Recipe CreateRecipe(ModRecipe modRecipe)
 	{
-		Alki alki = Lunatic.Control.MENU.ALKI;
-
 		return new Alki.Recipe
 		{
-			name = recipe.name,
-			des = recipe.description,
-			unlocked = recipe.startsUnlocked ? 1 : 0,
-			need_1 = System.Array.IndexOf(alki.MATS, recipe.ingredient1.GetName()),
-			need_2 = System.Array.IndexOf(alki.MATS, recipe.ingredient2.GetName()),
-			need_3 = System.Array.IndexOf(alki.MATS, recipe.ingredient3.GetName()),
-			SPAWN = recipe.result
+			name = modRecipe.name,
+			des = modRecipe.description,
+			unlocked = modRecipe.startsUnlocked ? 1 : 0,
+			need_1 = modRecipe.ingredient1.GetID(),
+			need_2 = modRecipe.ingredient2.GetID(),
+			need_3 = modRecipe.ingredient3.GetID(),
+			SPAWN = modRecipe.result
 		};
 	}
 
-	private Menus.CharClass CreateClass(ModClass @class)
+	private Menus.CharClass CreateClass(ModClass modClass)
 	{
 		return new Menus.CharClass
 		{
-			name = @class.name,
-			desc = @class.description,
-			LVL = @class.level,
-			STR = @class.strength,
-			DEF = @class.defense,
-			SPD = @class.speed,
-			DEX = @class.dexterity,
-			INT = @class.intelligence,
-			RES = @class.resistance
+			name = modClass.name,
+			desc = modClass.description,
+			LVL = modClass.level,
+			STR = modClass.strength,
+			DEF = modClass.defense,
+			SPD = modClass.speed,
+			DEX = modClass.dexterity,
+			INT = modClass.intelligence,
+			RES = modClass.resistance
 		};
 	}
 }

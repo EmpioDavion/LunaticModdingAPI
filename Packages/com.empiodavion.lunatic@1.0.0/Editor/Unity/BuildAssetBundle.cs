@@ -6,17 +6,34 @@ using UnityEngine;
 
 public class BuildAssetBundle
 {
-	[MenuItem("Assets/Build Mod")]
+	const string BUILD_DIR = "Build";
+	const string LUNATIC_BUILD_DIR = "LunaticBuild";
+
 	private static void BuildAllAssetBundles()
 	{
-		string buildDirectory = "Build";
+		if (!Directory.Exists(BUILD_DIR))
+			Directory.CreateDirectory(BUILD_DIR);
 
-		if (!Directory.Exists(buildDirectory))
-			Directory.CreateDirectory(buildDirectory);
+		if (!Directory.Exists(LUNATIC_BUILD_DIR))
+			Directory.CreateDirectory(LUNATIC_BUILD_DIR);
 
 		string[] bundles = AssetDatabase.GetAllAssetBundleNames();
 
-		List<AssetBundleBuild> builds = new List<AssetBundleBuild>();
+		List<AssetBundleBuild> builds = new List<AssetBundleBuild>
+		{
+			new AssetBundleBuild()
+			{
+				assetBundleName = "lunatic",
+				assetNames = AssetDatabase.GetAssetPathsFromAssetBundle("lunatic")
+			}
+		};
+
+		BuildPipeline.BuildAssetBundles(LUNATIC_BUILD_DIR, builds.ToArray(), BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
+
+		File.Delete($"{LUNATIC_BUILD_DIR}/{LUNATIC_BUILD_DIR}");
+		File.Delete($"{LUNATIC_BUILD_DIR}/{LUNATIC_BUILD_DIR}.manifest");
+
+		builds.Clear();
 
 		foreach (string bundle in bundles)
 		{
@@ -28,12 +45,12 @@ public class BuildAssetBundle
 				assetBundleName = bundle,
 				assetNames = AssetDatabase.GetAssetPathsFromAssetBundle(bundle)
 			});
-
-			BuildPipeline.BuildAssetBundles(buildDirectory, builds.ToArray(), BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
 		}
 
-		File.Delete("Build/Build");
-		File.Delete("Build/Build.manifest");
+		BuildPipeline.BuildAssetBundles(BUILD_DIR, builds.ToArray(), BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
+
+		File.Delete($"{BUILD_DIR}/{BUILD_DIR}");
+		File.Delete($"{BUILD_DIR}/{BUILD_DIR}.manifest");
 
 		string[] dlls = Directory.GetFiles("Assets/Scripts/", "*.asmdef", SearchOption.AllDirectories);
 		string assemblyDir = Path.Combine(Application.dataPath, "../Library/ScriptAssemblies/");
@@ -42,7 +59,7 @@ public class BuildAssetBundle
 		{
 			string file = $"{Path.GetFileNameWithoutExtension(dll)}.dll";
 			string source = Path.Combine(assemblyDir, file);
-			string dest = Path.Combine(buildDirectory, file);
+			string dest = Path.Combine(BUILD_DIR, file);
 			File.Copy(source, dest, true);
 		}
 	}
@@ -65,17 +82,19 @@ public class BuildAssetBundle
 
 	private static void BuildLunaticPlayer()
 	{
+		Debug.Log("Starting build.");
+
 		UnityEditor.PackageManager.PackageInfo packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(BuildAssetBundle).Assembly);
 		string[] scripts = Directory.GetFiles(Path.Combine(packageInfo.resolvedPath, "Scripts\\"), "*.cs");
 
-		AssemblyBuilder builder = new AssemblyBuilder("Lunatic/Lunatic.dll", scripts)
+		AssemblyBuilder builder = new AssemblyBuilder($"{LUNATIC_BUILD_DIR}/Lunatic.dll", scripts)
 		{
 			buildTarget = BuildTarget.StandaloneWindows64,
 			buildTargetGroup = BuildTargetGroup.Standalone,
 			compilerOptions = new ScriptCompilerOptions()
 			{
 				ApiCompatibilityLevel = ApiCompatibilityLevel.NET_Standard_2_0,
-				CodeOptimization = CodeOptimization.Release,
+				CodeOptimization = CodeOptimization.Release
 			},
 			referencesOptions = ReferencesOptions.UseEngineModules
 		};
@@ -92,8 +111,12 @@ public class BuildAssetBundle
 		string deployFolder = Path.Combine(pluginsFolder, PlayerSettings.productName);
 		string lunaticFolder = Path.Combine(pluginsFolder, "Lunatic");
 
-		CopyFiles("Build/", deployFolder, "*");
-		CopyFiles("Lunatic/", lunaticFolder, "*.dll");
+		CopyFiles(BUILD_DIR, deployFolder, "*");
+		CopyFiles(LUNATIC_BUILD_DIR, lunaticFolder, "*.dll");
+		File.Copy($"{LUNATIC_BUILD_DIR}/lunatic", Path.Combine(lunaticFolder, "lunatic"), true);
+		File.Copy($"{LUNATIC_BUILD_DIR}/lunatic.manifest", Path.Combine(lunaticFolder, "lunatic.manifest"), true);
+
+		Debug.Log("Completed build.");
 	}
 
 	private static void CopyFiles(string sourceFolder, string destFolder, string searchPattern)
