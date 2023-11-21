@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6e3107e544dfe478c9d26428a3edac, type: 3}
+  m_Name: TemplateSceneObjectGroup
+  m_EditorClassIdentifier: 
+  scene: HUB_01
+  sceneObjects:
+  - gameObject: {fileID: 9060664981745006451, guid: 0ceb5bf6008b9ea4490091d702b3edb2, type: 3}
+    localPosition: {x: 4.281804, y: 0.010941029, z: -0.84867907}
+    localRotation: {x: 0, y: 0, z: 0}
+    localScale: {x: 1, y: 1, z: 1}
+    parentTransform: 
+    gameObjectAssetPath: Assets/Objects/TEMPLATE_MATERIAL_PICKUP.prefab
+  Test:
+    gameObject: {fileID: 9060664981745006451, guid: 0ceb5bf6008b9ea4490091d702b3edb2, type: 3}
+    localPosition: {x: 4.281804, y: 0.010941029, z: -0.84867907}
+    localRotation: {x: 0, y: 0, z: 0}
+    localScale: {x: 1, y: 1, z: 1}
+    parentTransform: 
+    gameObjectAssetPath: Assets/Objects/TEMPLATE_MATERIAL_PICKUP.prefab
+  sceneObjectsJson: '[{"localPosition":{"x":4.281804,"y":0.0109410286,"z":-0.848679066},"localRotation":{"x":0.0,"y":0.0,"z":0.0},"localScale":{"x":1.0,"y":1.0,"z":1.0},"parentTransform":"","gameObjectAssetPath":"Assets/Objects/TEMPLATE_MATERIAL_PICKUP.prefab"}]'

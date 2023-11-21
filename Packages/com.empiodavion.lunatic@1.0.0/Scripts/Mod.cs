@@ -18,6 +18,7 @@ public class Mod : ScriptableObject
 	public readonly List<ModItemPickup> itemPickups = new List<ModItemPickup>();
 	public readonly List<ModRecipe> recipes = new List<ModRecipe>();
 	public readonly List<ModClass> classes = new List<ModClass>();
+	public readonly List<LSceneObjectGroup> sceneObjectGroups = new List<LSceneObjectGroup>();
 
 	internal static int RecipesLoaded = 0;
 
@@ -77,6 +78,9 @@ public class Mod : ScriptableObject
 
 		classes.AddRange(assets.OfType<ModClass>());
 		Debug.Log($"Added {classes.Count} classes.");
+
+		sceneObjectGroups.AddRange(assets.OfType<LSceneObjectGroup>());
+		Debug.Log($"Added {sceneObjectGroups.Count} scene object groups.");
 	}
 
 	internal void Init()
@@ -95,11 +99,17 @@ public class Mod : ScriptableObject
 		Debug.Log($"Initialising mod materials");
 		InitMaterials();
 
+		Debug.Log($"Initialising mod item pickups");
+		InitItemPickups();
+
 		Debug.Log($"Initialising mod recipes");
 		InitRecipes();
 
 		Debug.Log($"Initialising mod classes");
 		InitClasses();
+
+		Debug.Log($"Initialising mod scene object groups");
+		InitSceneObjectGroups();
 
 		Debug.Log($"Initialised mod objects");
 	}
@@ -108,6 +118,7 @@ public class Mod : ScriptableObject
 	{
 		foreach (ModWeapon weapon in weapons)
 		{
+			Lunatic.FixShaders(weapon);
 			Lunatic.TrackWeapon(weapon);
 		}
 
@@ -118,6 +129,7 @@ public class Mod : ScriptableObject
 	{
 		foreach (ModMagic magic in magics)
 		{
+			Lunatic.FixShaders(magic);
 			Lunatic.TrackMagic(magic);
 		}
 
@@ -128,6 +140,7 @@ public class Mod : ScriptableObject
 	{
 		foreach (ModItem item in items)
 		{
+			Lunatic.FixShaders(item);
 			Lunatic.TrackItem(item);
 		}
 
@@ -143,6 +156,12 @@ public class Mod : ScriptableObject
 		}
 
 		Lunatic.ModMaterials.AddRange(materials);
+	}
+
+	private void InitItemPickups()
+	{
+		foreach (ModItemPickup itemPickup in itemPickups)
+			Lunatic.FixShaders(itemPickup);
 	}
 
 	internal void InitRecipes()
@@ -181,6 +200,12 @@ public class Mod : ScriptableObject
 
 			Lunatic.Control.MENU.Classes = newClasses;
 		}
+	}
+
+	private void InitSceneObjectGroups()
+	{
+		foreach (LSceneObjectGroup sceneObjectGroup in sceneObjectGroups)
+			sceneObjectGroup.Init();
 	}
 
 	private Alki.Recipe CreateRecipe(ModRecipe modRecipe)

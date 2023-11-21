@@ -4726,7 +4726,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9060664981745006451}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.9087906, y: 37.804657, z: -2.494123}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3556948255100580121}
@@ -4761,7 +4761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 4
   Name: TEMPLATE MATERIAL
-  Alt_Name: 2
+  Alt_Name: -1
   CON: {fileID: 0}
   inChest: 0
   SAVED: {fileID: 0}

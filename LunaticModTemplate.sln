@@ -5,9 +5,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunatic", "Lunatic.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModTemplate", "ModTemplate.csproj", "{693FC65B-0ED1-2B88-42CF-55F1485538D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newtonsoft.Json.UnityConverters", "Newtonsoft.Json.UnityConverters.csproj", "{32EA24B8-6DD0-F109-425D-A1A540B39961}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LunaticEditor", "LunaticEditor.csproj", "{64228108-B403-6492-6482-066DCB22ACAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LunaticUnity", "LunaticUnity.csproj", "{A66B7277-9ED0-CB6A-E373-5727E9C6A45E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newtonsoft.Json.UnityConverters.Editor", "Newtonsoft.Json.UnityConverters.Editor.csproj", "{25455FF0-7C2C-6F2E-4CBA-AE4DADC0A6D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +27,10 @@ Global
 		{693FC65B-0ED1-2B88-42CF-55F1485538D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{693FC65B-0ED1-2B88-42CF-55F1485538D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{693FC65B-0ED1-2B88-42CF-55F1485538D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32EA24B8-6DD0-F109-425D-A1A540B39961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32EA24B8-6DD0-F109-425D-A1A540B39961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32EA24B8-6DD0-F109-425D-A1A540B39961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32EA24B8-6DD0-F109-425D-A1A540B39961}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64228108-B403-6492-6482-066DCB22ACAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{64228108-B403-6492-6482-066DCB22ACAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64228108-B403-6492-6482-066DCB22ACAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -31,6 +39,10 @@ Global
 		{A66B7277-9ED0-CB6A-E373-5727E9C6A45E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A66B7277-9ED0-CB6A-E373-5727E9C6A45E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A66B7277-9ED0-CB6A-E373-5727E9C6A45E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25455FF0-7C2C-6F2E-4CBA-AE4DADC0A6D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25455FF0-7C2C-6F2E-4CBA-AE4DADC0A6D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25455FF0-7C2C-6F2E-4CBA-AE4DADC0A6D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25455FF0-7C2C-6F2E-4CBA-AE4DADC0A6D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

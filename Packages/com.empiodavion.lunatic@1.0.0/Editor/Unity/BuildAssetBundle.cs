@@ -62,6 +62,15 @@ public class BuildAssetBundle
 			string dest = Path.Combine(BUILD_DIR, file);
 			File.Copy(source, dest, true);
 		}
+
+		string newton = typeof(Newtonsoft.Json.JsonConvert).Assembly.Location;
+		string newtonName = Path.GetFileName(newton);
+
+		string converters = typeof(Newtonsoft.Json.UnityConverters.Math.Vector3Converter).Assembly.Location;
+		string convertersName = Path.GetFileName(converters);
+
+		File.Copy(converters, $"{LUNATIC_BUILD_DIR}/{convertersName}", true);
+		File.Copy(newton, $"{LUNATIC_BUILD_DIR}/{newtonName}", true);
 	}
 
 	[MenuItem("Assets/Build Mod and Deploy")]

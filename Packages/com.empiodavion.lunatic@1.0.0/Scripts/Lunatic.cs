@@ -190,6 +190,8 @@ public static class Lunatic
 		SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
 		SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
 		SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+		SceneManager.sceneUnloaded -= SceneManager_sceneUnloaded;
+		SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
 
 		string lang = PlayerPrefs.GetString("LANG", "ENG");
 		TextAsset materialTxt = Resources.Load<TextAsset>($"txt/{lang}/MATERIALS");
@@ -441,7 +443,7 @@ public static class Lunatic
 		string name = assembly.GetName().Name;
 
 		if (ModData.TryGetValue(name, out string json))
-			return JsonUtility.FromJson<T>(json);
+			return LJson.Deserialise<T>(json);
 
 		return default;
 	}
@@ -451,7 +453,7 @@ public static class Lunatic
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetCallingAssembly();
 		string name = assembly.GetName().Name;
 
-		ModData[name] = JsonUtility.ToJson(data);
+		ModData[name] = LJson.Serialise(data);
 	}
 
 	private static void SceneManager_activeSceneChanged(Scene current, Scene next)
@@ -463,11 +465,6 @@ public static class Lunatic
 		foreach (Mod mod in Mods)
 			foreach (ModGame game in mod.games)
 				game.OnSceneChange(current, next);
-
-		foreach (Mod mod in Mods)
-			foreach (ModScene scene in mod.scenes)
-				if (scene.name == current.name)
-					scene.OnSceneLeave(next);
 	}
 
 	private static void SceneManager_sceneLoaded(Scene current, LoadSceneMode loadSceneMode)
@@ -485,6 +482,11 @@ public static class Lunatic
 		UIReferences.PlayerResponseExit = GameObject.Find("PLAYER/Canvas/HUD/DIALOG/EXIT");
 
 		LoadMods();
+
+		foreach (Mod mod in Mods)
+			foreach (LSceneObjectGroup sceneObjectGroup in mod.sceneObjectGroups)
+				if (sceneObjectGroup.scene == current.name)
+					sceneObjectGroup.Spawn();
 
 		Renderers.Clear();
 		Renderers.AddRange(Object.FindObjectsOfType<Renderer>());
@@ -507,11 +509,19 @@ public static class Lunatic
 		foreach (Mod mod in Mods)
 			foreach (ModGame game in mod.games)
 				game.OnSceneLoaded(LastScene, current);
-
+		
 		foreach (Mod mod in Mods)
 			foreach (ModScene scene in mod.scenes)
 				if (scene.sceneName == current.name)
 					scene.OnSceneLoaded(LastScene);
+	}
+
+	private static void SceneManager_sceneUnloaded(Scene current)
+	{
+		foreach (Mod mod in Mods)
+			foreach (ModScene scene in mod.scenes)
+				if (scene.name == current.name)
+					scene.OnSceneLeave(current);
 	}
 
 	public static AssetBundle GetAssetBundle()
@@ -543,41 +553,9 @@ public static class Lunatic
 		return null;
 	}
 
-	// TODO: Figure out what is null
 	internal static void TrackWeapon(ModWeapon weapon)
 	{
 		AssetReplacement.Add("WEPS/" + weapon.name, weapon.gameObject);
-
-		Debug.Log($"{weapon.name}, {LunacidShaders}");
-		Debug.Log($"{LunacidShaders["Shader Forge/Object"]}");
-
-		Renderer[] renderers = weapon.GetComponentsInChildren<Renderer>();
-
-		foreach (Renderer renderer in renderers)
-		{
-			if (renderer == null)
-			{
-				Debug.Log("Renderer was null?");
-
-				continue;
-			}
-
-			Material[] materials = renderer.sharedMaterials;
-
-			foreach (Material material in materials)
-			{
-				if (material == null)
-				{
-					Debug.Log("Material was null");
-					continue;
-				}
-
-				if (LunacidShaders.TryGetValue(material.shader.name, out Shader shader))
-					material.shader = shader;
-			}
-
-			renderer.sharedMaterials = materials;
-		}
 	}
 
 	internal static void TrackMagic(ModMagic magic)
@@ -588,6 +566,27 @@ public static class Lunatic
 	internal static void TrackItem(ModItem item)
 	{
 		AssetReplacement.Add("ITEMS/" + item.name, item.gameObject);
+	}
+
+	internal static void FixShaders(Component component)
+	{
+		Renderer[] renderers = component.GetComponentsInChildren<Renderer>();
+
+		foreach (Renderer renderer in renderers)
+		{
+			Material[] materials = renderer.sharedMaterials;
+
+			foreach (Material material in materials)
+			{
+				if (material == null)
+					continue;
+
+				if (LunacidShaders.TryGetValue(material.shader.name, out Shader shader))
+					material.shader = shader;
+			}
+
+			renderer.sharedMaterials = materials;
+		}
 	}
 
 	internal static CONTROL GetControl()
@@ -690,7 +689,7 @@ public static class Lunatic
 	public static void Internal_LoadModData(string file)
 	{
 		if (System.IO.File.Exists(file))
-			ModData = JsonUtility.FromJson<Dictionary<string, string>>(System.IO.File.ReadAllText(file));
+			ModData = LJson.Deserialise<Dictionary<string, string>>(System.IO.File.ReadAllText(file));
 
 		foreach (Mod mod in Mods)
 			foreach (ModGame game in mod.games)
@@ -703,7 +702,7 @@ public static class Lunatic
 			foreach (ModGame game in mod.games)
 				game.OnSaveFileSaved();
 
-		System.IO.File.WriteAllText(file, JsonUtility.ToJson(ModData));
+		System.IO.File.WriteAllText(file, LJson.Serialise(ModData));
 	}
 
 	public static PlayerData Internal_OnPlayerDataLoad(PlayerData playerData)
@@ -722,6 +721,14 @@ public static class Lunatic
 		LPlayerData data = LPlayerData.Save(playerData);
 
 		SetModData(data);
+	}
+
+	public static bool Internal_OnItemPickupStart(Item_Pickup_scr itemPickup)
+	{
+		if (itemPickup is ModItemPickup modItemPickup)
+			return modItemPickup.Internal_CheckStart();
+
+		return false;
 	}
 
 	public static void SortWeapons(List<string> list)
@@ -818,10 +825,6 @@ public static class Lunatic
 		Scene newScene = SceneManager.GetSceneByName(LVL);
 
 		foreach (Mod mod in Mods)
-			foreach (ModGame game in mod.games)
-				game.OnSceneChange(currentScene, newScene);
-
-		foreach (Mod mod in Mods)
 		{
 			foreach (ModGame game in mod.games)
 			{
@@ -831,11 +834,15 @@ public static class Lunatic
 					scene.OnSceneLeave(newScene);
 			}
 		}
+
+		foreach (Mod mod in Mods)
+			foreach (ModGame game in mod.games)
+				game.OnSceneChange(currentScene, newScene);
 	}
 
 	public static void Internal_OnPlayerJump(Player_Control_scr ___Player)
 	{
-		GiveMaterial("TEMPLATE MATERIAL", 2);
+
 	}
 
 	public static void Internal_SetSkills(CONTROL __instance)

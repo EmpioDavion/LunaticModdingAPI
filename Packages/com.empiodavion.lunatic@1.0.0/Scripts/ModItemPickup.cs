@@ -13,18 +13,15 @@ public class ModItemPickup : Item_Pickup_scr, IModObject
 	public string AssetName { get; set; }
 	public string InternalName => Lunatic.GetInternalName(this);
 
-
-
 	public bool Internal_CheckStart()
 	{
 		if (type == (int)Lunatic.ItemTypes.Material)
 		{
-			Alt_Name = Name;
-
-			return false;
+			Alt_Name = Lunatic.GetMaterialID(Name).ToString();
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 
