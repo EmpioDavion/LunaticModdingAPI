@@ -400,10 +400,15 @@ public static class Lunatic
 
 	internal static string GetInternalName(IModObject modObject)
 	{
-		return $"L#{modObject.Mod.name}/{modObject.Name}";
+		return CreateInternalName(modObject.Mod.name, modObject.Name);
 	}
 
-	public static void ReadInternalName(string internalName, out string modName, out string objectName, bool hasData)
+	internal static string CreateInternalName(string modName, string objectName)
+	{
+		return $"L#{modName}/{objectName}";
+	}
+
+	internal static void ReadInternalName(string internalName, out string modName, out string objectName, bool hasData)
 	{
 		int slash = internalName.IndexOf('/', 3);
 		modName = internalName.Substring(2, slash - 3);
@@ -454,6 +459,18 @@ public static class Lunatic
 		string name = assembly.GetName().Name;
 
 		ModData[name] = LJson.Serialise(data);
+	}
+
+	public static bool EndsWithNumbers(string str, int numberCount)
+	{
+		if (str.Length < numberCount)
+			return false;
+
+		for (int i = str.Length; i > 0; --i)
+			if (!char.IsDigit(str[i]))
+				return false;
+
+		return true;
 	}
 
 	private static void SceneManager_activeSceneChanged(Scene current, Scene next)
@@ -733,10 +750,10 @@ public static class Lunatic
 
 	public static void SortWeapons(List<string> list)
 	{
-		list.Sort(Internal_SortWeapon);
+		list.Sort(Internal_SortInternalNames);
 	}
 
-	internal static int Internal_SortWeapon(string a, string b)
+	internal static int Internal_SortInternalNames(string a, string b)
 	{
 		if (a.StartsWith("L#"))
 			a = a.Substring(a.IndexOf('/', 3) + 1);
@@ -745,6 +762,24 @@ public static class Lunatic
 			b = b.Substring(b.IndexOf('/', 3) + 1);
 
 		return a.CompareTo(b);
+	}
+
+	public static void Internal_OnRecipeForged(Alki.Recipe recipe)
+	{
+		if (recipe.name.StartsWith("L#"))
+		{
+			ReadInternalName(recipe.name, out string modName, out string objectName, false);
+
+			Mod mod = Mods.Find((x) => x.name == modName);
+			ModRecipe modRecipe = mod.recipes.Find((x) => x.name == objectName);
+
+			if (!modRecipe.isUnlocked)
+				modRecipe.OnUnlocked(recipe);
+
+			modRecipe.isUnlocked = true;
+
+			modRecipe.OnForged(recipe);
+		}
 	}
 
 	public static void Internal_AddMaterialTexts(Menus menus)
@@ -869,13 +904,61 @@ public static class Lunatic
 		if (EQ_SLOT != 2 && menus.ALKI.current_3 == materialID)
 			needed++;
 
-		Debug.Log($"ID: {materialID}, Count: {materialCount}, Needed: {needed}");
-
 		return materialCount >= needed;
 	}
 
-	public static void RemoveUnavailableIngredients(Alki alki)
+	public static void Internal_RemoveUnavailableIngredients(Alki alki)
 	{
+		void CheckHasNeeded(Alki alki, ref int id, int count)
+		{
+			if (id == -1 || count == 0)
+				return;
 
+			string idStr = id.ToString();
+
+			string[] array = alki.CON.CURRENT_PL_DATA.MATER;
+			int index = System.Array.FindIndex(array, (x) => !string.IsNullOrEmpty(x) && x.Substring(0, x.Length - 2) == idStr);
+
+			if (index >= 0)
+			{
+				int has = int.Parse(array[index].Substring(array[index].Length - 2));
+
+				if (has < count)
+					id = -1;
+			}
+		}
+
+		// if any of the select materials are the same, the first of them will have their need at the total value,
+		// and the remaining will be reduced by 1 per duplicate, example of all being the same (need1 = 3, need2 = 2, need3 = 1)
+		// this is because the amount of that material needed will be reduced as each one is removed from the forge selection
+		int need1 = 0;
+		int need2 = 0;
+		int need3 = 0;
+
+		if (alki.current_1 != -1)
+			need1++;
+
+		if (alki.current_2 != -1)
+		{
+			if (alki.current_2 == alki.current_1)
+				need1++;
+
+			need2++;
+		}
+
+		if (alki.current_3 != -1)
+		{
+			if (alki.current_3 == alki.current_1)
+				need1++;
+
+			if (alki.current_3 == alki.current_2)
+				need2++;
+
+			need3++;
+		}
+
+		CheckHasNeeded(alki, ref alki.current_1, need1);
+		CheckHasNeeded(alki, ref alki.current_2, need2);
+		CheckHasNeeded(alki, ref alki.current_3, need3);
 	}
 }

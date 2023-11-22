@@ -181,6 +181,7 @@ public class Mod : ScriptableObject
 			Debug.Log($"Converting recipe: {modRecipe.AssetName} - {modRecipe.ingredient1.name}, {modRecipe.ingredient2.name}, {modRecipe.ingredient3.name}, ");
 			Debug.Log($"Adding recipe: {recipe.name} - {recipe.need_1}, {recipe.need_2}, {recipe.need_3}");
 
+			modRecipe.recipeIndex = RecipesLoaded;
 			alki.Recipes[RecipesLoaded++] = recipe;
 		}
 	}
@@ -214,7 +215,7 @@ public class Mod : ScriptableObject
 		{
 			name = modRecipe.name,
 			des = modRecipe.description,
-			unlocked = modRecipe.startsUnlocked ? 1 : 0,
+			unlocked = (modRecipe.startsUnlocked || modRecipe.isUnlocked) ? 1 : 0,
 			need_1 = modRecipe.ingredient1.GetID(),
 			need_2 = modRecipe.ingredient2.GetID(),
 			need_3 = modRecipe.ingredient3.GetID(),

@@ -33,6 +33,8 @@ public class ModRecipe : ScriptableObject, IModObject
 
 	public bool startsUnlocked;
 
+	public bool isUnlocked;
+
 	[SerializeField]
 	private string ingredient1Name;
 
@@ -53,10 +55,25 @@ public class ModRecipe : ScriptableObject, IModObject
 
 	public GameObject result;
 
+	[System.NonSerialized]
+	public int recipeIndex = -1;
+
 	internal void Init()
 	{
+		isUnlocked |= startsUnlocked;
+
 		ingredient1.Init(this, ingredient1Name);
 		ingredient2.Init(this, ingredient2Name);
 		ingredient3.Init(this, ingredient3Name);
+	}
+
+	protected internal virtual void OnUnlocked(Alki.Recipe recipe)
+	{
+
+	}
+
+	protected internal virtual void OnForged(Alki.Recipe recipe)
+	{
+
 	}
 }
