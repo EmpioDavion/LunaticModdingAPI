@@ -840,16 +840,42 @@ public static class Lunatic
 				game.OnSceneChange(currentScene, newScene);
 	}
 
-	public static void Internal_OnPlayerJump(Player_Control_scr ___Player)
+	public static void Internal_OnPlayerJump(Player_Control_scr player)
 	{
 
 	}
 
-	public static void Internal_SetSkills(CONTROL __instance)
+	public static void Internal_SetSkills(CONTROL control)
 	{
 		foreach (Mod mod in Mods)
 			foreach (ModClass modClass in mod.classes)
-				if (__instance.CURRENT_PL_DATA.PLAYER_CLASS.ToUpper() == modClass.name)
-					modClass.SetDamageMultipliers(__instance);
+				if (control.CURRENT_PL_DATA.PLAYER_CLASS.ToUpper() == modClass.name)
+					modClass.SetDamageMultipliers(control);
+	}
+
+	public static bool Internal_CheckIngredientCounts(Menus menus, int materialIndex, int EQ_SLOT)
+	{
+		string material = menus.CON.CURRENT_PL_DATA.MATER[materialIndex];
+		int materialID = int.Parse(material.Substring(0, material.Length - 2));
+		int materialCount = int.Parse(material.Substring(material.Length - 2));
+		int needed = 1;
+
+		if (EQ_SLOT != 0 && menus.ALKI.current_1 == materialID)
+			needed++;
+
+		if (EQ_SLOT != 1 && menus.ALKI.current_2 == materialID)
+			needed++;
+
+		if (EQ_SLOT != 2 && menus.ALKI.current_3 == materialID)
+			needed++;
+
+		Debug.Log($"ID: {materialID}, Count: {materialCount}, Needed: {needed}");
+
+		return materialCount >= needed;
+	}
+
+	public static void RemoveUnavailableIngredients(Alki alki)
+	{
+
 	}
 }

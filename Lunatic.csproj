@@ -60,6 +60,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDynamicBone.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModCheckInTrigger.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModBreakFromParent.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LJson.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModNPCScaling.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLoot.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAnalyseNPC.cs" />
@@ -144,8 +145,8 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LPlayerData.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLivingObject.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModFollowPlayer.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModTurret.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLightSpinUI.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModTurret.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModIdleSounds.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModChangeScale.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModBannerPlacement.cs" />
@@ -166,7 +167,6 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModStatusEffect.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModChangePlayerStats.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModSpawnOnEnable.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LJson.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\Lunatic.asmdef" />
