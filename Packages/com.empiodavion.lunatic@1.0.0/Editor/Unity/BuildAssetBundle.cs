@@ -11,13 +11,13 @@ public class BuildAssetBundle
 
 	private static void BuildAllAssetBundles()
 	{
+		string[] bundles = AssetDatabase.GetAllAssetBundleNames();
+
 		if (!Directory.Exists(BUILD_DIR))
 			Directory.CreateDirectory(BUILD_DIR);
 
 		if (!Directory.Exists(LUNATIC_BUILD_DIR))
 			Directory.CreateDirectory(LUNATIC_BUILD_DIR);
-
-		string[] bundles = AssetDatabase.GetAllAssetBundleNames();
 
 		List<AssetBundleBuild> builds = new List<AssetBundleBuild>
 		{
@@ -46,7 +46,7 @@ public class BuildAssetBundle
 				assetNames = AssetDatabase.GetAssetPathsFromAssetBundle(bundle)
 			});
 		}
-
+		
 		BuildPipeline.BuildAssetBundles(BUILD_DIR, builds.ToArray(), BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
 
 		File.Delete($"{BUILD_DIR}/{BUILD_DIR}");
@@ -103,8 +103,9 @@ public class BuildAssetBundle
 			compilerOptions = new ScriptCompilerOptions()
 			{
 				ApiCompatibilityLevel = ApiCompatibilityLevel.NET_Standard_2_0,
-				CodeOptimization = CodeOptimization.Release
+				CodeOptimization = CodeOptimization.Debug
 			},
+			excludeReferences = new string[] { "Library/ScriptAssemblies/Lunatic.dll" },
 			referencesOptions = ReferencesOptions.UseEngineModules
 		};
 
@@ -115,6 +116,16 @@ public class BuildAssetBundle
 
 	private static void CopyDLLS(string path, CompilerMessage[] messages)
 	{
+		foreach (CompilerMessage message in messages)
+			if (message.type == CompilerMessageType.Error)
+				Debug.LogError(message.message);
+
+		if (messages.Length > 0 && System.Array.Exists(messages, (x) => x.type == CompilerMessageType.Error))
+		{
+			Debug.LogError("Building mod failed.");
+			return;
+		}
+
 		string gameFolder = Path.GetDirectoryName(MetaConnect.LunacidPath);
 		string pluginsFolder = Path.Combine(gameFolder, $"BepInEx/plugins/");
 		string deployFolder = Path.Combine(pluginsFolder, PlayerSettings.productName);
@@ -125,7 +136,7 @@ public class BuildAssetBundle
 		File.Copy($"{LUNATIC_BUILD_DIR}/lunatic", Path.Combine(lunaticFolder, "lunatic"), true);
 		File.Copy($"{LUNATIC_BUILD_DIR}/lunatic.manifest", Path.Combine(lunaticFolder, "lunatic.manifest"), true);
 
-		Debug.Log("Completed build.");
+		Debug.Log("Completed build..");
 	}
 
 	private static void CopyFiles(string sourceFolder, string destFolder, string searchPattern)

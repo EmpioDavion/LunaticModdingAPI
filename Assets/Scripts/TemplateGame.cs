@@ -11,10 +11,11 @@ public class TemplateGame : ModGame
 		public int someIntValue;
 		public float someFloatValue;
 		public string someStringValue;
+		public bool hubMaterialsCollected;
 
 		public override string ToString()
 		{
-			return $"{someIntValue}, {someFloatValue}, {someStringValue}";
+			return $"{someIntValue}, {someFloatValue}, {someStringValue}, {hubMaterialsCollected}";
 		}
 	}
 
@@ -36,7 +37,7 @@ public class TemplateGame : ModGame
 		// and will load data for all active mods when a Lunacid save file is loaded
 		// the mod data will be stored as a string of text,
 		// all you have to do is deserialise it
-		ModData = Lunatic.GetModData<MyModData>();
+		ModData = Lunatic.GetModData<MyModData>(Mod);
 
 		// keep in mind that if you create more than one ModGame script in your mod,
 		// you will want only one of the scripts to serialise and deserialise data,
@@ -51,7 +52,8 @@ public class TemplateGame : ModGame
 			{
 				someIntValue = 1,
 				someFloatValue = 3.0f,
-				someStringValue = "Test"
+				someStringValue = "Test",
+				hubMaterialsCollected = false
 			};
 		}
 		else
@@ -73,7 +75,7 @@ public class TemplateGame : ModGame
 	public override void OnSaveFileSaved()
 	{
 		// Lunatic is about to serialize the mod data to file, so update the json Lunatic has stored
-		Lunatic.SetModData(ModData);
+		Lunatic.SetModData(Mod, ModData);
 	}
 
 	// changing from any scene to another scene
@@ -94,5 +96,10 @@ public class TemplateGame : ModGame
 			Texture2D texture = MyAssets.LoadAsset<Texture2D>("Demi_FaceLift");	// load our new texture
 			mat.mainTexture = texture; // setting mainTexture is the same as mat.SetTexture("_MainTex", texture);
 		}
+	}
+
+	public bool CheckHubMaterialsCollected(LSceneObject sceneObject)
+	{
+		return !ModData.hubMaterialsCollected;
 	}
 }

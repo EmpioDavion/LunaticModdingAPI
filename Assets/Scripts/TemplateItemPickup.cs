@@ -3,6 +3,6 @@ public class TemplateItemPickup : ModItemPickup
 {
 	public override void OnPickup()
 	{
-		
+		TemplateGame.ModData.hubMaterialsCollected = true;
 	}
 }

@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb23ed46aa7549e49ab39f4eff6430a5, type: 3}
   m_Name: Lunatic
   m_EditorClassIdentifier: 
+  Name: Lunatic
+  version:
+    major: 1
+    minor: 0
+    build: 0
+    revision: 0

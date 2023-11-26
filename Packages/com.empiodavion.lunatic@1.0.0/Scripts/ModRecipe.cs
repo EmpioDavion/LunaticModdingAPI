@@ -21,7 +21,7 @@ public struct Ingredient
 	}
 }
 
-public class ModRecipe : ScriptableObject, IModObject
+public class ModRecipe : ScriptableObject, IModObject, ISerializationCallbackReceiver
 {
 	public Mod Mod { get; set; }
 	public AssetBundle Bundle { get; set; }
@@ -35,14 +35,18 @@ public class ModRecipe : ScriptableObject, IModObject
 
 	public bool isUnlocked;
 
-	[SerializeField]
-	private string ingredient1Name;
+	public ModMaterial material1;
+	public ModMaterial material2;
+	public ModMaterial material3;
 
-	[SerializeField]
-	private string ingredient2Name;
+	[SerializeField, HideInInspector]
+	internal string ingredient1Name;
 
-	[SerializeField]
-	private string ingredient3Name;
+	[SerializeField, HideInInspector]
+	internal string ingredient2Name;
+
+	[SerializeField, HideInInspector]
+	internal string ingredient3Name;
 
 	[System.NonSerialized]
 	public Ingredient ingredient1;
@@ -73,6 +77,36 @@ public class ModRecipe : ScriptableObject, IModObject
 	}
 
 	protected internal virtual void OnForged(Alki.Recipe recipe)
+	{
+
+	}
+
+	public void OnBeforeSerialize()
+	{
+#if UNITY_EDITOR
+		static void GetMaterialName(ModMaterial material, ref string ingredientName)
+		{
+			if (material == null)
+				return;
+
+			string assetPath = UnityEditor.AssetDatabase.GetAssetPath(material);
+
+			if (assetPath.StartsWith("Assets/"))
+			{
+				Mod mod = UnityEditor.AssetDatabase.LoadAssetAtPath<Mod>("Assets/Mod.asset");
+				ingredientName = Lunatic.CreateInternalName(mod.Name, material.Name);
+			}
+			else
+				ingredientName = material.name;
+		}
+
+		GetMaterialName(material1, ref ingredient1Name);
+		GetMaterialName(material2, ref ingredient2Name);
+		GetMaterialName(material3, ref ingredient3Name);
+#endif
+	}
+
+	public void OnAfterDeserialize()
 	{
 
 	}

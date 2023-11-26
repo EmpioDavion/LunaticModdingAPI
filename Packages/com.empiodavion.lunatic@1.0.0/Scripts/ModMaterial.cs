@@ -13,5 +13,6 @@ public class ModMaterial : UnityEngine.ScriptableObject, IModObject
 
 	public string description;
 
+	[UnityEngine.HideInInspector]
 	public int count = 1;
 }

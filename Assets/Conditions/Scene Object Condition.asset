@@ -9,6 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb23ed46aa7549e49ab39f4eff6430a5, type: 3}
-  m_Name: Mod Template
+  m_Script: {fileID: 11500000, guid: 5684c3d1c4714e048bb0b65fe8641e54, type: 3}
+  m_Name: Scene Object Condition
   m_EditorClassIdentifier: 
+  memberName: CheckHubMaterialsCollected
+  memberType: 8
+  target: {fileID: 11400000, guid: 5d81e076f00319b42b3c92746b697223, type: 2}

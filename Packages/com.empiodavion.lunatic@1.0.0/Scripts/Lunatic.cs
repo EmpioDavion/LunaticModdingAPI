@@ -1,7 +1,9 @@
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
 public static class Lunatic
 {
@@ -154,7 +156,7 @@ public static class Lunatic
 	internal static readonly List<ModMaterial> ModMaterials = new List<ModMaterial>();
 	internal static readonly List<ModRecipe> ModRecipes = new List<ModRecipe>();
 
-	private static Dictionary<string, string> ModData = new Dictionary<string, string>();
+	private static Dictionary<string, JObject> ModData = new Dictionary<string, JObject>();
 
 	private static readonly Dictionary<string, AssetBundle> AssetBundles = new Dictionary<string, AssetBundle>();
 
@@ -168,6 +170,8 @@ public static class Lunatic
 	public static int BaseMaterialCount { get; private set; }
 
 	private static AssetBundle Bundle;
+
+	internal static Mod MainMod;
 
 	public static void Init()
 	{
@@ -206,24 +210,24 @@ public static class Lunatic
 		BaseMaterialCount = MaterialNames.Count;
 
 		AddShader("Lunacid/Mix");
-		AddShader("Lunacid/Unlit Transparent No Fog");
+		AddShader("Lunacid/UnlitTransparentNoFog");
 		AddShader("ProBuilder/Standard Vertex Color");
-		AddShader("ProBuilder/Unlit Vertex Color");
-		AddShader("Retro Look Pro/Analog TV Noise");
-		AddShader("Retro Look Pro/Bleed Effect");
-		AddShader("Retro Look Pro/Bottom Noise Effect");
-		AddShader("Retro Look Pro/Glitch 1 Retro Look");
-		AddShader("Retro Look Pro/Glitch 2 Retro Look");
-		AddShader("Retro Look Pro/Glitch 3");
-		AddShader("Retro Look Pro/Jitter Effect");
-		AddShader("Retro Look Pro/Low Res_RL Pro");
-		AddShader("Retro Look Pro/Noise");
-		AddShader("Retro Look Pro/NTSC_RL Pro");
-		AddShader("Retro Look Pro/Phosphor_RL Pro");
-		AddShader("Retro Look Pro/Picture Correction");
-		AddShader("Retro Look Pro/TV_Retro Look");
-		AddShader("Retro Look Pro/VHS_Retro Look");
-		AddShader("Retro Look Pro/VHS Scanlines_RL Pro");
+		AddShader("ProBuilder/UnlitVertexColor");
+		AddShader("RetroLookPro/AnalogTVNoise");
+		AddShader("RetroLookPro/BleedEffect");
+		AddShader("RetroLookPro/BottomNoiseEffect");
+		AddShader("RetroLookPro/Glitch1RetroLook");
+		AddShader("RetroLookPro/Glitch2RetroLook");
+		AddShader("RetroLookPro/Glitch3");
+		AddShader("RetroLookPro/JitterEffect");
+		AddShader("RetroLookPro/LowRes_RLPro");
+		AddShader("RetroLookPro/Noise");
+		AddShader("RetroLookPro/NTSC_RLPro");
+		AddShader("RetroLookPro/Phosphor_RLPro");
+		AddShader("RetroLookPro/PictureCorrection");
+		AddShader("RetroLookPro/TV_RetroLook");
+		AddShader("RetroLookPro/VHS_RetroLook");
+		AddShader("RetroLookPro/VHSScanlines_RLPro");
 		AddShader("Shader Forge/Additive_Ignore_Fog");
 		AddShader("Shader Forge/CASMOON");
 		AddShader("Shader Forge/Clouds");
@@ -234,8 +238,8 @@ public static class Lunatic
 		AddShader("Shader Forge/flame_bill");
 		AddShader("Shader Forge/Gamma");
 		AddShader("Shader Forge/ghost");
-		AddShader("Shader Forge/Ghost Dark");
-		AddShader("Shader Forge/Glow Wave");
+		AddShader("Shader Forge/GhostDark");
+		AddShader("Shader Forge/GlowWave");
 		AddShader("Shader Forge/Hair");
 		AddShader("Shader Forge/Heatwave");
 		AddShader("Shader Forge/Ignore_Fog");
@@ -257,20 +261,20 @@ public static class Lunatic
 		AddShader("Shader Forge/Particle_Ignore_Fog");
 		AddShader("Shader Forge/Radiant");
 		AddShader("Shader Forge/Reflections");
-		AddShader("Shader Forge/Shiney Surf");
+		AddShader("Shader Forge/ShineySurf");
 		AddShader("Shader Forge/swim_shady");
 		AddShader("Shader Forge/Unlit_Object");
 		AddShader("Shader Forge/Water");
 		AddShader("Shader Forge/Water_alt");
 		AddShader("Shader Forge/Water_Flow");
-		AddShader("Shader Forge/Water_SWirl");
+		AddShader("Shader Forge/Water_Swirl");
 		AddShader("Shader Forge/Wind");
 		AddShader("Shader Forge/Winder");
-		AddShader("Volumetric Cloud 3");
+		AddShader("VolumetricCloud3");
 
 		foreach (KeyValuePair<string, Shader> kvp in LunacidShaders)
 			if (kvp.Value == null)
-				Debug.Log($"Shader \"{kvp.Key}\" is null");
+				Debug.LogWarning($"Shader \"{kvp.Key}\" is null");
 	}
 
 	private static void AddShader(string shaderPath)
@@ -317,28 +321,17 @@ public static class Lunatic
 
 				if (mods.Length == 0)
 				{
-					Debug.LogError("AssetBundle contains no Mod object, adding default Mod object for it.");
-					Mod mod = ScriptableObject.CreateInstance<Mod>();
-					mod.name = System.IO.Path.GetFileName(bundlePath);
-
-					AddMod(mod, bundle);
-					mod.Init();
+					Debug.LogError("AssetBundle contains no Mod asset, cannot load.");
 				}
 				else
 				{
 					// add mods, load assets from bundles and count totals
 					foreach (Mod mod in mods)
 					{
-						Debug.Log("Loading mod assets " + mod.name);
+						Debug.Log("Loading mod assets " + mod.Name);
 
-						AddMod(mod, bundle);
-					}
-
-					foreach (Mod mod in mods)
-					{
-						Debug.Log("Initialising mod " + mod.name);
-
-						mod.Init();
+						mod.bundle = bundle;
+						Mods.Add(mod);
 					}
 				}
 			}
@@ -348,13 +341,17 @@ public static class Lunatic
 			}
 		}
 
-		Bundle = AssetBundles["lunatic"];
-	}
+		MainMod = FindModByName("Lunatic");
+		Bundle = MainMod.bundle;
 
-	private static void AddMod(Mod mod, AssetBundle bundle)
-	{
-		mod.Load(bundle);
-		Mods.Add(mod);
+		MainMod.Load();
+		MainMod.Init();
+
+		foreach (Mod mod in Mods)
+			mod.Load();
+
+		foreach (Mod mod in Mods)
+			mod.Init();
 	}
 
 	// due to truncation, don't need to bother with checking whether it's a mod material or not
@@ -400,19 +397,51 @@ public static class Lunatic
 
 	internal static string GetInternalName(IModObject modObject)
 	{
-		return CreateInternalName(modObject.Mod.name, modObject.Name);
+		return CreateInternalName(modObject.Mod.Name, modObject.Name);
 	}
 
-	internal static string CreateInternalName(string modName, string objectName)
+	public static string CreateInternalName(string modName, string objectName)
 	{
 		return $"L#{modName}/{objectName}";
 	}
 
-	internal static void ReadInternalName(string internalName, out string modName, out string objectName, bool hasData)
+	public static void ReadInternalName(string internalName, out string modName, out string objectName, bool hasData)
 	{
 		int slash = internalName.IndexOf('/', 3);
 		modName = internalName.Substring(2, slash - 3);
 		objectName = internalName.Substring(slash + 1, internalName.Length - slash - (hasData ? 3 : 1));
+	}
+
+	public static string ReadModName(string internalName)
+	{
+		return internalName.Substring(2, internalName.IndexOf('/') - 2);
+	}
+
+	public static string ReadObjectName(string internalName, bool includeNumbers)
+	{
+		int slash = internalName.IndexOf('/') + 1;
+
+		if (includeNumbers || !EndsWithNumbers(internalName, 2))
+			return internalName.Substring(slash);
+		
+		return internalName.Substring(slash, internalName.Length - slash - 2);
+	}
+
+	public static Mod FindModByName(string modName)
+	{
+		return Mods.Find((x) => x.Name == modName);
+	}
+
+	public static Mod FindModFromInternalName(string internalName, bool checkIsInternalName = true)
+	{
+		if (checkIsInternalName && (internalName == null || !internalName.StartsWith("L#")))
+			return null;
+
+		string modName = ReadModName(internalName);
+
+		Debug.Log("Mod Name: " + modName);
+
+		return Mods.Find((x) => x.Name == modName);
 	}
 
 	public static void Internal_InitRecipesArray(Alki alki)
@@ -442,23 +471,30 @@ public static class Lunatic
 		}
 	}
 
-	public static T GetModData<T>()
+	public static T GetModData<T>(Mod mod)
 	{
-		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetCallingAssembly();
-		string name = assembly.GetName().Name;
-
-		if (ModData.TryGetValue(name, out string json))
-			return LJson.Deserialise<T>(json);
+		if (ModData.TryGetValue(mod.Name, out JObject json))
+			return json.ToObject<T>();
 
 		return default;
 	}
 
-	public static void SetModData(object data)
+	public static void SetModData(Mod mod, object data)
 	{
-		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetCallingAssembly();
-		string name = assembly.GetName().Name;
+		ModData[mod.Name] = LJson.SerialiseObject(data);
+	}
 
-		ModData[name] = LJson.Serialise(data);
+	public static int ReadMaterialID(string str)
+	{
+		return int.Parse(str.Substring(0, str.Length - 2));
+	}
+
+	public static int ReadItemData(string str)
+	{
+		if (EndsWithNumbers(str, 2))
+			return int.Parse(str.Substring(str.Length - 2));
+
+		return -1;
 	}
 
 	public static bool EndsWithNumbers(string str, int numberCount)
@@ -466,7 +502,7 @@ public static class Lunatic
 		if (str.Length < numberCount)
 			return false;
 
-		for (int i = str.Length; i > 0; --i)
+		for (int i = str.Length - 1; i >= str.Length - numberCount; i--)
 			if (!char.IsDigit(str[i]))
 				return false;
 
@@ -572,17 +608,18 @@ public static class Lunatic
 
 	internal static void TrackWeapon(ModWeapon weapon)
 	{
-		AssetReplacement.Add("WEPS/" + weapon.name, weapon.gameObject);
+		Debug.Log("Tracking weapon " + weapon.InternalName);
+		AssetReplacement.Add("WEPS/" + weapon.InternalName, weapon.gameObject);
 	}
 
 	internal static void TrackMagic(ModMagic magic)
 	{
-		AssetReplacement.Add("MAGIC/" + magic.name, magic.gameObject);
+		AssetReplacement.Add("MAGIC/" + magic.InternalName, magic.gameObject);
 	}
 
 	internal static void TrackItem(ModItem item)
 	{
-		AssetReplacement.Add("ITEMS/" + item.name, item.gameObject);
+		AssetReplacement.Add("ITEMS/" + item.InternalName, item.gameObject);
 	}
 
 	internal static void FixShaders(Component component)
@@ -703,41 +740,54 @@ public static class Lunatic
 
 	// Patch functions
 
-	public static void Internal_LoadModData(string file)
+	private static string GetModSaveFile(int saveSlot)
 	{
+		return Application.dataPath + "/SAVE_" + saveSlot + ".LUNATIC";
+	}
+
+	public static void Internal_OnPlayerDataDelete()
+	{
+		ModData = new Dictionary<string, JObject>();
+
+		foreach (Mod mod in Mods)
+			foreach (ModGame game in mod.games)
+				game.OnSaveFileDeleted();
+
+		LPlayerData data = LPlayerData.Delete();
+		SetModData(MainMod, data);
+
+		// save is called right after which will write the data to file
+		//System.IO.File.WriteAllText(file, LJson.Serialise(ModData));
+	}
+
+	public static void Internal_OnPlayerDataLoad(PlayerData playerData, int saveSlot)
+	{
+		string file = GetModSaveFile(saveSlot);
+
 		if (System.IO.File.Exists(file))
-			ModData = LJson.Deserialise<Dictionary<string, string>>(System.IO.File.ReadAllText(file));
+			ModData = LJson.Deserialise<Dictionary<string, JObject>>(System.IO.File.ReadAllText(file));
+
+		LPlayerData data = GetModData<LPlayerData>(MainMod);
+
+		if (data != null)
+			LPlayerData.Load(data, playerData);
 
 		foreach (Mod mod in Mods)
 			foreach (ModGame game in mod.games)
 				game.OnSaveFileLoaded();
 	}
 
-	public static void Internal_SaveModData(string file)
+	public static void Internal_OnPlayerDataSave(PlayerData playerData, int saveSlot)
 	{
 		foreach (Mod mod in Mods)
-			foreach (ModGame game in mod.games)
-				game.OnSaveFileSaved();
+			foreach (ModGame modGame in mod.games)
+				modGame.OnSaveFileSaved();
 
-		System.IO.File.WriteAllText(file, LJson.Serialise(ModData));
-	}
-
-	public static PlayerData Internal_OnPlayerDataLoad(PlayerData playerData)
-	{
-		LPlayerData data = GetModData<LPlayerData>();
-
-		if (data != null)
-			LPlayerData.Load(data, playerData);
-
-		return playerData;
-	}
-
-	public static void Internal_OnPlayerDataSave(PlayerData playerData)
-	{
-		// TODO: remove mod objects
 		LPlayerData data = LPlayerData.Save(playerData);
+		SetModData(MainMod, data);
 
-		SetModData(data);
+		string file = GetModSaveFile(saveSlot);
+		System.IO.File.WriteAllText(file, LJson.Serialise(ModData));
 	}
 
 	public static bool Internal_OnItemPickupStart(Item_Pickup_scr itemPickup)
@@ -748,13 +798,18 @@ public static class Lunatic
 		return false;
 	}
 
-	public static void SortWeapons(List<string> list)
+	public static void Internal_SortList(List<string> list)
 	{
 		list.Sort(Internal_SortInternalNames);
 	}
 
 	internal static int Internal_SortInternalNames(string a, string b)
 	{
+		if (string.IsNullOrEmpty(a))
+			return string.IsNullOrEmpty(b) ? 0 : 1;
+		else if (string.IsNullOrEmpty(b))
+			return -1;
+
 		if (a.StartsWith("L#"))
 			a = a.Substring(a.IndexOf('/', 3) + 1);
 
@@ -836,9 +891,9 @@ public static class Lunatic
 
 			switch (folder)
 			{
-				case "WEPS": replacement = "BASE WEAPON"; break;
-				case "MAGIC": replacement = "BASE MAGIC"; break;
-				case "ITEMS": replacement = "BASE ITEM"; break;
+				case "WEPS": replacement = "L#Lunatic/BASE WEAPON"; break;
+				case "MAGIC": replacement = "L#Lunatic/BASE MAGIC"; break;
+				case "ITEMS": replacement = "L#Lunatic/BASE ITEM"; break;
 				default: return;
 			}
 
@@ -877,7 +932,18 @@ public static class Lunatic
 
 	public static void Internal_OnPlayerJump(Player_Control_scr player)
 	{
+		Transform playerTransform = player.transform;
 
+		for (int i = 0; i < player.CON.CURRENT_PL_DATA.WEPS.Length; i++)
+			if (!string.IsNullOrEmpty(player.CON.CURRENT_PL_DATA.WEPS[i]))
+				if (Resources.Load("WEPS/" + player.CON.CURRENT_PL_DATA.WEPS[i]) == null)
+					player.CON.CURRENT_PL_DATA.WEPS[i] = "";
+
+		System.Array.Sort(player.CON.CURRENT_PL_DATA.WEPS, LPlayerData.PushBlankToEnd);
+
+		foreach (Mod mod in Mods)
+			foreach (ModItemPickup itemPickup in  mod.itemPickups)
+				itemPickup.Spawn(playerTransform.position, playerTransform.rotation);
 	}
 
 	public static void Internal_SetSkills(CONTROL control)

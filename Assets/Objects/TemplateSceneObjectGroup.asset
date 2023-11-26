@@ -14,17 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene: HUB_01
   sceneObjects:
-  - gameObject: {fileID: 9060664981745006451, guid: 0ceb5bf6008b9ea4490091d702b3edb2, type: 3}
-    localPosition: {x: 4.281804, y: 0.010941029, z: -0.84867907}
-    localRotation: {x: 0, y: 0, z: 0}
-    localScale: {x: 1, y: 1, z: 1}
-    parentTransform: 
-    gameObjectAssetPath: Assets/Objects/TEMPLATE_MATERIAL_PICKUP.prefab
-  Test:
-    gameObject: {fileID: 9060664981745006451, guid: 0ceb5bf6008b9ea4490091d702b3edb2, type: 3}
-    localPosition: {x: 4.281804, y: 0.010941029, z: -0.84867907}
-    localRotation: {x: 0, y: 0, z: 0}
-    localScale: {x: 1, y: 1, z: 1}
-    parentTransform: 
-    gameObjectAssetPath: Assets/Objects/TEMPLATE_MATERIAL_PICKUP.prefab
-  sceneObjectsJson: '[{"localPosition":{"x":4.281804,"y":0.0109410286,"z":-0.848679066},"localRotation":{"x":0.0,"y":0.0,"z":0.0},"localScale":{"x":1.0,"y":1.0,"z":1.0},"parentTransform":"","gameObjectAssetPath":"Assets/Objects/TEMPLATE_MATERIAL_PICKUP.prefab"}]'
+  - {fileID: 0}
+  sceneObjectsJson: "[\r\n  {\r\n    \"spawnCondition\": {\r\n      \"json\": \"{\\r\\n 
+    \\\"memberName\\\": \\\"CheckHubMaterialsCollected\\\",\\r\\n  \\\"memberType\\\":
+    8,\\r\\n  \\\"target\\\": {\\r\\n    \\\"assetPath\\\": \\\"Assets/Objects/TemplateGame.asset\\\"\\r\\n 
+    }\\r\\n}\"\r\n    },\r\n    \"localPosition\": {\r\n      \"x\": 4.2818,\r\n     
+    \"y\": 0.0109410286,\r\n      \"z\": -0.848679066\r\n    },\r\n    \"localRotation\":
+    {\r\n      \"x\": 0.0,\r\n      \"y\": 0.0,\r\n      \"z\": 0.0\r\n    },\r\n   
+    \"localScale\": {\r\n      \"x\": 1.0,\r\n      \"y\": 1.0,\r\n      \"z\": 1.0\r\n   
+    },\r\n    \"parentTransform\": \"\",\r\n    \"gameObjectAssetPath\": \"Assets/Objects/TEMPLATE_MATERIAL_PICKUP.prefab\"\r\n 
+    }\r\n]"
+  spawnCondition: {fileID: 11400000, guid: 8ded7611e3984da4390aedaea9eaf56b, type: 2}

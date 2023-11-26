@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: Lunatic mod recipe
   startsUnlocked: 1
-  ingredient1Name: TEMPLATE MATERIAL
-  ingredient2Name: TEMPLATE MATERIAL
+  isUnlocked: 0
+  material1: {fileID: 11400000, guid: c3034e33fd2cf1e4184dbe5686cce05f, type: 2}
+  material2: {fileID: 11400000, guid: c3034e33fd2cf1e4184dbe5686cce05f, type: 2}
+  material3: {fileID: 0}
+  ingredient1Name: L#LunaticModTemplate/TEMPLATE MATERIAL
+  ingredient2Name: L#LunaticModTemplate/TEMPLATE MATERIAL
   ingredient3Name: FIRE OPAL
   result: {fileID: 9060664981745006451, guid: 9c41d12519f70f54db6a5d1e3653b5f0, type: 3}

@@ -5,6 +5,26 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Lunatic/Mod Asset")]
 public class Mod : ScriptableObject
 {
+	[System.Serializable]
+	public class Version
+	{
+		public int major;
+		public int minor;
+		public int build;
+		public int revision;
+
+		public Version()
+		{
+			major = 1;
+			minor = 0;
+			build = 0;
+			revision = 0;
+		}
+	}
+
+	public string Name;
+	public Version version;
+
 	[System.NonSerialized]
 	public AssetBundle bundle;
 
@@ -22,9 +42,15 @@ public class Mod : ScriptableObject
 
 	internal static int RecipesLoaded = 0;
 
-	internal void Load(AssetBundle _bundle)
+	private bool loaded = false;
+	private bool initialised = false;
+
+	internal void Load()
 	{
-		bundle = _bundle;
+		if (loaded)
+			return;
+
+		loaded = true;
 
 		string[] assetNames = bundle.GetAllAssetNames();
 		List<IModObject> assets = new List<IModObject>();
@@ -85,33 +111,19 @@ public class Mod : ScriptableObject
 
 	internal void Init()
 	{
-		Debug.Log($"Initialising mod objects");
+		if (initialised)
+			return;
 
-		Debug.Log($"Initialising mod weapons");
+		initialised = true;
+
 		InitWeapons();
-
-		Debug.Log($"Initialising mod magics");
 		InitMagics();
-
-		Debug.Log($"Initialising mod items");
 		InitItems();
-
-		Debug.Log($"Initialising mod materials");
 		InitMaterials();
-
-		Debug.Log($"Initialising mod item pickups");
 		InitItemPickups();
-
-		Debug.Log($"Initialising mod recipes");
 		InitRecipes();
-
-		Debug.Log($"Initialising mod classes");
 		InitClasses();
-
-		Debug.Log($"Initialising mod scene object groups");
 		InitSceneObjectGroups();
-
-		Debug.Log($"Initialised mod objects");
 	}
 
 	private void InitWeapons()
@@ -152,7 +164,7 @@ public class Mod : ScriptableObject
 		foreach (ModMaterial material in materials)
 		{
 			material.id = Lunatic.MaterialNames.Count * 2 + 1;
-			Lunatic.MaterialNames.Add(material.name);
+			Lunatic.MaterialNames.Add(material.InternalName);
 		}
 
 		Lunatic.ModMaterials.AddRange(materials);
@@ -161,7 +173,10 @@ public class Mod : ScriptableObject
 	private void InitItemPickups()
 	{
 		foreach (ModItemPickup itemPickup in itemPickups)
+		{
 			Lunatic.FixShaders(itemPickup);
+			itemPickup.Init();
+		}
 	}
 
 	internal void InitRecipes()
@@ -177,9 +192,6 @@ public class Mod : ScriptableObject
 		foreach (ModRecipe modRecipe in recipes)
 		{
 			Alki.Recipe recipe = CreateRecipe(modRecipe);
-
-			Debug.Log($"Converting recipe: {modRecipe.AssetName} - {modRecipe.ingredient1.name}, {modRecipe.ingredient2.name}, {modRecipe.ingredient3.name}, ");
-			Debug.Log($"Adding recipe: {recipe.name} - {recipe.need_1}, {recipe.need_2}, {recipe.need_3}");
 
 			modRecipe.recipeIndex = RecipesLoaded;
 			alki.Recipes[RecipesLoaded++] = recipe;

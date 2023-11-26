@@ -4760,8 +4760,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  Name: TEMPLATE WEAPON
+  Name: L#Mod Template/TEMPLATE WEAPON
   Alt_Name: 2
   CON: {fileID: 0}
   inChest: 0
   SAVED: {fileID: 0}
+  item: {fileID: 7124211558951234573, guid: a289779bd10942640a0d955a056fd0f0, type: 3}

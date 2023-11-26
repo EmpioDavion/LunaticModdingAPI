@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b2c9b506646cf048b82fcf5fd484633, type: 3}
+  m_Name: Scene Object
+  m_EditorClassIdentifier: 
+  gameObject: {fileID: 0}
+  localPosition: {x: 0, y: 0, z: 0}
+  localRotation: {x: 0, y: 0, z: 0}
+  localScale: {x: 0, y: 0, z: 0}
+  parentTransform: 
+  gameObjectAssetPath: 
+  spawnCondition: {fileID: 11400000, guid: 643e0bcf816d4b140971afc643933a7f, type: 2}

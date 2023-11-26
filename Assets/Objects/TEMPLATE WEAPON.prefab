@@ -10552,15 +10552,16 @@ MonoBehaviour:
   WEP_WEIGHT: 5
   WEP_BACKSTEP: 60
   WEP_ELEMENT: 0
-  WEP_XP: -1
+  WEP_XP: 0
   WEP_GROWTH: 1
-  UPGRADE: 
+  UPGRADE: Assets/Objects/TEMPLATE WEAPON.prefab
   type: 0
   special: 0
   cooling: 0
   cooling2: 0
   CHARGE_SPEED: 2
   anim_speed_adjust: 1
+  upgradeWeapon: {fileID: 4231693432828122559}
 --- !u!1 &7245264569525668648
 GameObject:
   m_ObjectHideFlags: 0

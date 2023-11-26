@@ -1,38 +1,10 @@
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Lunatic/Scene Object Group")]
 public class LSceneObjectGroup : ScriptableObject, IModObject, ISerializationCallbackReceiver
 {
-	[Serializable]
-    public class SceneObject : ISerializationCallbackReceiver
-    {
-        [JsonIgnore]
-        public GameObject gameObject;
-
-        public Vector3 localPosition;
-        public Vector3 localRotation;
-        public Vector3 localScale;
-        public string parentTransform;
-
-        [SerializeField, HideInInspector, JsonRequired]
-        internal string gameObjectAssetPath;
-
-		public void OnBeforeSerialize()
-		{
-#if UNITY_EDITOR
-            gameObjectAssetPath = UnityEditor.AssetDatabase.GetAssetPath(gameObject);
-#endif
-        }
-
-		public void OnAfterDeserialize()
-		{
-
-		}
-	}
-
     public Mod Mod { get; set; }
     public AssetBundle Bundle { get; set; }
     public string Name { get; set; }
@@ -40,39 +12,44 @@ public class LSceneObjectGroup : ScriptableObject, IModObject, ISerializationCal
     public string InternalName => Lunatic.GetInternalName(this);
 
 	public string scene;
-	public List<SceneObject> sceneObjects = new List<SceneObject>();
+	public List<LSceneObject> sceneObjects = new List<LSceneObject>();
 
-    public SceneObject Test;
+	[SerializeField, HideInInspector, JsonProperty]
+    internal string sceneObjectsJson;
 
-	[SerializeField, HideInInspector]
-    private string sceneObjectsJson;
+    [SerializeField]
+    protected LSceneObjectGroupCondition spawnCondition;
 
-    internal void Init()
+	internal void Init()
 	{
-        sceneObjects = LJson.Deserialise<List<SceneObject>>(sceneObjectsJson);
+        //spawnCondition.Print();
+        //spawnCondition.Load();
+        //spawnCondition.Reference.Init(Bundle);
+        spawnCondition.Init(Bundle);
 
-        foreach (SceneObject sceneObject in sceneObjects)
-        {
-            Debug.Log($"Initing {sceneObject.gameObjectAssetPath}");
-            sceneObject.gameObject = Bundle.LoadAsset<GameObject>(sceneObject.gameObjectAssetPath);
-        }
+		//sceneObjects = LJson.Deserialise<List<SceneObject>>(sceneObjectsJson);
+
+        //foreach (SceneObject sceneObject in sceneObjects)
+        //    sceneObject.Init(Bundle);
 	}
 
-    public void Spawn()
+    public void Spawn(bool ignoreConditions = false)
     {
-        foreach (SceneObject sceneObject in sceneObjects)
-        {
-            GameObject parent = GameObject.Find(sceneObject.parentTransform);
-            Transform parentTr = parent == null ? null : parent.transform;
-            GameObject gameObject = Instantiate(sceneObject.gameObject, sceneObject.localPosition, Quaternion.Euler(sceneObject.localRotation), parentTr);
-            gameObject.transform.localScale = sceneObject.localScale;
-		}
+        if (!ignoreConditions && spawnCondition != null && !spawnCondition.Invoke(this))
+            return;
+
+        foreach (LSceneObject sceneObject in sceneObjects)
+            sceneObject.Spawn(ignoreConditions);
     }
 
-	public void OnBeforeSerialize()
+    public void OnBeforeSerialize()
 	{
 #if UNITY_EDITOR
-        sceneObjectsJson = LJson.Serialise(sceneObjects);
+        foreach (LSceneObject sceneObject in sceneObjects)
+            if (sceneObject != null)
+                sceneObject.UpdatePath();
+
+        //sceneObjectsJson = LJson.Serialise(sceneObjects);
 #endif
 	}
 

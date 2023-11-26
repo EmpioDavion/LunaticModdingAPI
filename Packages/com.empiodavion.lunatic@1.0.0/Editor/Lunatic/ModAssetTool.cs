@@ -75,6 +75,7 @@ public class ModAssetTool : EditorWindow
 		new PrefabTypeCategory("Item Pickups", typeof(ModItemPickup), "BASE ITEM PICKUP"),
 		new TypeCategory("Recipes", typeof(ModRecipe)),
 		new TypeCategory("Classes", typeof(ModClass)),
+		new TypeCategory("Scene Object Groups", typeof(LSceneObjectGroup)),
 	};
 
 	private int category = 0;

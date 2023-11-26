@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class ModItemPickupEditor : Editor
 {
 	private SerializedProperty script;
 	private SerializedProperty type;
+	private SerializedProperty item;
 	private SerializedProperty itemName;
 	private SerializedProperty inChest;
 	private SerializedProperty saved;
@@ -16,6 +18,7 @@ public class ModItemPickupEditor : Editor
 	{
 		script = serializedObject.FindProperty("m_Script");
 		type = serializedObject.FindProperty("type");
+		item = serializedObject.FindProperty("item");
 		itemName = serializedObject.FindProperty("Name");
 		inChest = serializedObject.FindProperty("inChest");
 		saved = serializedObject.FindProperty("SAVED");
@@ -36,12 +39,20 @@ public class ModItemPickupEditor : Editor
 
 		EditorTools.DrawShowHelpToggle();
 
+		EditorGUI.BeginChangeCheck();
+
 		EditorTools.DrawItemTypeProperty(type, "Item type contained in this pickup.");
+
+		if (EditorGUI.EndChangeCheck())
+		{
+			itemName.stringValue = "";
+			item.objectReferenceValue = null;
+		}
 
 		if (type.intValue == (int)Lunatic.ItemTypes.Material)
 		{
 			if (EditorTools.ShowHelp)
-				EditorGUILayout.HelpBox("You can select one of Lunacid's materials from this list or type your own.", MessageType.Info);
+				EditorGUILayout.HelpBox("You can select one of Lunacid's materials from this list.", MessageType.Info);
 
 			int index = EditorGUILayout.Popup("Select Lunacid material", -1, materials);
 
@@ -49,12 +60,69 @@ public class ModItemPickupEditor : Editor
 				itemName.stringValue = Lunatic.MaterialNames[index];
 		}
 
-		EditorTools.DrawHelpProperty(itemName, "Name of the item or material contained in this pickup.");
+		if (type.intValue == (int)Lunatic.ItemTypes.Gold)
+		{
+			if (EditorTools.ShowHelp)
+				EditorGUILayout.HelpBox("The amount of gold given by this pickup.", MessageType.Info);
+
+			if (!int.TryParse(itemName.stringValue, out int amount))
+				amount = 0;
+
+			amount = EditorGUILayout.IntField("Amount", amount);
+
+			itemName.stringValue = amount.ToString();
+		}
+		else
+			DrawItem(item, itemName, "The object that is given when the pickup is collected.");
+
 		EditorTools.DrawHelpProperty(inChest, "If this item pickup is contained in a chest.");
 		EditorTools.DrawHelpProperty(saved, "The object that controls if this item pickup has been collected.");
 
-		EditorTools.DrawRemainingProperties(serializedObject, saved);
+		EditorTools.DrawRemainingProperties(serializedObject, item);
 
 		serializedObject.ApplyModifiedProperties();
+	}
+
+	private void DrawItem(SerializedProperty prop, SerializedProperty nameProp, string help)
+	{
+		if (EditorTools.ShowHelp)
+			EditorGUILayout.HelpBox(help, MessageType.Info);
+
+		EditorTools.DrawRefName(prop, nameProp);
+
+		EditorGUI.BeginChangeCheck();
+
+		EditorGUILayout.PropertyField(prop);
+
+		if (EditorGUI.EndChangeCheck())
+		{
+			if (prop.objectReferenceValue != null)
+			{
+				IModObject modObj;
+
+				if (prop.objectReferenceValue is GameObject propGO)
+					modObj = propGO.GetComponent<IModObject>();
+				else
+					modObj = prop.objectReferenceValue as IModObject;
+
+				if (modObj is ModWeapon)
+					type.intValue = (int)Lunatic.ItemTypes.Weapon;
+				else if (modObj is ModMagic)
+					type.intValue = (int)Lunatic.ItemTypes.Magic;
+				else if (modObj is ModItem)
+					type.intValue = (int)Lunatic.ItemTypes.Item;
+				else if (modObj is ModMaterial)
+					type.intValue = (int)Lunatic.ItemTypes.Material;
+				else
+				{
+					Debug.LogWarning($"Could not find valid component that implements IModObject on {prop.objectReferenceValue.name}.");
+					prop.objectReferenceValue = null;
+				}
+
+				EditorTools.CheckLunaticRef(prop, nameProp);
+			}
+			else
+				nameProp.stringValue = "";
+		}
 	}
 }

@@ -88,7 +88,6 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAICompanion.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomActivator.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModProjectile.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\JsonWrapper.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModBloodTrigger.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAttachToCamera.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModHuntPOSPlace.cs" />
@@ -97,7 +96,6 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModFullBillboard.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModForceOnEnable.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModNPCBillboard.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModObjectData.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModWeapon.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomAnimList.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomScale.cs" />
@@ -142,6 +140,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModTent.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAutoKill.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDynamicBonePlaneCollider.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LCondition.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LPlayerData.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLivingObject.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModFollowPlayer.cs" />
@@ -167,6 +166,11 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModStatusEffect.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModChangePlayerStats.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModSpawnOnEnable.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LReference.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LAssetReference.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LSceneObject.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LSceneObjectCondition.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LSceneObjectGroupCondition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\Lunatic.asmdef" />
@@ -772,11 +776,11 @@
     <Reference Include="Unity.TextMeshPro">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

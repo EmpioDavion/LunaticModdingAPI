@@ -8,6 +8,8 @@ public class ModGame : UnityEngine.ScriptableObject, IModObject
 	public string AssetName { get; set; }
 	public string InternalName => Lunatic.GetInternalName(this);
 
+	public virtual void OnSaveFileDeleted() { }
+
 	public virtual void OnSaveFileLoaded() { }
 
 	public virtual void OnSaveFileSaved() { }

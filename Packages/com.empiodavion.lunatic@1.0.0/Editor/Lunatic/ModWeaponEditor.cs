@@ -1,5 +1,4 @@
 using UnityEditor;
-using UnityEngine;
 
 [CustomEditor(typeof(ModWeapon), true)]
 public class ModWeaponEditor : Editor
@@ -31,7 +30,8 @@ public class ModWeaponEditor : Editor
     private SerializedProperty experience;
     private SerializedProperty growthRate;
     private SerializedProperty upgrade;
-    private SerializedProperty type;
+    private SerializedProperty upgradeWeapon;
+	private SerializedProperty type;
 	private SerializedProperty special;
     private SerializedProperty chargeSpeed;
     private SerializedProperty animationSpeed;
@@ -59,6 +59,7 @@ public class ModWeaponEditor : Editor
 		experience = serializedObject.FindProperty("WEP_XP");
 		growthRate = serializedObject.FindProperty("WEP_GROWTH");
 		upgrade = serializedObject.FindProperty("UPGRADE");
+		upgradeWeapon = serializedObject.FindProperty("upgradeWeapon");
 		type = serializedObject.FindProperty("type");
 		special = serializedObject.FindProperty("special");
 		chargeSpeed = serializedObject.FindProperty("CHARGE_SPEED");
@@ -101,9 +102,18 @@ public class ModWeaponEditor : Editor
 			EditorTools.DrawHelpProperty(description, "Text description/lore of the weapon to show in the player's inventory.");
 			EditorTools.DrawHelpProperty(weight, "How heavy the weapon is.");
 			EditorTools.DrawHelpProperty(backstep, "The distance the weapon will make the player backstep.");
-			EditorTools.DrawHelpProperty(experience, "The weapon's current experience amount, -1 is no leveling, 0-99 is leveling, -2 is leveled up.");
+
 			EditorTools.DrawHelpProperty(growthRate, "How much experience to give per successful attack with the weapon, multiplied by elemental damage bonuses.");
-			EditorTools.DrawHelpProperty(upgrade, "The name of the new weapon given when this weapon is leveled up.");
+
+			if ((int)experience.floatValue == -1 && !string.IsNullOrEmpty(upgrade.stringValue))
+				EditorGUILayout.HelpBox("A weapon is set to upgrade to, but experience gain is disabled.", MessageType.Warning);
+			else if ((int)experience.floatValue != -1 && string.IsNullOrEmpty(upgrade.stringValue))
+				EditorGUILayout.HelpBox("No weapon set to upgrade to, but experience gain is enabled.", MessageType.Warning);
+			
+			EditorTools.DrawHelpProperty(experience, "The weapon's current experience amount, -1 disables leveling, 0-99 is leveling progress, -2 is leveled up.");
+
+			DrawUpgrade(upgradeWeapon, upgrade, "The name of the new weapon given when this weapon is leveled up.");
+
 			EditorTools.DrawHelpProperty(special, "Special effect of the weapon.");
 			EditorTools.DrawHelpProperty(collisionMask, "Collision layers the weapon will detect collisions with for attacking and blocking.");
 
@@ -163,5 +173,20 @@ public class ModWeaponEditor : Editor
 		EditorTools.DrawRemainingProperties(serializedObject, animationSpeed);
 
 		serializedObject.ApplyModifiedProperties();
+	}
+
+	private void DrawUpgrade(SerializedProperty prop, SerializedProperty nameProp, string help)
+	{
+		if (EditorTools.ShowHelp)
+			EditorGUILayout.HelpBox(help, MessageType.Info);
+
+		EditorTools.DrawRefName(prop, nameProp);
+
+		EditorGUI.BeginChangeCheck();
+
+		EditorGUILayout.PropertyField(prop);
+
+		if (EditorGUI.EndChangeCheck())
+			EditorTools.CheckLunaticRef(prop, nameProp);
 	}
 }
