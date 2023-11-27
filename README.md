@@ -6,7 +6,7 @@ The mod template project has all layers, sorting layers and tags set up to match
 
 ## Unity
 
-You'll need to download [Unity version 2020.3.4f1](https://unity.com/releases/editor/whats-new/2020.3.4#release-notes) ([Unity Hub link](unityhub://2020.3.4f1/0abb6314276a)) as this is the version Lunacid was built with, and you may run into problems with other Unity versions.
+You'll need to download [Unity version 2020.3.4f1](https://unity.com/releases/editor/whats-new/2020.3.4#release-notes) as this is the version Lunacid was built with, and you may run into problems with other Unity versions.
 
 
 ## BepInEx
