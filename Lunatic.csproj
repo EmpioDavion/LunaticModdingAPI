@@ -142,7 +142,6 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModTent.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAutoKill.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDynamicBonePlaneCollider.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LReference.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LCondition.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LPlayerData.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLivingObject.cs" />
@@ -151,7 +150,6 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModTurret.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModIdleSounds.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModChangeScale.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LAssetReference.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModBannerPlacement.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModScene.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDynamicBoneCollider.cs" />
