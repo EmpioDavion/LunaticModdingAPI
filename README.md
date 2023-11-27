@@ -132,19 +132,19 @@ Launching Lunacid normally should have BepInEx run and load your mod dll(s) and 
 
 ## Pitfalls
 
-**Some of my asset data is not being deserialised from the asset bundle**
+### Some of my asset data is not being deserialised from the asset bundle
 
 Unity asset bundles are unable to deserialise classes and structs that are not packaged into the asset bundle.
 
 If you want your classes to deserialise properly, they must derive from ScriptableObject and become an asset. The class assets also need to be labeled to build into your asset bundle.
 
 
-**I'm getting null reference exceptions when deserialising my ModGame data**
+### I'm getting null reference exceptions when deserialising my ModGame data
 
 Chances are that your ModGame data does not exist yet for that save file and that you need to assign defaults for new saves.
 
 
-**My ModGame data is being loaded whenever I warp to a new area**
+### My ModGame data is being loaded whenever I warp to a new area
 
 The game itself saves and reloads save data whenever you warp. So you'll need to handle your custom data with this in mind.
 
