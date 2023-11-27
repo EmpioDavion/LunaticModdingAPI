@@ -58,7 +58,9 @@
   <ItemGroup>
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModVersionPropertyDrawer.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModSceneEditor.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LAssetReferencePropertyDrawer.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModAssetTool.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LReferencePropertyDrawer.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModItemPickupEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModWeaponEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LSceneObjectGroupEditor.cs" />
@@ -69,8 +71,6 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModRecipeEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModMultipleStatesEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LConditionBaseEditor.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LReferencePropertyDrawer.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LAssetReferencePropertyDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LunaticEditor.asmdef" />
@@ -676,11 +676,11 @@
     <Reference Include="System.Xml.XPath.XDocument">
       <HintPath>E:\Program Files\Unity\Hub\Editor\2020.3.4f1\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>

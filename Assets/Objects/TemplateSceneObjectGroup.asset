@@ -14,14 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene: HUB_01
   sceneObjects:
-  - {fileID: 0}
-  sceneObjectsJson: "[\r\n  {\r\n    \"spawnCondition\": {\r\n      \"json\": \"{\\r\\n 
-    \\\"memberName\\\": \\\"CheckHubMaterialsCollected\\\",\\r\\n  \\\"memberType\\\":
-    8,\\r\\n  \\\"target\\\": {\\r\\n    \\\"assetPath\\\": \\\"Assets/Objects/TemplateGame.asset\\\"\\r\\n 
-    }\\r\\n}\"\r\n    },\r\n    \"localPosition\": {\r\n      \"x\": 4.2818,\r\n     
-    \"y\": 0.0109410286,\r\n      \"z\": -0.848679066\r\n    },\r\n    \"localRotation\":
-    {\r\n      \"x\": 0.0,\r\n      \"y\": 0.0,\r\n      \"z\": 0.0\r\n    },\r\n   
-    \"localScale\": {\r\n      \"x\": 1.0,\r\n      \"y\": 1.0,\r\n      \"z\": 1.0\r\n   
-    },\r\n    \"parentTransform\": \"\",\r\n    \"gameObjectAssetPath\": \"Assets/Objects/TEMPLATE_MATERIAL_PICKUP.prefab\"\r\n 
-    }\r\n]"
-  spawnCondition: {fileID: 11400000, guid: 8ded7611e3984da4390aedaea9eaf56b, type: 2}
+  - {fileID: 11400000, guid: 98ad0d79e4b1f0648b3bc2a5eba376b3, type: 2}
+  spawnCondition: {fileID: 0}

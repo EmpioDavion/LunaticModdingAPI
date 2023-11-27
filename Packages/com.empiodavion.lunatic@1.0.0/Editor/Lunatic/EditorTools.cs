@@ -14,20 +14,21 @@ public static class EditorTools
 
 		if (path.EndsWith(".asset"))
 			path = path.Substring(0, path.Length - ".asset".Length);
+		else
+			assetPath += ".asset";
 
 		while (AssetDatabase.GetMainAssetTypeAtPath(assetPath) != null)
 		{
-			assetPath = path + $" ({count})";
+			assetPath = path + $" ({count}).asset";
 			count++;
 		}
-
-		assetPath += ".asset";
 
 		T obj = ScriptableObject.CreateInstance<T>();
 		AssetDatabase.CreateAsset(obj, assetPath);
 		AssetDatabase.ImportAsset(assetPath);
 
-		return obj;
+		return AssetDatabase.LoadAssetAtPath<T>(assetPath);
+		//return obj;
 	}
 
 	public static void DrawShowHelpToggle()

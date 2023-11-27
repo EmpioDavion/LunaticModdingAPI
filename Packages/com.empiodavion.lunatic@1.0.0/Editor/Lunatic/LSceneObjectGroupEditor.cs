@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,22 +10,32 @@ internal class LSceneObjectGroupEditor : Editor
 	protected SerializedProperty sceneObjects;
 	protected SerializedProperty spawnCondition;
 
-	Editor sceneObjectEditor;
-	Editor conditionEditor;
+	private Dictionary<Object, Editor> sceneObjectEditors = new Dictionary<Object, Editor>();
+	private Editor conditionEditor;
 
 	private void OnEnable()
 	{
 		scene = serializedObject.FindProperty("scene");
 		sceneObjects = serializedObject.FindProperty("sceneObjects");
 		spawnCondition = serializedObject.FindProperty("spawnCondition");
-
-		SceneView.duringSceneGui -= DrawSceneGUI;
-		SceneView.duringSceneGui += DrawSceneGUI;
 	}
 
 	private void OnDisable()
 	{
-		SceneView.duringSceneGui -= DrawSceneGUI;
+		foreach (KeyValuePair<Object, Editor> kvp in sceneObjectEditors)
+			if (kvp.Value is LSceneObjectEditor editor)
+				editor.OnDisable();
+
+		sceneObjectEditors.Clear();
+	}
+
+	private void OnDestroy()
+	{
+		foreach (KeyValuePair<Object, Editor> kvp in sceneObjectEditors)
+			if (kvp.Value is LSceneObjectEditor editor)
+				editor.OnDisable();
+
+		sceneObjectEditors.Clear();
 	}
 
 	public override void OnInspectorGUI()
@@ -37,7 +48,7 @@ internal class LSceneObjectGroupEditor : Editor
 
 		EditorGUILayout.LabelField(sceneObjects.displayName);
 
-		sceneObjects.arraySize = EditorGUILayout.IntField(sceneObjects.arraySize);
+		sceneObjects.arraySize = EditorGUILayout.IntField(sceneObjects.arraySize, GUILayout.Width(40));
 
 		EditorGUILayout.EndHorizontal();
 
@@ -45,23 +56,67 @@ internal class LSceneObjectGroupEditor : Editor
 
 		for (int i = 0; i < sceneObjects.arraySize; i++)
 		{
+			EditorGUILayout.BeginVertical(GUI.skin.box);
+
 			SerializedProperty prop = sceneObjects.GetArrayElementAtIndex(i);
 
-			if (prop.objectReferenceValue == null)
+			EditorGUILayout.BeginHorizontal();
+
+			EditorGUILayout.PropertyField(prop);
+
+			if (GUILayout.Button("Create", GUILayout.Width(100)))
 				AssignNewSceneObject(prop);
+			
+			bool delete = GUILayout.Button("X", GUILayout.Width(20));
+
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUI.indentLevel++;
 
 			if (prop.objectReferenceValue != null)
 			{
-				CreateCachedEditor(prop.objectReferenceValue, null, ref sceneObjectEditor);
-				sceneObjectEditor.OnInspectorGUI();
+				if (!sceneObjectEditors.TryGetValue(prop.objectReferenceValue, out Editor editor))
+				{
+					CreateCachedEditor(prop.objectReferenceValue, typeof(LSceneObjectEditor), ref editor);
+					sceneObjectEditors.Add(prop.objectReferenceValue, editor);
+				}
+
+				editor.OnInspectorGUI();
 			}
+
+			if (delete)
+			{
+				prop.objectReferenceValue = null;
+				sceneObjects.DeleteArrayElementAtIndex(i--);
+			}
+
+			EditorGUI.indentLevel--;
+
+			EditorGUILayout.EndVertical();
 		}
+
+		EditorGUILayout.BeginHorizontal();
+
+		GUILayout.FlexibleSpace();
+
+		if (GUILayout.Button("+", GUILayout.Width(64)))
+			sceneObjects.arraySize++;
+
+		EditorGUILayout.EndHorizontal();
 
 		EditorGUI.indentLevel--;
 
-		if (spawnCondition.objectReferenceValue == null)
+		EditorGUILayout.BeginHorizontal();
+
+		EditorGUILayout.PropertyField(spawnCondition);
+
+		if (GUILayout.Button("Create", GUILayout.Width(100)))
 			AssignNewSceneObjectGroupCondition(spawnCondition);
 
+		if (GUILayout.Button("X", GUILayout.Width(20)))
+			spawnCondition.objectReferenceValue = null;
+
+		EditorGUILayout.EndHorizontal();
 
 		if (spawnCondition.objectReferenceValue != null)
 		{
@@ -86,40 +141,5 @@ internal class LSceneObjectGroupEditor : Editor
 		Directory.CreateDirectory("Assets/Conditions");
 		property.objectReferenceValue = EditorTools.CreateNewAsset<LSceneObjectGroupCondition>("Assets/Conditions/Scene Object Group Condition");
 		EditorUtility.SetDirty(target);
-	}
-
-	private void DrawSceneGUI(SceneView sceneView)
-	{
-		LSceneObjectGroup group = (LSceneObjectGroup)target;
-
-		GUIStyle centeredStyle = GUI.skin.GetStyle("Label");
-		centeredStyle.alignment = TextAnchor.UpperCenter;
-		centeredStyle.fixedWidth = 200.0f;
-		centeredStyle.normal.background = Texture2D.whiteTexture;
-		centeredStyle.normal.textColor = Color.black;
-
-		for (int i = 0; i < group.sceneObjects.Count; i++)
-		{
-			if (group.sceneObjects[i] == null)
-			{
-				group.sceneObjects[i] = CreateInstance<LSceneObject>();
-				EditorUtility.SetDirty(group);
-			}
-
-			LSceneObject sceneObject = group.sceneObjects[i];
-
-			Vector3 pos = sceneObject.localPosition;
-
-			if (!string.IsNullOrEmpty(sceneObject.parentTransform))
-			{
-				GameObject parent = GameObject.Find(sceneObject.parentTransform);
-
-				if (parent != null)
-					pos = parent.transform.TransformPoint(pos);
-			}
-
-			Handles.Label(pos + Vector3.up, sceneObject.gameObject == null ? "[NULL]" : sceneObject.gameObject.name, centeredStyle);
-			Handles.DrawWireCube(pos, Vector3.one);
-		}
 	}
 }

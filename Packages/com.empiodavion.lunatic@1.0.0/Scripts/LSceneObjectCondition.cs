@@ -1,1 +1,4 @@
-public class LSceneObjectCondition : LCondition<LSceneObject> { }
+public class LSceneObjectCondition : LCondition<LSceneObject>
+{
+
+}

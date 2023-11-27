@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b2c9b506646cf048b82fcf5fd484633, type: 3}
   m_Name: Scene Object
   m_EditorClassIdentifier: 
-  gameObject: {fileID: 0}
-  localPosition: {x: 0, y: 0, z: 0}
+  gameObject: {fileID: 9060664981745006451, guid: 0ceb5bf6008b9ea4490091d702b3edb2, type: 3}
+  localPosition: {x: 3.6729896, y: 0.010941029, z: -0.8554101}
   localRotation: {x: 0, y: 0, z: 0}
-  localScale: {x: 0, y: 0, z: 0}
+  localScale: {x: 1, y: 1, z: 1}
   parentTransform: 
-  gameObjectAssetPath: 
-  spawnCondition: {fileID: 11400000, guid: 643e0bcf816d4b140971afc643933a7f, type: 2}
+  gameObjectAssetPath: Assets/Objects/TEMPLATE_MATERIAL_PICKUP.prefab
+  spawnCondition: {fileID: 11400000, guid: a5c6d66257724ae46821962ce87eed78, type: 2}

@@ -17,6 +17,12 @@ public class LConditionBaseEditor : Editor
 
 	private void OnEnable()
 	{
+		if (target == null)
+		{
+			DestroyImmediate(this);
+			return;
+		}
+
 		memberName = serializedObject.FindProperty("memberName");
 		memberType = serializedObject.FindProperty("memberType");
 		targetObj = serializedObject.FindProperty("target");

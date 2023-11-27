@@ -39,6 +39,8 @@ public class Mod : ScriptableObject
 	public readonly List<ModRecipe> recipes = new List<ModRecipe>();
 	public readonly List<ModClass> classes = new List<ModClass>();
 	public readonly List<LSceneObjectGroup> sceneObjectGroups = new List<LSceneObjectGroup>();
+	public readonly List<LSceneObject> sceneObjects = new List<LSceneObject>();
+	public readonly List<LConditionBase> conditions = new List<LConditionBase>();
 
 	internal static int RecipesLoaded = 0;
 
@@ -107,6 +109,12 @@ public class Mod : ScriptableObject
 
 		sceneObjectGroups.AddRange(assets.OfType<LSceneObjectGroup>());
 		Debug.Log($"Added {sceneObjectGroups.Count} scene object groups.");
+
+		sceneObjects.AddRange(assets.OfType<LSceneObject>());
+		Debug.Log($"Added {sceneObjects.Count} scene objects.");
+
+		conditions.AddRange(assets.OfType<LConditionBase>());
+		Debug.Log($"Added {conditions.Count} conditions.");
 	}
 
 	internal void Init()
@@ -124,6 +132,8 @@ public class Mod : ScriptableObject
 		InitRecipes();
 		InitClasses();
 		InitSceneObjectGroups();
+		InitSceneObjects();
+		InitConditions();
 	}
 
 	private void InitWeapons()
@@ -219,6 +229,18 @@ public class Mod : ScriptableObject
 	{
 		foreach (LSceneObjectGroup sceneObjectGroup in sceneObjectGroups)
 			sceneObjectGroup.Init();
+	}
+
+	private void InitSceneObjects()
+	{
+		foreach (LSceneObject sceneObject in sceneObjects)
+			sceneObject.Init();
+	}
+
+	private void InitConditions()
+	{
+		foreach (LConditionBase condition in conditions)
+			condition.Init();
 	}
 
 	private Alki.Recipe CreateRecipe(ModRecipe modRecipe)

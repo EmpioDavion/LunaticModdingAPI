@@ -1,24 +1,31 @@
 using Newtonsoft.Json;
 using System.Reflection;
+using UnityEngine;
 
 [System.Serializable]
-public abstract class LConditionBase : UnityEngine.ScriptableObject
+public abstract class LConditionBase : ScriptableObject, IModObject
 {
-	[UnityEngine.SerializeField, JsonProperty]
+	public Mod Mod { get; set; }
+	public AssetBundle Bundle { get; set; }
+	public string Name { get; set; }
+	public string AssetName { get; set; }
+	public string InternalName => Lunatic.GetInternalName(this);
+
+	[SerializeField, JsonProperty]
 	protected string memberName;
 
-	[UnityEngine.SerializeField, JsonProperty]
+	[SerializeField, JsonProperty]
 	protected MemberTypes memberType;
 
 	[JsonIgnore]
-	public UnityEngine.Object target;
+	public Object target;
 
 	[JsonIgnore]
 	public abstract System.Delegate Method { get; }
 
 	protected System.Delegate GetDelegate(System.Type funcType)
 	{
-		if (target != null)
+		if (target != null && !string.IsNullOrEmpty(memberName))
 		{
 			System.Type type = target.GetType();
 			MethodInfo methodInfo = null;
@@ -33,15 +40,27 @@ public abstract class LConditionBase : UnityEngine.ScriptableObject
 				methodInfo = type.GetMethod(memberName, bindingFlags);
 
 			if (methodInfo != null)
-				return System.Delegate.CreateDelegate(funcType, methodInfo);
+			{
+				if (!MatchMethod(methodInfo))
+				{
+					string[] args = System.Array.ConvertAll(methodInfo.GetParameters(), (x) => x.ParameterType.Name);
+
+					Debug.Log($"Found method {methodInfo.ReturnType.Name} {methodInfo.Name}({string.Join(", ", args)})");
+					
+					args = System.Array.ConvertAll(funcType.GenericTypeArguments, (x) => x.Name);
+					string retType = args.Length > 0 ? args[args.Length - 1] : "System.Void";
+
+					Debug.Log($"Expected type {retType}(${string.Join(", ", args, 0, args.Length - 1)})");
+				}
+
+				return System.Delegate.CreateDelegate(funcType, target, methodInfo);
+			}
 		}
 
 		return null;
 	}
 
-	public abstract void Init(UnityEngine.AssetBundle bundle);
-
-	protected abstract bool InvokeFunc();
+	public abstract void Init();
 
 	public abstract bool MatchMethod(MethodInfo _methodInfo);
 
@@ -57,24 +76,20 @@ public abstract class LConditionBase<T> : LConditionBase where T : System.Delega
 	[JsonIgnore]
 	public override System.Delegate Method => method;
 
-	public override void Init(UnityEngine.AssetBundle bundle)
+	public override void Init()
 	{
+		Debug.Log($"Member: {memberName}, Target: {target}");
+
 		method = (T)GetDelegate(typeof(T));
-		//target.Load(bundle);
 	}
 }
 
 [System.Serializable]
 public class LCondition : LConditionBase<System.Func<bool>>
 {
-	protected override bool InvokeFunc()
-	{
-		return method();
-	}
-
 	public bool Invoke()
 	{
-		return InvokeFunc();
+		return method == null || method();
 	}
 
 	public override bool MatchMethod(MethodInfo _methodInfo)
@@ -90,15 +105,10 @@ public class LCondition<T> : LConditionBase<System.Func<T, bool>>
 	[System.NonSerialized]
 	private T argument;
 
-	protected override bool InvokeFunc()
-	{
-		return method(argument);
-	}
-
 	public bool Invoke(T _argument)
 	{
 		argument = _argument;
-		return InvokeFunc();
+		return method == null || method(argument);
 	}
 
 	public override bool MatchMethod(MethodInfo _methodInfo)

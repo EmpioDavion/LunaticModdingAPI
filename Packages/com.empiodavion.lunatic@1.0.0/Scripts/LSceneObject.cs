@@ -2,8 +2,14 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class LSceneObject : ScriptableObject
+public class LSceneObject : ScriptableObject, IModObject, ISerializationCallbackReceiver
 {
+	public Mod Mod { get; set; }
+	public AssetBundle Bundle { get; set; }
+	public string Name { get; set; }
+	public string AssetName { get; set; }
+	public string InternalName => Lunatic.GetInternalName(this);
+
 	[Newtonsoft.Json.JsonIgnore]
 	public GameObject gameObject;
 
@@ -18,15 +24,16 @@ public class LSceneObject : ScriptableObject
 	[SerializeField]
 	internal LSceneObjectCondition spawnCondition;
 
-	internal void Init(AssetBundle bundle)
+	internal void Init()
 	{
-		gameObject = bundle.LoadAsset<GameObject>(gameObjectAssetPath);
-		//spawnCondition.Load();
-		spawnCondition.Init(bundle);
+		gameObject = Bundle.LoadAsset<GameObject>(gameObjectAssetPath);
 	}
 
 	public void Spawn(bool ignoreConditions = false)
 	{
+		Debug.Log($"Ignore: {ignoreConditions}, Spawn Condition: {spawnCondition}");
+		Debug.Log($"Condition Method: {spawnCondition.Method}");
+
 		if (!ignoreConditions && spawnCondition != null && !spawnCondition.Invoke(this))
 			return;
 
@@ -36,10 +43,12 @@ public class LSceneObject : ScriptableObject
 		clone.transform.localScale = localScale;
 	}
 
-#if UNITY_EDITOR
-	public void UpdatePath()
+	public void OnBeforeSerialize()
 	{
+#if UNITY_EDITOR
 		gameObjectAssetPath = UnityEditor.AssetDatabase.GetAssetPath(gameObject);
-	}
 #endif
+	}
+
+	public void OnAfterDeserialize() { }
 }

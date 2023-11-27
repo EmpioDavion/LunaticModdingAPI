@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5684c3d1c4714e048bb0b65fe8641e54, type: 3}
-  m_Name: Scene Object Condition
+  m_Name: Collected Hub Materials
   m_EditorClassIdentifier: 
   memberName: CheckHubMaterialsCollected
   memberType: 8
