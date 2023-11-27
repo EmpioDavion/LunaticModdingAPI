@@ -64,7 +64,7 @@ When you first open the mod template project, you'll have a few errors pop up. T
 
 Start by opening the Meta Connect tool by going to "Window/Meta Connect" in the top menu, then clicking "Run" at the bottom of the window.
 
-This should ask you to provide paths to the exported project folder and Lunacid.exe in the game directory.
+This should ask you to provide paths to the exported project solution file, and Lunacid.exe in the game directory.
 
 The tool will then copy over the game assets and libraries to the "Packages/com.empiodavion.lunatic/Lunacid/" folder.
 
