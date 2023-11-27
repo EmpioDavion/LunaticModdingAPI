@@ -31,6 +31,15 @@ I recommend pointing AssetRipper to the LUNACID_Data folder with "File/Open Fold
 **You will need to open the exported project in Unity after exporting to generate all the meta files that will be copied later.**
 
 
+## Opening Lunatic
+
+When you first open the mod template, Unity will ask if you want to start in safe mode. Select no/ignore.
+
+If you are unable to open the project, start in safe mode, then exit safe mode using the button in the top right.
+
+Script errors will not be able to be fixed in safe mode.
+
+
 ## Packages
 
 You may need to add packages to the LunaticModTemplate project if they are not already in your Unity package cache.
@@ -70,6 +79,8 @@ This will also automatically replace Lunacid game scripts on Lunacid prefabs wit
 The main reason for this is that prefabs and GameObjects that contain a Component class from a dll will become missing scripts on reload.
 
 This is a quirk with Unity, and is unavoidable.
+
+The process will take 5 to 10 minutes the first time it's run. Afterwards, Unity will import the copied assets.
 
 
 ## Mod Asset Tool
