@@ -164,6 +164,13 @@ Lunatic will handle loading basic data for items for you, such as any types of i
 So you'll only need to worry about functionality that is not part of Lunacid normally.
 
 
+### My weapon is throwing exceptions when it's loaded, equipped or spawned
+
+Check to make sure that the root GameObject of the weapon prefab is set to inactive.
+
+Lunacid runs some code on the weapon before setting it to active. It's possible your weapon is accessing something before it's set up.
+
+
 ## Class Information
 
 Most classes are straightforward and you can use the Show help toggle in the inspector for each class to see what each value means.
