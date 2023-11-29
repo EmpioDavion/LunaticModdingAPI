@@ -26,7 +26,7 @@ This will extract out all of the game assets to a folder that the Lunatic mod te
 
 I recommend pointing AssetRipper to the LUNACID_Data folder with "File/Open Folder" then clicking "Export/Export all Files".
 
-![AssetRipper](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/Step1.png "AssetRipper")
+![AssetRipper](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/AssetRipper.png "AssetRipper")
 
 **You will need to open the exported project in Unity after exporting to generate all the meta files that will be copied later.**
 
