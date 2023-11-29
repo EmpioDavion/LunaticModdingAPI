@@ -419,6 +419,8 @@ public class MetaConnect : EditorWindow
 
 			ReplaceAssetGUIDs();
 
+			ConfigureTextMeshPro();
+
 			SetProgress(1.0f);
 		}
 		catch (System.Exception e)
@@ -674,5 +676,34 @@ public class MetaConnect : EditorWindow
 		string guid = System.Array.Find(lines, (x) => x.StartsWith("guid: "));
 
 		return guid.Substring("guid: ".Length);
+	}
+
+	private static void ConfigureTextMeshPro()
+	{
+		string path = "Packages/com.empiodavion.lunatic/Lunacid/Plugins/Unity.TextMeshPro.dll.meta";
+		string[] lines = File.ReadAllLines(path);
+		bool getID = false;
+		string id = "";
+
+		for (int i = 0; i < lines.Length; i++)
+		{
+			string trim = lines[i].Trim();
+
+			if (getID)
+			{
+				id = trim;
+				getID = false;
+			}
+			else if (trim.EndsWith("first:"))
+				getID = true;
+			else if (trim.StartsWith("Exclude ") ||
+				trim.StartsWith("enabled: ") &&
+				(id.EndsWith("Win") || id.EndsWith("Win64")))
+				lines[i] = lines[i].Substring(0, lines[i].Length - 1) + '1';
+		}
+
+		File.WriteAllLines(path, lines);
+
+		AssetDatabase.ImportAsset(path);
 	}
 }
