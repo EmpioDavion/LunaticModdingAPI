@@ -50,8 +50,8 @@ This should ask you to provide paths to the exported project solution file, and 
 
 The tool will then copy over the game assets and libraries to the "Packages/com.empiodavion.lunatic/Lunacid/" folder.
 
-![Window/Meta Connect](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/Step2.png "Window/Meta Connect")
-![Run Meta Connect](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/Step3.png "Run Meta Connect")
+![Window/Meta Connect](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/MetaConnect1.png "Window/Meta Connect")
+![Run Meta Connect](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/MetaConnect2.png "Run Meta Connect")
 
 
 This will also copy over meta files for the game scripts, matching them to Lunatic's versions of those scripts.
@@ -75,9 +75,9 @@ Clicking the tabs at the top of the Mod Asset Tool window will change between ca
 
 Clicking on the button for your script class will instantiate a prefab or asset of that type in the current project folder.
 
-![Window/Mod Asset Tool](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/Step4.png "Window/Mod Asset Tool")
-![Mod Asset Tool categories](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/Step5.png "Mod Asset Tool categories")
-![Script class prefab](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/Step6.png "Script class prefab")
+![Window/Mod Asset Tool](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/ModAssetTool1.png "Window/Mod Asset Tool")
+![Mod Asset Tool categories](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/ModAssetTool2.png "Mod Asset Tool categories")
+![Script class prefab](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/ModAssetTool3.png "Script class prefab")
 
 
 ## Prefab Bases
@@ -118,7 +118,11 @@ Ensure all the assets that need to be built into your mod asset bundle are given
 You can set this at the bottom of the Inspector tab when an asset is selected.
 
 
-Once you are ready to package your mod, you can do so by going to "Assets/Build Mod and Deploy". This will build your asset bundles and copy your mod dll(s) into "LunaticModTemplate/Build" folder for zipping and distributing.
+Once you are ready to package your mod, you can do so by going to "Assets/Build Mod and Deploy".
+
+![Build Mod and Deploy](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/BuildMod.png "Build Mod and Deploy")
+
+This will build your asset bundles and copy your mod dll(s) into "LunaticModTemplate/Build" folder for zipping and distributing.
 
 Your mod files will also be copied into the "Lunacid/BepInEx/plugins/{Mod.Name}" folder. So you can launch Lunacid straight after building to test your mod.
 
