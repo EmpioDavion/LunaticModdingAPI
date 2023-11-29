@@ -40,24 +40,6 @@ If you are unable to open the project, start in safe mode, then exit safe mode u
 Script errors will not be able to be fixed in safe mode.
 
 
-## Packages
-
-You may need to add packages to the LunaticModTemplate project if they are not already in your Unity package cache.
-
-You can install packages from the Window/Package Manager context menu.
-
-Most of these contain components used by Lunacid, and you will have errors until they are installed.
-
-The packages needed are:
-- Input System
-- Newtonsoft Json
-- Post Processing
-- TextMeshPro
-- Unity UI
-
-If you do not see these packages in the list, change the "Packages: In Project" dropdown to "Unity Registry".
-
-
 ## Meta Connect
 
 When you first open the mod template project, you'll have a few errors pop up. This is because Lunacid game assets are not packaged with the mod template.
@@ -76,11 +58,11 @@ This will also copy over meta files for the game scripts, matching them to Lunat
 
 This will also automatically replace Lunacid game scripts on Lunacid prefabs with Lunatic's versions.
 
-The main reason for this is that prefabs and GameObjects that contain a Component class from a dll will become missing scripts on reload.
+The main reason for this is that every time the Lunacid game assets are exported, they will have different meta GUIDs.
 
-This is a quirk with Unity, and is unavoidable.
+Which would cause most Lunacid assets to lose their script references.
 
-The process will take 5 to 10 minutes the first time it's run. Afterwards, Unity will import the copied assets.
+The process will take 5 to 10 minutes. Afterwards, Unity will import the copied assets.
 
 
 ## Mod Asset Tool
@@ -100,7 +82,7 @@ Clicking on the button for your script class will instantiate a prefab or asset 
 
 ## Prefab Bases
 
-NPCs created are based off a copy of Demi's GameObject in the HUB_01 scene (Wing's Rest).
+NPCs created are based off the template wolf NPC.
 
 Weapons created are based off a copy of the "Lunacid/Resources/weps/HERITAGE SWORD" prefab.
 
@@ -126,13 +108,17 @@ You can set the information for your mod by editing the Mod asset in the Assets 
 
 Note that changing your mod name will break any Lunatic save data. So only change the name if you have not yet released your mod to the public.
 
-Do not rename the Mod.asset file itself.
+You can edit your local Lunatic save files to match your changed mod name at "Lunacid/Lunacid_Data/SAVE_#.LUNATIC".
+
+
+Do not rename the Mod.asset file itself, as Lunatic looks for the "Assets/Mod.asset" file to get your mod information.
 
 Ensure all the assets that need to be built into your mod asset bundle are given its AssetBundle Asset Label.
 
 You can set this at the bottom of the Inspector tab when an asset is selected.
 
-Once you are ready to package your mod, you can do so by going to "Assets/Build Mod and Deploy". This will build your asset bundles and copy your mod dll(s) into "LunaticModTemplate/Build" folder for zipping.
+
+Once you are ready to package your mod, you can do so by going to "Assets/Build Mod and Deploy". This will build your asset bundles and copy your mod dll(s) into "LunaticModTemplate/Build" folder for zipping and distributing.
 
 Your mod files will also be copied into the "Lunacid/BepInEx/plugins/{Mod.Name}" folder. So you can launch Lunacid straight after building to test your mod.
 
@@ -155,13 +141,13 @@ If you want your classes to deserialise properly, they must derive from Scriptab
 Chances are that your ModGame data does not exist yet for that save file and that you need to assign defaults for new saves.
 
 
-### My ModGame data is being loaded whenever I warp to a new area
-
-The game itself saves and reloads save data whenever you warp. So you'll need to handle your custom data with this in mind.
+### Some of my items are losing data on equip or loading a save file
 
 Lunatic will handle loading basic data for items for you, such as any types of items collected, weapon experience, and recipes unlocked, etc.
 
-So you'll only need to worry about functionality that is not part of Lunacid normally.
+You'll need to handle loading any custom data that is not part of Lunacid normally.
+
+You can do this by using Lunatic.GetModData and Lunatic.SetModData as shown in the TemplateGame script.
 
 
 ### My weapon is throwing exceptions when it's loaded, equipped or spawned
@@ -231,6 +217,21 @@ An example use case is having a bridge that becomes broken when a boss is defeat
 A class that is used for scene specific functionality. Has events that fire for only the specified scene.
 
 
+### ModDialog
+
+The class that is used for handling NPC dialogue chains and activating triggers typically to open menus such as shops, or to change the NPC's current state.
+
+Dialogue in Lunacid is a bit convoluted in how it works. Some ModDialogs have a script on their TALK_SND GameObject that is activated when the player talks to their NPC.
+
+This script will then turn on another GameObject that will set the current state of the NPC to a new value.
+
+The reason that this functionality isn't just on the TALK_SND GameObject is that it gets turned on and off repeatedly as the NPC talks.
+
+Only the NPC's state is saved when saving, loading, or warping. The dialogue progress itself is reset to zero.
+
+This is why NPCs have multiple stages or states. Each state serves as a checkpoint for new dialogue.
+
+
 ### LSceneObjectGroup
 
 Contains a list of scene objects that will spawn based on conditions when the specified scene is loaded.
@@ -248,6 +249,12 @@ bool MethodName(LSceneObjectGroup sceneObjectGroup) { }
 ### LSceneObject
 
 An object in a LSceneObjectGroup list that defines an object to spawn in a scene under a certain condition.
+
+You can place prefab objects into an existing Lunacid scene in the editor, then drag them onto the LSceneObject Game Object field to copy the transform data.
+
+Only prefab assets may be spawned, as regular scene objects will not exist on build.
+
+If no condition is set, it defaults to true.
 
 The signature for an LSceneObject condition method is
 bool MethodName(LSceneObject sceneObject) { }
