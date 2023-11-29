@@ -59,7 +59,7 @@ public class LSceneObjectEditor : Editor
 
 		EditorGUI.BeginChangeCheck();
 
-		GameObject newGameObject = EditorGUILayout.ObjectField(gameObject.objectReferenceValue, typeof(GameObject), true) as GameObject;
+		GameObject newGameObject = EditorGUILayout.ObjectField(gameObject.displayName, gameObject.objectReferenceValue, typeof(GameObject), true) as GameObject;
 
 		if (EditorGUI.EndChangeCheck())
 		{
