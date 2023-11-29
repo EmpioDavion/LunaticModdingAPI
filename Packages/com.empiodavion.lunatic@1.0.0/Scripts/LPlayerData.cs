@@ -47,7 +47,7 @@ internal class LPlayerData
 	[System.Serializable]
 	public class LPlayerModData
 	{
-		[Newtonsoft.Json.JsonIgnore]
+		[JsonIgnore]
 		public Mod mod;
 
 		public WeaponData weapon1;
@@ -67,6 +67,8 @@ internal class LPlayerData
 		public List<IntegralData> items = new List<IntegralData>();
 		public List<MaterialData> materials = new List<MaterialData>();
 		public List<ObjectData> recipes = new List<ObjectData>();
+
+		public List<IntegralData> npcStates = new List<IntegralData>();
 	}
 
 	private class LActiveItemMods
@@ -181,7 +183,7 @@ internal class LPlayerData
 		{
 			LPlayerModData modData = new LPlayerModData() { mod = mod };
 
-			Save(modData, playerData, itemMods);
+			SaveModData(modData, playerData, itemMods);
 
 			data.playerModDatas[mod.Name] = modData;
 		}
@@ -195,7 +197,7 @@ internal class LPlayerData
 		return data;
 	}
 
-	private static void Save(LPlayerModData data, PlayerData playerData, LActiveItemMods itemMods)
+	private static void SaveModData(LPlayerModData data, PlayerData playerData, LActiveItemMods itemMods)
 	{
 		// weapons
 		if (data.mod == itemMods.weapon1)
@@ -318,6 +320,16 @@ internal class LPlayerData
 			{
 				ObjectData recipeData = GetRecipeData(modRecipe.Name);
 				data.recipes.Add(recipeData);
+			}
+		}
+
+		// npc states
+		foreach (KeyValuePair<string, int> npcState in data.mod.npcStates)
+		{
+			if (npcState.Value > 0)
+			{
+				IntegralData npcData = GetNPCData(npcState.Key, npcState.Value);
+				data.npcStates.Add(npcData);
 			}
 		}
 	}
@@ -448,6 +460,16 @@ internal class LPlayerData
 					modRecipe.isUnlocked = true;
 			}
 		}
+
+		// npc states
+		{
+			data.mod.npcStates.Clear();
+
+			foreach (IntegralData npcData in data.npcStates)
+			{
+				data.mod.npcStates[npcData.name] = npcData.data;
+			}
+		}
 	}
 
 	private static IntegralData GetIntegralData(string internalName)
@@ -494,6 +516,11 @@ internal class LPlayerData
 	private static ObjectData GetRecipeData(string recipe)
 	{
 		return new ObjectData() { name = recipe };
+	}
+
+	private static IntegralData GetNPCData(string npc, int state)
+	{
+		return new IntegralData() { name = npc, data = state };
 	}
 
 	internal static int PushBlankToEnd(string a, string b)

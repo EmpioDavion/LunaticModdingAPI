@@ -19,7 +19,8 @@ public class LSceneObjectGroup : ScriptableObject, IModObject
 
 	internal void Init()
 	{
-        spawnCondition.Init();
+        if (spawnCondition != null)
+            spawnCondition.Init();
 	}
 
     public void Spawn(bool ignoreConditions = false)

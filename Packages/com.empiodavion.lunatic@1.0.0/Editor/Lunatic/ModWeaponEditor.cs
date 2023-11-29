@@ -170,7 +170,7 @@ public class ModWeaponEditor : Editor
 			EditorGUI.indentLevel--;
 		}
 
-		EditorTools.DrawRemainingProperties(serializedObject, animationSpeed);
+		EditorTools.DrawRemainingProperties(serializedObject, upgradeWeapon);
 
 		serializedObject.ApplyModifiedProperties();
 	}

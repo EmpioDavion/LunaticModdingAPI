@@ -65,8 +65,12 @@ internal class LSceneObjectGroupEditor : Editor
 			EditorGUILayout.PropertyField(prop);
 
 			if (GUILayout.Button("Create", GUILayout.Width(100)))
+			{
 				AssignNewSceneObject(prop);
-			
+
+				EditorTools.CopyAssetBundleLabel(target, prop.objectReferenceValue);
+			}
+
 			bool delete = GUILayout.Button("X", GUILayout.Width(20));
 
 			EditorGUILayout.EndHorizontal();
@@ -100,7 +104,12 @@ internal class LSceneObjectGroupEditor : Editor
 		GUILayout.FlexibleSpace();
 
 		if (GUILayout.Button("+", GUILayout.Width(64)))
+		{
 			sceneObjects.arraySize++;
+
+			SerializedProperty prop = sceneObjects.GetArrayElementAtIndex(sceneObjects.arraySize - 1);
+			prop.objectReferenceValue = null;
+		}
 
 		EditorGUILayout.EndHorizontal();
 
@@ -111,7 +120,11 @@ internal class LSceneObjectGroupEditor : Editor
 		EditorGUILayout.PropertyField(spawnCondition);
 
 		if (GUILayout.Button("Create", GUILayout.Width(100)))
+		{
 			AssignNewSceneObjectGroupCondition(spawnCondition);
+
+			EditorTools.CopyAssetBundleLabel(target, spawnCondition.objectReferenceValue);
+		}
 
 		if (GUILayout.Button("X", GUILayout.Width(20)))
 			spawnCondition.objectReferenceValue = null;

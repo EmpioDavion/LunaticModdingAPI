@@ -82,5 +82,7 @@ public class ModMagicEditor : Editor
 		EditorTools.DrawArrayElement(sounds, 3, "Charged Sound", "The sound that plays when the magic is fully charged and ready to cast.");
 
 		EditorTools.DrawRemainingProperties(serializedObject, minChargeTime);
+
+		serializedObject.ApplyModifiedProperties();
 	}
 }

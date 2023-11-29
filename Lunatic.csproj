@@ -146,8 +146,8 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LPlayerData.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLivingObject.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModFollowPlayer.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLightSpinUI.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModTurret.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLightSpinUI.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModIdleSounds.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModChangeScale.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModBannerPlacement.cs" />

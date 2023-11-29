@@ -15,4 +15,5 @@ MonoBehaviour:
   scene: HUB_01
   sceneObjects:
   - {fileID: 11400000, guid: 98ad0d79e4b1f0648b3bc2a5eba376b3, type: 2}
+  - {fileID: 11400000, guid: f423ebbe95d761c4fa9a1a184829c5a7, type: 2}
   spawnCondition: {fileID: 0}

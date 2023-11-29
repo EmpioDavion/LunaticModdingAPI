@@ -6,12 +6,40 @@
 	public string AssetName { get; set; }
 	public string InternalName => Lunatic.GetInternalName(this);
 
-	public virtual void OnLoad()
+	public string id;
+
+	public void Internal_Load()
+	{
+		if (CON == null)
+			CON = Lunatic.Control;
+
+		Mod.npcStates.TryGetValue(id, out value);
+
+		for (int i = 0; i < STATES.Length; i++)
+			STATES[i].SetActive(false);
+		
+		STATES[value].SetActive(true);
+
+		OnLoad();
+	}
+
+	public void Internal_Save()
+	{
+		if (CON == null)
+			CON = Lunatic.Control;
+
+		if (!string.IsNullOrEmpty(id))
+			Mod.npcStates[id] = value;
+
+		OnSave();
+	}
+
+	protected virtual void OnLoad()
 	{
 		
 	}
 
-	public virtual void OnSave()
+	protected virtual void OnSave()
 	{
 
 	}

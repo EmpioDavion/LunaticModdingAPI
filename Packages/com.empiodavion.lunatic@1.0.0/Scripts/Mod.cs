@@ -42,10 +42,19 @@ public class Mod : ScriptableObject
 	public readonly List<LSceneObject> sceneObjects = new List<LSceneObject>();
 	public readonly List<LConditionBase> conditions = new List<LConditionBase>();
 
+	public readonly Dictionary<string, int> npcStates = new Dictionary<string, int>();
+
 	internal static int RecipesLoaded = 0;
 
 	private bool loaded = false;
 	private bool initialised = false;
+
+	private void InitModObject(IModObject modObject, string assetName)
+	{
+		modObject.Mod = this;
+		modObject.Bundle = bundle;
+		modObject.AssetName = assetName;
+	}
 
 	internal void Load()
 	{
@@ -60,20 +69,24 @@ public class Mod : ScriptableObject
 		foreach (string assetName in assetNames)
 		{
 			Object asset = bundle.LoadAsset(assetName);
-			IModObject modObject;
-
+			
 			if (asset is GameObject gameObject)
-				modObject = gameObject.GetComponent<IModObject>();
-			else
-				modObject = asset as IModObject;
-
-			if (modObject != null)
 			{
-				modObject.Mod = this;
-				modObject.Bundle = bundle;
-				modObject.AssetName = assetName;
+				IModObject[] modObjects = gameObject.GetComponentsInChildren<IModObject>(true);
 
-				assets.Add(modObject);
+				foreach (IModObject modObject in modObjects)
+				{
+					InitModObject(modObject, assetName);
+					assets.Add(modObject);
+				}
+			}
+			else
+			{
+				if (asset is IModObject modObject)
+				{
+					InitModObject(modObject, assetName);
+					assets.Add(modObject);
+				}
 			}
 		}
 
@@ -115,6 +128,8 @@ public class Mod : ScriptableObject
 
 		conditions.AddRange(assets.OfType<LConditionBase>());
 		Debug.Log($"Added {conditions.Count} conditions.");
+
+		// npc states are loaded from save files
 	}
 
 	internal void Init()

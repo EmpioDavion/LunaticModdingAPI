@@ -57,8 +57,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModVersionPropertyDrawer.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModDialogEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModSceneEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModAssetTool.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\DialogLinePropertyDrawer.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModItemPickupEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModWeaponEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LSceneObjectGroupEditor.cs" />

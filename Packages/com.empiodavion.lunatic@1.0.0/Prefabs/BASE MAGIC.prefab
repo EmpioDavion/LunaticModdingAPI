@@ -51,12 +51,12 @@ MonoBehaviour:
   desc: Lunatic mod magic
   ICON2: {fileID: 21300000, guid: 4e39c5642f32a834b93b63cebbe75bc8, type: 2}
   snds:
-  - {fileID: 8300000, guid: c6561699477211049a09efd3c9e96e07, type: 3}
-  - {fileID: 8300000, guid: 4efdbacb9edc18545b82bce87a802c57, type: 3}
-  - {fileID: 8300000, guid: bc46244ce89918f40822feaea583cd37, type: 3}
-  - {fileID: 8300000, guid: 04e9e45ef581c024c8657c46fe70a72a, type: 3}
+  - {fileID: 8300000, guid: da2b10d4ec37dc74892b96dc774a5c47, type: 3}
+  - {fileID: 8300000, guid: 17130ab799a936d4991e44d7bb4c5df7, type: 3}
+  - {fileID: 8300000, guid: d45517897c132bc42a9d16daa679e709, type: 3}
+  - {fileID: 8300000, guid: 0672c112d919e0b4e9fc387cfcefef2d, type: 3}
   ICON_SPR: {fileID: 0}
-  ICON: {fileID: 21300000, guid: c81f1883529f06740b21a999639a8844, type: 2}
+  ICON: {fileID: 21300000, guid: 77971a26fdd42ef4092e986fa50a7007, type: 3}
   MAG_TYPE: 0
   MAG_DAMAGE: 20
   MAG_CHARGE_TIME: 1

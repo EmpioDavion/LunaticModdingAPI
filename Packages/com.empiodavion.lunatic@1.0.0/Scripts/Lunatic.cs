@@ -439,9 +439,23 @@ public static class Lunatic
 
 		string modName = ReadModName(internalName);
 
-		Debug.Log("Mod Name: " + modName);
-
 		return Mods.Find((x) => x.Name == modName);
+	}
+
+	public static void PrintStackTrace()
+	{
+		System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace(1);
+		System.Diagnostics.StackFrame[] frames = stackTrace.GetFrames();
+
+		Debug.Log("---STACK TRACE---");
+
+		for (int i = frames.Length - 1; i >= 0; i--)
+		{
+			System.Reflection.MethodBase methodBase = frames[i].GetMethod();
+			Debug.Log($"{methodBase.DeclaringType.Name}.{methodBase.Name}");
+		}
+
+		Debug.Log("-----------------");
 	}
 
 	public static void Internal_InitRecipesArray(Alki alki)
@@ -608,7 +622,6 @@ public static class Lunatic
 
 	internal static void TrackWeapon(ModWeapon weapon)
 	{
-		Debug.Log("Tracking weapon " + weapon.InternalName);
 		AssetReplacement.Add("WEPS/" + weapon.InternalName, weapon.gameObject);
 	}
 
@@ -760,6 +773,16 @@ public static class Lunatic
 		//System.IO.File.WriteAllText(file, LJson.Serialise(ModData));
 	}
 
+	public static bool Internal_CheckHeldData(CONTROL control, int saveSlot)
+	{
+		if (Hold_Data.HD != null && Hold_Data.HD.PLAYER_NAME != "")
+			return true;
+
+		control.CURRENT_PL_DATA = Save.LOAD_FILE(saveSlot);
+
+		return false;
+	}
+
 	public static void Internal_OnPlayerDataLoad(PlayerData playerData, int saveSlot)
 	{
 		string file = GetModSaveFile(saveSlot);
@@ -779,6 +802,8 @@ public static class Lunatic
 
 	public static void Internal_OnPlayerDataSave(PlayerData playerData, int saveSlot)
 	{
+		Debug.Log("Saving");
+
 		foreach (Mod mod in Mods)
 			foreach (ModGame modGame in mod.games)
 				modGame.OnSaveFileSaved();
@@ -932,18 +957,7 @@ public static class Lunatic
 
 	public static void Internal_OnPlayerJump(Player_Control_scr player)
 	{
-		Transform playerTransform = player.transform;
 
-		for (int i = 0; i < player.CON.CURRENT_PL_DATA.WEPS.Length; i++)
-			if (!string.IsNullOrEmpty(player.CON.CURRENT_PL_DATA.WEPS[i]))
-				if (Resources.Load("WEPS/" + player.CON.CURRENT_PL_DATA.WEPS[i]) == null)
-					player.CON.CURRENT_PL_DATA.WEPS[i] = "";
-
-		System.Array.Sort(player.CON.CURRENT_PL_DATA.WEPS, LPlayerData.PushBlankToEnd);
-
-		foreach (Mod mod in Mods)
-			foreach (ModItemPickup itemPickup in  mod.itemPickups)
-				itemPickup.Spawn(playerTransform.position, playerTransform.rotation);
 	}
 
 	public static void Internal_SetSkills(CONTROL control)

@@ -45,12 +45,12 @@ public abstract class LConditionBase : ScriptableObject, IModObject
 				{
 					string[] args = System.Array.ConvertAll(methodInfo.GetParameters(), (x) => x.ParameterType.Name);
 
-					Debug.Log($"Found method {methodInfo.ReturnType.Name} {methodInfo.Name}({string.Join(", ", args)})");
+					Debug.LogWarning($"Found method {methodInfo.ReturnType.Name} {methodInfo.Name}({string.Join(", ", args)})");
 					
 					args = System.Array.ConvertAll(funcType.GenericTypeArguments, (x) => x.Name);
 					string retType = args.Length > 0 ? args[args.Length - 1] : "System.Void";
 
-					Debug.Log($"Expected type {retType}(${string.Join(", ", args, 0, args.Length - 1)})");
+					Debug.LogWarning($"Expected type {retType}(${string.Join(", ", args, 0, args.Length - 1)})");
 				}
 
 				return System.Delegate.CreateDelegate(funcType, target, methodInfo);
@@ -78,8 +78,6 @@ public abstract class LConditionBase<T> : LConditionBase where T : System.Delega
 
 	public override void Init()
 	{
-		Debug.Log($"Member: {memberName}, Target: {target}");
-
 		method = (T)GetDelegate(typeof(T));
 	}
 }

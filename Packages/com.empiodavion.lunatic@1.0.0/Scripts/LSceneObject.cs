@@ -31,9 +31,6 @@ public class LSceneObject : ScriptableObject, IModObject, ISerializationCallback
 
 	public void Spawn(bool ignoreConditions = false)
 	{
-		Debug.Log($"Ignore: {ignoreConditions}, Spawn Condition: {spawnCondition}");
-		Debug.Log($"Condition Method: {spawnCondition.Method}");
-
 		if (!ignoreConditions && spawnCondition != null && !spawnCondition.Invoke(this))
 			return;
 
@@ -41,6 +38,15 @@ public class LSceneObject : ScriptableObject, IModObject, ISerializationCallback
 		Transform parentTr = parent == null ? null : parent.transform;
 		GameObject clone = Instantiate(gameObject, localPosition, Quaternion.Euler(localRotation), parentTr);
 		clone.transform.localScale = localScale;
+
+		IModObject[] modObjects = clone.GetComponentsInChildren<IModObject>(true);
+
+		foreach (IModObject modObject in modObjects)
+		{
+			modObject.Mod = Mod;
+			modObject.Bundle = Bundle;
+			modObject.AssetName = "";
+		}
 	}
 
 	public void OnBeforeSerialize()

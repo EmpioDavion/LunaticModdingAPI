@@ -7,6 +7,25 @@ public static class EditorTools
 
 	private static string[] ItemTypeNames;
 
+	public static float EditorLineSpacing(int lines)
+	{
+		return EditorGUIUtility.singleLineHeight * lines + EditorGUIUtility.standardVerticalSpacing;
+	}
+
+	public static float EditorHeight(int lines)
+	{
+		return (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing) * lines;
+	}
+
+	public static void CopyAssetBundleLabel(Object from, Object to)
+	{
+		string assetPath = AssetDatabase.GetAssetPath(from);
+		string bundle = AssetDatabase.GetImplicitAssetBundleName(assetPath);
+		string objectPath = AssetDatabase.GetAssetPath(to);
+		AssetImporter importer = AssetImporter.GetAtPath(objectPath);
+		importer.SetAssetBundleNameAndVariant(bundle, objectPath);
+	}
+
 	public static T CreateNewAsset<T>(string path) where T : ScriptableObject
 	{
 		string assetPath = path;
@@ -45,6 +64,21 @@ public static class EditorTools
 			ItemTypeNames = typeof(Lunatic.ItemTypes).GetEnumNames();
 
 		prop.intValue = EditorGUILayout.Popup(prop.displayName, prop.intValue, ItemTypeNames);
+	}
+
+	public static void DrawHelpProperty(ref Rect position, SerializedProperty prop, string help)
+	{
+		if (ShowHelp)
+		{
+			Rect pos = position;
+			pos.height = EditorGUIUtility.singleLineHeight * 2;
+
+			EditorGUI.HelpBox(pos, help, MessageType.Info);
+
+			position.y += EditorLineSpacing(2);
+		}
+
+		EditorGUI.PropertyField(position, prop);
 	}
 
 	public static void DrawHelpProperty(SerializedProperty prop, string help)

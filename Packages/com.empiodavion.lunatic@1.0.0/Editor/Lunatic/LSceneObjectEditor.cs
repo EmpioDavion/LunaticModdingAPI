@@ -101,20 +101,40 @@ public class LSceneObjectEditor : Editor
 
 		GUI.enabled = true;
 
-		if (spawnCondition.objectReferenceValue == null)
+		EditorGUILayout.BeginHorizontal();
+
+		EditorGUILayout.PropertyField(spawnCondition);
+
+		if (GUILayout.Button("Create", GUILayout.Width(100)))
 		{
-			System.IO.Directory.CreateDirectory("Assets/Conditions");
-			spawnCondition.objectReferenceValue = EditorTools.CreateNewAsset<LSceneObjectCondition>("Assets/Conditions/Scene Object Condition");
-			EditorUtility.SetDirty(target);
+			AssignNewSceneObjectCondition(spawnCondition);
+
+			EditorTools.CopyAssetBundleLabel(target, spawnCondition.objectReferenceValue);
 		}
 
-		CreateCachedEditor(spawnCondition.objectReferenceValue, typeof(LConditionBaseEditor), ref spawnConditionEditor);
+		if (GUILayout.Button("X", GUILayout.Width(20)))
+			spawnCondition.objectReferenceValue = null;
 
-		spawnConditionEditor.OnInspectorGUI();
+		EditorGUILayout.EndHorizontal();
+
+		if (spawnCondition.objectReferenceValue != null)
+		{
+			CreateCachedEditor(spawnCondition.objectReferenceValue, typeof(LConditionBaseEditor), ref spawnConditionEditor);
+			spawnConditionEditor.OnInspectorGUI();
+		}
 
 		EditorGUI.indentLevel--;
 
+		EditorTools.DrawRemainingProperties(serializedObject, spawnCondition);
+
 		serializedObject.ApplyModifiedProperties();
+	}
+
+	private void AssignNewSceneObjectCondition(SerializedProperty property)
+	{
+		System.IO.Directory.CreateDirectory("Assets/Conditions");
+		property.objectReferenceValue = EditorTools.CreateNewAsset<LSceneObjectCondition>("Assets/Conditions/Scene Object Condition");
+		EditorUtility.SetDirty(target);
 	}
 
 	protected string GetScenePath(Transform tr)
