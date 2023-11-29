@@ -308,9 +308,6 @@
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.0.1\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="NavMeshComponents">
-      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Plugins\NavMeshComponents.dll</HintPath>
-    </Reference>
     <Reference Include="unityplastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.0.1\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
     </Reference>
@@ -322,6 +319,63 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.InputSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InputSystem.RebindingUI">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.InputSystem.RebindingUI.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Fbx">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Autodesk.Fbx.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.DataPrivacy">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.Analytics.DataPrivacy.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Recorder">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.Recorder.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.KdTree">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.ProBuilder.KdTree.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Recorder.Base">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.Recorder.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Timeline">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProGrids">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.ProGrids.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.Poly2Tri">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.ProBuilder.Poly2Tri.dll</HintPath>
+    </Reference>
+    <Reference Include="Coffee.SoftMaskForUGUI">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Coffee.SoftMaskForUGUI.dll</HintPath>
+    </Reference>
+    <Reference Include="com.unity.multiplayer-hlapi.Runtime">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Formats.Fbx.Runtime">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.Formats.Fbx.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.Stl">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.ProBuilder.Stl.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.ProBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.ScriptableBuildPipeline.dll</HintPath>
+    </Reference>
+    <Reference Include="FbxBuildTestAssets">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\FbxBuildTestAssets.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Postprocessing.Runtime">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.Postprocessing.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="NavMeshComponents">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\NavMeshComponents.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>E:\Program Files\Unity\Hub\Editor\2020.3.4f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>

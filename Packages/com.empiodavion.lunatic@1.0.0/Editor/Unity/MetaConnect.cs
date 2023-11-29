@@ -395,44 +395,46 @@ public class MetaConnect : EditorWindow
 			if (copyAssets)
 			{
 				CopyAssetDirectory("AnimationClip");
-				AddProgress(0.05f); // 0.25
+				AddProgress(0.04f); // 0.24
 				CopyAssetDirectory("AudioClip");
-				AddProgress(0.05f); // 0.3
+				AddProgress(0.04f); // 0.28
 				CopyAssetDirectory("Cubemap");
-				AddProgress(0.05f); // 0.35
+				AddProgress(0.04f); // 0.32
 				CopyAssetDirectory("Material");
-				AddProgress(0.05f); // 0.4
+				AddProgress(0.04f); // 0.36
 				CopyAssetDirectory("Mesh");
-				AddProgress(0.05f); // 0.45
+				AddProgress(0.04f); // 0.4
 				CopyAssetDirectory("PhysicMaterial");
-				AddProgress(0.05f); // 0.5
+				AddProgress(0.04f); // 0.44
+				CopyAssetDirectory("Plugins");
+				AddProgress(0.04f); // 0.48
 				CopyAssetDirectory("PrefabInstance");
-				AddProgress(0.05f); // 0.55
+				AddProgress(0.04f); // 0.52
 				CopyAssetDirectory("RenderTexture");
-				AddProgress(0.05f); // 0.6
+				AddProgress(0.04f); // 0.56
 				CopyAssetDirectory("Resources");
 
 				trackMetas = false;
 
-				AddProgress(0.05f); // 0.65
+				AddProgress(0.04f); // 0.6
 				CopyAssetDirectory("Scenes");
 
 				trackMetas = true;
 
-				AddProgress(0.05f); // 0.7
+				AddProgress(0.04f); // 0.64
 				CopyAssetDirectory("Shader");
-				AddProgress(0.05f); // 0.75
+				AddProgress(0.04f); // 0.69
 				CopyAssetDirectory("Sprite");
-				AddProgress(0.05f); // 0.8
+				AddProgress(0.04f); // 0.72
 				CopyAssetDirectory("Texture2D");
-				AddProgress(0.05f); // 0.85
+				AddProgress(0.04f); // 0.76
 				CopyAssetDirectory("VideoClip");
-				AddProgress(0.05f); // 0.9
+				AddProgress(0.04f); // 0.8
 			}
 
 			ReplaceAssetGUIDs();
 
-			AddProgress(0.1f); // 1.0
+			SetProgress(1.0f);
 		}
 		catch (System.Exception e)
 		{
@@ -445,6 +447,12 @@ public class MetaConnect : EditorWindow
 		threadData.progressID = -1;
 
 		return null;
+	}
+
+	private void SetProgress(float amount)
+	{
+		threadData.progress = amount;
+		Progress.Report(threadData.progressID, threadData.progress);
 	}
 
 	private void AddProgress(float amount)
@@ -625,6 +633,8 @@ public class MetaConnect : EditorWindow
 			if (modified)
 				File.WriteAllLines(file.FullName, lines);
 		}
+
+		AddProgress(0.001f); // 0.8##
 
 		foreach (DirectoryInfo subDir in subDirs)
 			ReplaceAssetGUIDsRecursive(subDir);
