@@ -211,6 +211,8 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLoreBlock.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLoreLoader.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAlchemyTrigger.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLevelEffect.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModMenus.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\Lunatic.asmdef" />
@@ -500,6 +502,9 @@
     </Reference>
     <Reference Include="com.unity.multiplayer-hlapi.Runtime">
       <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Formats.Fbx.Runtime">
       <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.Formats.Fbx.Runtime.dll</HintPath>
@@ -866,9 +871,6 @@
     </Reference>
     <Reference Include="System.Xml.Serialization">
       <HintPath>E:\Program Files\Unity\Hub\Editor\2020.3.4f1\Editor\Data\NetStandard\compat\2.0.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>

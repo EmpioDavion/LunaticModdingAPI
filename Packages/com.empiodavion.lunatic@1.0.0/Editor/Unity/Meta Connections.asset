@@ -187,6 +187,9 @@ MonoBehaviour:
   - lunacidScript: InSolid
     lunaticScript: ModCheckInSolid
     isFirstPass: 0
+  - lunacidScript: InterpolationObjectController
+    lunaticScript: ModTransformInterpolator
+    isFirstPass: 0
   - lunacidScript: InTrigger
     lunaticScript: ModCheckInTrigger
     isFirstPass: 0
@@ -300,9 +303,6 @@ MonoBehaviour:
     isFirstPass: 0
   - lunacidScript: OBJ_Health
     lunaticScript: ModObjectHealth
-    isFirstPass: 0
-  - lunacidScript: ObjectInterpolationController
-    lunaticScript: ModTransformInterpolator
     isFirstPass: 0
   - lunacidScript: Objectmacy_scr
     lunaticScript: ModObjectmancy

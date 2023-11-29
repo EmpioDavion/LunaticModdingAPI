@@ -38,8 +38,16 @@ public class MetaConnect : EditorWindow
 			string guid = ReadMetaGUID(file);
 			string relative = GetRelativePath(file, subFolder);
 
-			FileToGUID.Add(relative, guid);
-			GUIDToFile.Add(guid, relative);
+			try
+			{
+				FileToGUID.Add(relative, guid);
+				GUIDToFile.Add(guid, relative);
+			}
+			catch (System.ArgumentException ex)
+			{
+				Debug.LogError($"Duplicate entry: {relative} - {guid}");
+				throw ex;
+			}
 		}
 
 		public void Clear()
@@ -66,7 +74,6 @@ public class MetaConnect : EditorWindow
 	private class ThreadData
 	{
 		public string lunaticPackage;
-		public string tmpPackage;
 		public ThreadState state;
 		public float progress;
 		public int progressID;
@@ -114,21 +121,6 @@ public class MetaConnect : EditorWindow
 	private readonly MetaGUID rippedDataGUIDs = new MetaGUID("", "Scripts\\Assembly-CSharp\\", "Plugins\\Assembly-CSharp-firstpass\\");
 	private readonly MetaGUID lunaticGUIDs = new MetaGUID("Lunacid\\", "Scripts\\");
 
-	#region TextMeshPro
-
-	private string rippedDataTMP;
-	private string lunaticTMP;
-	private string lunaticFont;
-	private string lunaticSprite;
-	private string lunaticStyle;
-
-	private int textMesh;
-	private int fontAsset;
-	private int spriteAsset;
-	private int styleSheet;
-
-	#endregion
-
 	private string searchLunacid;
 	private string searchLunatic;
 
@@ -147,7 +139,6 @@ public class MetaConnect : EditorWindow
 	{
 		threadData.state = ThreadState.Ready;
 		threadData.progress = 0.0f;
-		threadData.tmpPackage = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(TMPro.TextMeshProUGUI).Assembly).resolvedPath;
 		threadData.lunaticPackage = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(MetaConnect).Assembly).resolvedPath;
 
 		PackageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(MetaConnect).Assembly);
@@ -165,11 +156,6 @@ public class MetaConnect : EditorWindow
 			string metaPath = $"{PackageInfo.assetPath}\\Editor\\Unity\\Meta Connections.asset";
 			meta = AssetDatabase.LoadAssetAtPath<MetaConnections>(metaPath);
 		}
-
-		textMesh = FileIDUtil.Compute<TMPro.TextMeshProUGUI>();
-		fontAsset = FileIDUtil.Compute<TMPro.TMP_FontAsset>();
-		spriteAsset = FileIDUtil.Compute<TMPro.TMP_SpriteAsset>();
-		styleSheet = FileIDUtil.Compute<TMPro.TMP_StyleSheet>();
 	}
 
 	public void OnGUI()
@@ -382,7 +368,6 @@ public class MetaConnect : EditorWindow
 			{
 				CopyDLL("Assembly-CSharp");
 				CopyDLL("Assembly-CSharp-firstpass");
-				CopyDLL("NavMeshComponents");
 			}
 
 			AddProgress(0.1f); // 0.1
@@ -406,7 +391,7 @@ public class MetaConnect : EditorWindow
 				AddProgress(0.04f); // 0.4
 				CopyAssetDirectory("PhysicMaterial");
 				AddProgress(0.04f); // 0.44
-				CopyAssetDirectory("Plugins");
+				CopyAssetDirectory("Plugins", false);
 				AddProgress(0.04f); // 0.48
 				CopyAssetDirectory("PrefabInstance");
 				AddProgress(0.04f); // 0.52
@@ -494,18 +479,6 @@ public class MetaConnect : EditorWindow
 			rippedDataGUIDs.Add(sourcePath, (int)(connection.isFirstPass ? RippedDataSubFolders.AssemblyCSharpFirstPass : RippedDataSubFolders.AssemblyCSharp));
 			lunaticGUIDs.Add(destPath, (int)LunaticSubFolders.Scripts);
 		}
-
-		string rippedTMPPath = Path.Combine(RippedDataPath, "Plugins\\Unity.TextMeshPro.dll.meta");
-		string lunaticTMPPath = Path.Combine(threadData.tmpPackage, "Scripts\\Runtime\\TextMeshProUGUI.cs.meta");
-		string lunaticFontPath = Path.Combine(threadData.tmpPackage, "Scripts\\Runtime\\TMP_FontAsset.cs.meta");
-		string lunaticSpritePath = Path.Combine(threadData.tmpPackage, "Scripts\\Runtime\\TMP_SpriteAsset.cs.meta");
-		string lunaticStylePath = Path.Combine(threadData.tmpPackage, "Scripts\\Runtime\\TMP_StyleSheet.cs.meta");
-		
-		rippedDataTMP = ReadMetaGUID(rippedTMPPath);
-		lunaticTMP = ReadMetaGUID(lunaticTMPPath);
-		lunaticFont = ReadMetaGUID(lunaticFontPath);
-		lunaticSprite = ReadMetaGUID(lunaticSpritePath);
-		lunaticStyle = ReadMetaGUID(lunaticStylePath);
 	}
 
 	private static void CopyDLL(string dllName)
@@ -517,25 +490,25 @@ public class MetaConnect : EditorWindow
 		File.Copy(Path.Combine(LunacidDataPath, $"{dllName}.dll"), dest, true);
 	}
 
-	private void CopyAssetDirectory(string dirName)
+	private void CopyAssetDirectory(string dirName, bool recursive = true)
 	{
 		string dest = Path.Combine(LunaticPath, "Lunacid\\");
 		Directory.CreateDirectory(dest);
 		dest = Path.Combine(dest, dirName);
 		Directory.CreateDirectory(dest);
 
-		CopyDirectory(Path.Combine(RippedDataPath, dirName), dest);
+		CopyDirectory(Path.Combine(RippedDataPath, dirName), dest, recursive);
 	}
 
-	private void CopyDirectory(string source, string dest)
+	private void CopyDirectory(string source, string dest, bool recursive)
 	{
 		DirectoryInfo sourceDir = new DirectoryInfo(source);
 		DirectoryInfo destDir = new DirectoryInfo(dest);
 
-		CopyRecursive(sourceDir, destDir);
+		CopyRecursive(sourceDir, destDir, recursive);
 	}
 
-	private void CopyRecursive(DirectoryInfo source, DirectoryInfo dest)
+	private void CopyRecursive(DirectoryInfo source, DirectoryInfo dest, bool recursive)
 	{
 		FileInfo[] files = source.GetFiles();
 		DirectoryInfo[] subDirs = source.GetDirectories();
@@ -561,10 +534,13 @@ public class MetaConnect : EditorWindow
 				file.CopyTo(target, true);
 		}
 
+		if (!recursive)
+			return;
+
 		foreach (DirectoryInfo sourceSubDir in subDirs)
 		{
 			DirectoryInfo destSubDir = dest.CreateSubdirectory(sourceSubDir.Name);
-			CopyRecursive(sourceSubDir, destSubDir);
+			CopyRecursive(sourceSubDir, destSubDir, recursive);
 		}
 	}
 
@@ -632,9 +608,10 @@ public class MetaConnect : EditorWindow
 
 			if (modified)
 				File.WriteAllLines(file.FullName, lines);
-		}
 
-		AddProgress(0.001f); // 0.8##
+			// approx 6500 files
+			AddProgress(0.2f / 6500.0f); // 0.8##
+		}
 
 		foreach (DirectoryInfo subDir in subDirs)
 			ReplaceAssetGUIDsRecursive(subDir);
@@ -660,28 +637,6 @@ public class MetaConnect : EditorWindow
 
 				if (RippedDataGUIDToLunaticGUID(guid, out string lunaticGUID))
 					line = string.Concat(pre, lunaticGUID, post);
-				else if (guid == rippedDataTMP)
-				{
-					const string ID_PATTERN = "fileID: ";
-
-					index = line.IndexOf(ID_PATTERN);
-					start = index + ID_PATTERN.Length;
-					comma = line.IndexOf(',', start);
-					string preFileID = pre.Substring(0, start);
-					string fileIDStr = pre.Substring(start, comma - start);
-					int fileID = int.Parse(fileIDStr);
-
-					if (fileID == textMesh)
-						guid = lunaticTMP;
-					else if (fileID == fontAsset)
-						guid = lunaticFont;
-					else if (fileID == spriteAsset)
-						guid = lunaticSprite;
-					else if (fileID == styleSheet)
-						guid = lunaticStyle;
-
-					line = string.Concat(preFileID, "11500000", PATTERN, guid, post);
-				}
 
 				return true;
 			}

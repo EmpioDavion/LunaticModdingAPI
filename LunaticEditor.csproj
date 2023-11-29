@@ -361,6 +361,9 @@
     <Reference Include="com.unity.multiplayer-hlapi.Runtime">
       <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Formats.Fbx.Runtime">
       <HintPath>Packages\com.empiodavion.lunatic@1.0.0\Lunacid\Plugins\Unity.Formats.Fbx.Runtime.dll</HintPath>
     </Reference>
