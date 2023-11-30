@@ -8,6 +8,11 @@
 
 	public string id;
 
+	private void Awake()
+	{
+		CON = Lunatic.Control;
+	}
+
 	public void Internal_Load()
 	{
 		if (CON == null)
