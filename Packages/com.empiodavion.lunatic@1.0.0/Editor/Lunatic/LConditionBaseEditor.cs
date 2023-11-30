@@ -4,11 +4,13 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(LConditionBase), true)]
-public class LConditionBaseEditor : Editor
+public class LConditionBaseEditor : ModBaseEditor
 {
 	protected SerializedProperty memberName;
 	protected SerializedProperty memberType;
 	protected SerializedProperty targetObj;
+
+	public override SerializedProperty LastProperty => targetObj;
 
 	protected List<MethodInfo> methods;
 	protected string[] methodNames;
@@ -36,10 +38,8 @@ public class LConditionBaseEditor : Editor
 		}
 	}
 
-	public override void OnInspectorGUI()
+	public override void DrawGUI()
 	{
-		serializedObject.Update();
-
 		EditorGUILayout.LabelField(target.name);
 
 		EditorGUI.indentLevel++;
@@ -82,8 +82,6 @@ public class LConditionBaseEditor : Editor
 		}
 
 		EditorGUI.indentLevel--;
-
-		serializedObject.ApplyModifiedProperties();
 	}
 
 	private List<MethodInfo> GetMethods(Object obj, out string[] methodNames)

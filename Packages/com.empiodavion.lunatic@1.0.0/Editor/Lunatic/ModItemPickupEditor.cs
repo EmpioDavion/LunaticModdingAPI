@@ -1,11 +1,9 @@
-using NUnit.Framework.Constraints;
 using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(ModItemPickup), true)]
-public class ModItemPickupEditor : Editor
+public class ModItemPickupEditor : ModBaseEditor
 {
-	private SerializedProperty script;
 	private SerializedProperty type;
 	private SerializedProperty item;
 	private SerializedProperty itemName;
@@ -14,9 +12,10 @@ public class ModItemPickupEditor : Editor
 
 	private string[] materials;
 
+	public override SerializedProperty LastProperty => item;
+
 	private void OnEnable()
 	{
-		script = serializedObject.FindProperty("m_Script");
 		type = serializedObject.FindProperty("type");
 		item = serializedObject.FindProperty("item");
 		itemName = serializedObject.FindProperty("Name");
@@ -24,20 +23,12 @@ public class ModItemPickupEditor : Editor
 		saved = serializedObject.FindProperty("SAVED");
 	}
 
-	public override void OnInspectorGUI()
+	public override void DrawGUI()
 	{
-		serializedObject.Update();
-
 		Lunatic.Init();
 
 		if (materials == null)
 			materials = Lunatic.MaterialNames.ToArray();
-
-		GUI.enabled = false;
-		EditorGUILayout.PropertyField(script);
-		GUI.enabled = true;
-
-		EditorTools.DrawShowHelpToggle();
 
 		EditorGUI.BeginChangeCheck();
 
@@ -77,10 +68,6 @@ public class ModItemPickupEditor : Editor
 
 		EditorTools.DrawHelpProperty(inChest, "If this item pickup is contained in a chest.");
 		EditorTools.DrawHelpProperty(saved, "The object that controls if this item pickup has been collected.");
-
-		EditorTools.DrawRemainingProperties(serializedObject, item);
-
-		serializedObject.ApplyModifiedProperties();
 	}
 
 	private void DrawItem(SerializedProperty prop, SerializedProperty nameProp, string help)

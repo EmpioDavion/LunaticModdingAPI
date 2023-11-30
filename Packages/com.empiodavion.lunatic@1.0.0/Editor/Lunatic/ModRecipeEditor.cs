@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 
 [CustomEditor(typeof(ModRecipe), true)]
-public class ModRecipeEditor : Editor
+public class ModRecipeEditor : ModBaseEditor
 {
 	protected SerializedProperty description;
 	protected SerializedProperty startsUnlocked;
@@ -17,6 +17,8 @@ public class ModRecipeEditor : Editor
 	protected SerializedProperty result;
 
 	private string[] materials;
+
+	public override SerializedProperty LastProperty => result;
 
 	private void OnEnable()
 	{
@@ -34,16 +36,12 @@ public class ModRecipeEditor : Editor
 		result = serializedObject.FindProperty("result");
 	}
 
-	public override void OnInspectorGUI()
+	public override void DrawGUI()
 	{
-		serializedObject.Update();
-
 		Lunatic.Init();
 
 		if (materials == null)
 			materials = Lunatic.MaterialNames.ToArray();
-
-		EditorTools.DrawShowHelpToggle();
 
 		EditorTools.DrawHelpProperty(description, "The description displayed in the alchemy table UI.");
 		EditorTools.DrawHelpProperty(startsUnlocked, "If the recipe should already be unlocked on a fresh character.");
@@ -53,10 +51,6 @@ public class ModRecipeEditor : Editor
 		DrawIngredient(material3, ingredient3Name, "The third material needed for the recipe.");
 
 		EditorTools.DrawHelpProperty(result, "The item created when the recipe is forged.");
-
-		EditorTools.DrawRemainingProperties(serializedObject, result);
-
-		serializedObject.ApplyModifiedProperties();
 	}
 
 	private void DrawIngredient(SerializedProperty prop, SerializedProperty nameProp, string help)

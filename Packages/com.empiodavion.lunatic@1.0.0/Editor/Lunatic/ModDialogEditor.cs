@@ -3,7 +3,7 @@ using UnityEditorInternal;
 using UnityEngine;
 
 [CustomEditor(typeof(ModDialog))]
-public class ModDialogEditor : Editor
+public class ModDialogEditor : ModBaseEditor
 {
 	protected SerializedProperty id;
 	protected SerializedProperty npcName;
@@ -20,6 +20,8 @@ public class ModDialogEditor : Editor
 	protected SerializedProperty music;
 
 	protected ReorderableList linesList;
+
+	public override SerializedProperty LastProperty => id;
 
 	protected virtual void OnEnable()
 	{
@@ -45,12 +47,8 @@ public class ModDialogEditor : Editor
 		};
 	}
 
-	public override void OnInspectorGUI()
+	public override void DrawGUI()
 	{
-		serializedObject.Update();
-
-		EditorTools.DrawShowHelpToggle();
-
 		// [0], [1], and [2] are random greetings, [3] is first-time greeting
 		if (lines.arraySize < 4)
 			lines.arraySize = 4;
@@ -126,10 +124,6 @@ public class ModDialogEditor : Editor
 		EditorGUILayout.Space(height);
 
 		linesList.DoList(rect);
-
-		EditorTools.DrawRemainingProperties(serializedObject, id);
-
-		serializedObject.ApplyModifiedProperties();
 	}
 
 	private void DrawLine(int index, string help)

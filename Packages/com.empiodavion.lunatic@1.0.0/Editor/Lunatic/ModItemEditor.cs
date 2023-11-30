@@ -1,7 +1,7 @@
 using UnityEditor;
 
 [CustomEditor(typeof(ModItem), true)]
-public class ModItemEditor : Editor
+public class ModItemEditor : ModBaseEditor
 {
 	protected SerializedProperty itemName;
 	protected SerializedProperty sprite;
@@ -10,6 +10,8 @@ public class ModItemEditor : Editor
 	protected SerializedProperty effectName;
 	protected SerializedProperty effect;
 	protected SerializedProperty itemCast;
+
+	public override SerializedProperty LastProperty => itemCast;
 
 	private void OnEnable()
 	{
@@ -21,12 +23,8 @@ public class ModItemEditor : Editor
 		itemCast = serializedObject.FindProperty("ITM_CAST");
 	}
 
-	public override void OnInspectorGUI()
+	public override void DrawGUI()
 	{
-		serializedObject.Update();
-
-		EditorTools.DrawShowHelpToggle();
-
 		EditorTools.DrawHelpProperty(itemName, "The name of the item.");
 		EditorTools.DrawHelpProperty(sprite, "The sprite to use for the item's UI graphic.");
 
@@ -42,9 +40,5 @@ public class ModItemEditor : Editor
 		EditorTools.DrawHelpProperty(description, "The description of the item to display in the inventory.");
 		EditorTools.DrawHelpProperty(effectName, "The name of the particle effect to use.");
 		EditorTools.DrawHelpProperty(itemCast, "The path to the resource that will be spawned on use. 0 = nothing.");
-
-		EditorTools.DrawRemainingProperties(serializedObject, itemCast);
-
-		serializedObject.ApplyModifiedProperties();
 	}
 }

@@ -1,8 +1,7 @@
 using UnityEditor;
-using UnityEngine;
 
 [CustomEditor(typeof(ModMagic), true)]
-public class ModMagicEditor : Editor
+public class ModMagicEditor : ModBaseEditor
 {
 	private string[] magicTypes;
 	private string[] elementTypes;
@@ -21,6 +20,8 @@ public class ModMagicEditor : Editor
 	public SerializedProperty fadeSpeed;
 	public SerializedProperty isBlood;
 	public SerializedProperty sounds;
+
+	public override SerializedProperty LastProperty => minChargeTime;
 
 	private void OnEnable()
 	{
@@ -43,12 +44,8 @@ public class ModMagicEditor : Editor
 		sounds = serializedObject.FindProperty("snds");
 	}
 
-	public override void OnInspectorGUI()
+	public override void DrawGUI()
 	{
-		serializedObject.Update();
-
-		EditorTools.DrawShowHelpToggle();
-
 		EditorTools.DrawHelpProperty(projectileName, "The object to spawn on cast.");
 		EditorTools.DrawHelpProperty(description, "The description shown in the player's inventory.");
 		EditorTools.DrawHelpProperty(icon, "The sprite shown in the player's inventory and in the active quick item hotbar.");
@@ -80,9 +77,5 @@ public class ModMagicEditor : Editor
 		EditorTools.DrawArrayElement(sounds, 1, "Fail Sound", "The sound that plays when the player stops charging the magic before the required charge time.");
 		EditorTools.DrawArrayElement(sounds, 2, "Charging Sound", "The sound that plays when the player starts charging to cast the magic.");
 		EditorTools.DrawArrayElement(sounds, 3, "Charged Sound", "The sound that plays when the magic is fully charged and ready to cast.");
-
-		EditorTools.DrawRemainingProperties(serializedObject, minChargeTime);
-
-		serializedObject.ApplyModifiedProperties();
 	}
 }

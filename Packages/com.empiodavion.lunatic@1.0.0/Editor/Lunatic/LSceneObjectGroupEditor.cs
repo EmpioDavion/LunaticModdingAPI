@@ -4,14 +4,16 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(LSceneObjectGroup), true)]
-internal class LSceneObjectGroupEditor : Editor
+internal class LSceneObjectGroupEditor : ModBaseEditor
 {
 	protected SerializedProperty scene;
 	protected SerializedProperty sceneObjects;
 	protected SerializedProperty spawnCondition;
 
-	private Dictionary<Object, Editor> sceneObjectEditors = new Dictionary<Object, Editor>();
+	private readonly Dictionary<Object, Editor> sceneObjectEditors = new Dictionary<Object, Editor>();
 	private Editor conditionEditor;
+
+	public override SerializedProperty LastProperty => spawnCondition;
 
 	private void OnEnable()
 	{
@@ -38,10 +40,8 @@ internal class LSceneObjectGroupEditor : Editor
 		sceneObjectEditors.Clear();
 	}
 
-	public override void OnInspectorGUI()
+	public override void DrawGUI()
 	{
-		serializedObject.Update();
-
 		EditorGUILayout.PropertyField(scene);
 
 		EditorGUILayout.BeginHorizontal();
@@ -83,6 +83,9 @@ internal class LSceneObjectGroupEditor : Editor
 				{
 					CreateCachedEditor(prop.objectReferenceValue, typeof(LSceneObjectEditor), ref editor);
 					sceneObjectEditors.Add(prop.objectReferenceValue, editor);
+
+					LSceneObjectEditor sceneObjectEditor = (LSceneObjectEditor)editor;
+					sceneObjectEditor.drawHeader = false;
 				}
 
 				editor.OnInspectorGUI();
@@ -136,10 +139,6 @@ internal class LSceneObjectGroupEditor : Editor
 			CreateCachedEditor(spawnCondition.objectReferenceValue, typeof(LConditionBaseEditor), ref conditionEditor);
 			conditionEditor.OnInspectorGUI();
 		}
-
-		EditorTools.DrawRemainingProperties(serializedObject, spawnCondition);
-
-		serializedObject.ApplyModifiedProperties();
 	}
 
 	private void AssignNewSceneObject(SerializedProperty property)

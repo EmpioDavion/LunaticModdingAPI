@@ -3,9 +3,9 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(LSceneObject), true)]
-public class LSceneObjectEditor : Editor
+public class LSceneObjectEditor : ModBaseEditor
 {
-	private static Dictionary<Object, Editor> Editors = new Dictionary<Object, Editor>();
+	private static readonly Dictionary<Object, Editor> Editors = new Dictionary<Object, Editor>();
 
 	protected SerializedProperty gameObject;
 	protected SerializedProperty position;
@@ -15,6 +15,8 @@ public class LSceneObjectEditor : Editor
 	protected SerializedProperty spawnCondition;
 
 	protected Editor spawnConditionEditor;
+
+	public override SerializedProperty LastProperty => spawnCondition;
 
 	private void OnEnable()
 	{
@@ -49,10 +51,8 @@ public class LSceneObjectEditor : Editor
 		SceneView.duringSceneGui -= DrawSceneGUI;
 	}
 
-	public override void OnInspectorGUI()
+	public override void DrawGUI()
 	{
-		serializedObject.Update();
-
 		EditorGUILayout.LabelField(target.name);
 
 		EditorGUI.indentLevel++;
@@ -120,14 +120,14 @@ public class LSceneObjectEditor : Editor
 		if (spawnCondition.objectReferenceValue != null)
 		{
 			CreateCachedEditor(spawnCondition.objectReferenceValue, typeof(LConditionBaseEditor), ref spawnConditionEditor);
+
+			LConditionBaseEditor conditionEditor = (LConditionBaseEditor)spawnConditionEditor;
+			conditionEditor.drawHeader = false;
+
 			spawnConditionEditor.OnInspectorGUI();
 		}
 
 		EditorGUI.indentLevel--;
-
-		EditorTools.DrawRemainingProperties(serializedObject, spawnCondition);
-
-		serializedObject.ApplyModifiedProperties();
 	}
 
 	private void AssignNewSceneObjectCondition(SerializedProperty property)

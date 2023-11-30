@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 8339535042385063498}
   - component: {fileID: 8507916062454070591}
   m_Layer: 0
-  m_Name: TemplateItem
+  m_Name: Template Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
   ITEM_NAME: Template_Item
-  SPR: {fileID: 21300000, guid: 79dce4c889178e941b73e4b1de8f008f, type: 2}
+  SPR: {fileID: 21300000, guid: 7d26144a772209440b96c6736ee0b9a7, type: 3}
   Count: 0
   type: 0
   slot: 1

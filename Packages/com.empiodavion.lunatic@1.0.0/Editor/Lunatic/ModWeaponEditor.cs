@@ -1,7 +1,7 @@
 using UnityEditor;
 
 [CustomEditor(typeof(ModWeapon), true)]
-public class ModWeaponEditor : Editor
+public class ModWeaponEditor : ModBaseEditor
 {
 	private bool misc = true;
 	private bool data = true;
@@ -35,6 +35,8 @@ public class ModWeaponEditor : Editor
 	private SerializedProperty special;
     private SerializedProperty chargeSpeed;
     private SerializedProperty animationSpeed;
+
+	public override SerializedProperty LastProperty => upgradeWeapon;
 
 	private void OnEnable()
 	{
@@ -73,12 +75,8 @@ public class ModWeaponEditor : Editor
 	//[Tooltip("0 melee, 1 ranged")]
 	//[Tooltip("0 none, 1 fly in air, 2 Moonlight, 3 magic drain, 4 knock back, 5 moon sword with xp drain, 6 breakable, 7 hp drain, 8 crissagrim, 9 flail2, 10 flail3, 11 curse null, 13 cursed hammer, 14 switch type, 15 null curse/blind, 16 Death, 17 DeathisBack, 18 blind, 22 spawn shoot on full but no mana charge")]
 
-	public override void OnInspectorGUI()
+	public override void DrawGUI()
 	{
-		serializedObject.Update();
-
-		EditorTools.DrawShowHelpToggle();
-
 		if (misc = EditorGUILayout.Foldout(misc, "Misc"))
 		{
 			EditorGUI.indentLevel++;
@@ -169,10 +167,6 @@ public class ModWeaponEditor : Editor
 
 			EditorGUI.indentLevel--;
 		}
-
-		EditorTools.DrawRemainingProperties(serializedObject, upgradeWeapon);
-
-		serializedObject.ApplyModifiedProperties();
 	}
 
 	private void DrawUpgrade(SerializedProperty prop, SerializedProperty nameProp, string help)
