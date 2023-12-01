@@ -6,6 +6,7 @@ public class ModMagicEditor : ModBaseEditor
 	private string[] magicTypes;
 	private string[] elementTypes;
 
+	public SerializedProperty projectile;
 	public SerializedProperty projectileName;
 	public SerializedProperty description;
 	public SerializedProperty icon;
@@ -21,13 +22,14 @@ public class ModMagicEditor : ModBaseEditor
 	public SerializedProperty isBlood;
 	public SerializedProperty sounds;
 
-	public override SerializedProperty LastProperty => minChargeTime;
+	public override SerializedProperty LastProperty => projectile;
 
 	private void OnEnable()
 	{
 		magicTypes = typeof(Lunatic.MagicTypes).GetEnumNames();
 		elementTypes = typeof(Lunatic.Elements).GetEnumNames();
 
+		projectile = serializedObject.FindProperty("projectile");
 		projectileName = serializedObject.FindProperty("MAG_CHILD");
 		description = serializedObject.FindProperty("desc");
 		icon = serializedObject.FindProperty("ICON");
@@ -46,7 +48,8 @@ public class ModMagicEditor : ModBaseEditor
 
 	public override void DrawGUI()
 	{
-		EditorTools.DrawHelpProperty(projectileName, "The object to spawn on cast.");
+		DrawProjectile(projectile, projectileName, "The object to spawn on cast.");
+
 		EditorTools.DrawHelpProperty(description, "The description shown in the player's inventory.");
 		EditorTools.DrawHelpProperty(icon, "The sprite shown in the player's inventory and in the active quick item hotbar.");
 		EditorTools.DrawHelpProperty(colour, "The colour to tint the icon.");
@@ -54,14 +57,14 @@ public class ModMagicEditor : ModBaseEditor
 		if (EditorTools.ShowHelp)
 			EditorGUILayout.HelpBox("The category the magic belongs to.", MessageType.Info);
 
-		type.intValue = EditorGUILayout.Popup(type.intValue, magicTypes);
+		type.intValue = EditorGUILayout.Popup(type.displayName, type.intValue, magicTypes);
 
 		EditorTools.DrawHelpProperty(damage, "How much damage the magic projectile inflicts.");
 
 		if (EditorTools.ShowHelp)
 			EditorGUILayout.HelpBox("The damage type element of the magic.", MessageType.Info);
 
-		element.intValue = EditorGUILayout.Popup(element.intValue, elementTypes);
+		element.intValue = EditorGUILayout.Popup(element.displayName, element.intValue, elementTypes);
 
 		EditorTools.DrawHelpProperty(chargeTime, "How long the magic takes to charge to cast.");
 		EditorTools.DrawHelpProperty(minChargeTime, "The shortest the charge time can become after bonuses from player stats.");
@@ -77,5 +80,20 @@ public class ModMagicEditor : ModBaseEditor
 		EditorTools.DrawArrayElement(sounds, 1, "Fail Sound", "The sound that plays when the player stops charging the magic before the required charge time.");
 		EditorTools.DrawArrayElement(sounds, 2, "Charging Sound", "The sound that plays when the player starts charging to cast the magic.");
 		EditorTools.DrawArrayElement(sounds, 3, "Charged Sound", "The sound that plays when the magic is fully charged and ready to cast.");
+	}
+
+	private void DrawProjectile(SerializedProperty prop, SerializedProperty nameProp, string help)
+	{
+		if (EditorTools.ShowHelp)
+			EditorGUILayout.HelpBox(help, MessageType.Info);
+
+		EditorTools.DrawRefName(prop, nameProp);
+
+		EditorGUI.BeginChangeCheck();
+
+		EditorGUILayout.PropertyField(prop);
+
+		if (EditorGUI.EndChangeCheck())
+			EditorTools.CheckLunaticRef(prop, nameProp);
 	}
 }

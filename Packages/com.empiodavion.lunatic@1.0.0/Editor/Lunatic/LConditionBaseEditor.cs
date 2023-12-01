@@ -9,11 +9,15 @@ public class LConditionBaseEditor : ModBaseEditor
 	protected SerializedProperty memberName;
 	protected SerializedProperty memberType;
 	protected SerializedProperty targetObj;
+	protected SerializedProperty invert;
 
-	public override SerializedProperty LastProperty => targetObj;
+	public override SerializedProperty LastProperty => invert;
 
 	protected List<MethodInfo> methods;
 	protected string[] methodNames;
+
+	protected List<Component> components;
+	protected string[] componentNames;
 
 	protected int methodIndex = -1;
 
@@ -28,13 +32,21 @@ public class LConditionBaseEditor : ModBaseEditor
 		memberName = serializedObject.FindProperty("memberName");
 		memberType = serializedObject.FindProperty("memberType");
 		targetObj = serializedObject.FindProperty("target");
+		invert = serializedObject.FindProperty("invert");
 
 		methodIndex = -1;
 
 		if (targetObj.objectReferenceValue != null)
 		{
 			methods = GetMethods(targetObj.objectReferenceValue, out methodNames);
-			methodIndex = methods.FindIndex((x) => x.Name == memberName.stringValue);
+			methodIndex = methods.FindIndex(MatchMethod);
+
+			if (targetObj.objectReferenceValue is GameObject gameObject)
+				components = GetComponents(gameObject, out componentNames);
+			else if (targetObj.objectReferenceValue is Component component)
+				components = GetComponents(component.gameObject, out componentNames);
+			else
+				components = null;
 		}
 	}
 
@@ -67,7 +79,31 @@ public class LConditionBaseEditor : ModBaseEditor
 			if (methods == null)
 			{
 				methods = GetMethods(targetObj.objectReferenceValue, out methodNames);
-				methodIndex = methods.FindIndex((x) => x.Name == memberName.stringValue);
+				methodIndex = methods.FindIndex(MatchMethod);
+			}
+
+			if (components == null)
+			{
+				if (targetObj.objectReferenceValue is GameObject gameObject)
+					components = GetComponents(gameObject, out componentNames);
+				else if (targetObj.objectReferenceValue is Component component)
+					components = GetComponents(component.gameObject, out componentNames);
+			}
+
+			if (components != null)
+			{
+				EditorGUI.BeginChangeCheck();
+
+				int componentIndex = EditorGUILayout.Popup("Component", -1, componentNames);
+
+				if (EditorGUI.EndChangeCheck())
+				{
+					targetObj.objectReferenceValue = components[componentIndex];
+					methods = GetMethods(targetObj.objectReferenceValue, out methodNames);
+					methodIndex = -1;
+
+					Repaint();
+				}
 			}
 
 			EditorGUI.BeginChangeCheck();
@@ -77,11 +113,18 @@ public class LConditionBaseEditor : ModBaseEditor
 			if (EditorGUI.EndChangeCheck())
 			{
 				memberName.stringValue = methodNames[methodIndex];
-				memberType.intValue = (int)MemberTypes.Method;
+				memberType.intValue = (int)methods[methodIndex].MemberType;
 			}
 		}
 
+		EditorGUILayout.PropertyField(invert);
+
 		EditorGUI.indentLevel--;
+	}
+
+	private bool MatchMethod(MethodInfo method)
+	{
+		return method.Name == memberName.stringValue && method.MemberType == (MemberTypes)memberType.intValue;
 	}
 
 	private List<MethodInfo> GetMethods(Object obj, out string[] methodNames)
@@ -94,9 +137,33 @@ public class LConditionBaseEditor : ModBaseEditor
 			if (condition.MatchMethod(method))
 				methods.Add(method);
 
+		PropertyInfo[] allProperties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+		foreach (PropertyInfo property in allProperties)
+		{
+			if (property.PropertyType == typeof(bool))
+			{
+				MethodInfo getMethod = property.GetMethod;
+
+				if (getMethod != null)
+					methods.Add(getMethod);
+			}
+		}
+
 		methodNames = methods.ConvertAll((x) => x.Name).ToArray();
 
 		return methods;
 	}
 
+
+	private List<Component> GetComponents(GameObject gameObject, out string[] componentNames)
+	{
+		List<Component> components = new List<Component>();
+
+		gameObject.GetComponents(components);
+
+		componentNames = components.ConvertAll((x) => x.GetType().Name).ToArray();
+
+		return components;
+	}
 }

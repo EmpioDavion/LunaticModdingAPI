@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -382,6 +383,52 @@ public static class Lunatic
 		return ModMaterials[index];
 	}
 
+	public static bool PlayerHasWeapon(Weapon_scr weapon)
+	{
+		if (weapon is ModWeapon modWeapon)
+			return PlayerHasWeapon(modWeapon.InternalName);
+
+		return PlayerHasWeapon(weapon.name);
+	}
+
+	public static bool PlayerHasWeapon(string internalName)
+	{
+		CONTROL control = GetControl();
+
+		if (control == null)
+			return false;
+
+		Control = control;
+
+		if (control.CURRENT_PL_DATA == null)
+			return false;
+
+		return control.CURRENT_PL_DATA.WEPS.Contains(internalName);
+	}
+
+	public static bool PlayerHasMagic(Magic_scr magic)
+	{
+		if (magic is ModMagic modMagic)
+			return PlayerHasMagic(modMagic.InternalName);
+
+		return PlayerHasMagic(magic.name);
+	}
+
+	public static bool PlayerHasMagic(string internalName)
+	{
+		CONTROL control = GetControl();
+
+		if (control == null)
+			return false;
+
+		Control = control;
+
+		if (control.CURRENT_PL_DATA == null)
+			return false;
+
+		return control.CURRENT_PL_DATA.SPELLS.Contains(internalName);
+	}
+
 	public static int GetMaterialID(string name)
 	{
 		int index = MaterialNames.IndexOf(name);
@@ -632,6 +679,11 @@ public static class Lunatic
 	internal static void TrackItem(ModItem item)
 	{
 		AssetReplacement.Add("ITEMS/" + item.InternalName, item.gameObject);
+	}
+
+	internal static void TrackProjectile(ModProjectile projectile)
+	{
+		AssetReplacement.Add("MAGIC/CAST/" + projectile.InternalName, projectile.gameObject);
 	}
 
 	internal static void FixShaders(Component component)

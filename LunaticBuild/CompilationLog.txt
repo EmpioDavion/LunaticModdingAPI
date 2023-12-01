@@ -1,2 +1,2 @@
 # Starting compiling Lunatic.dll
-E:\Program Files\Unity\Hub\Editor\2020.3.4f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-5a5230495d9f5694dae64712eedd2a94
+E:\Program Files\Unity\Hub\Editor\2020.3.4f1\Editor\Data\Tools\RoslynScripts\unity_csc.bat /noconfig @Temp/UnityTempFile-6aa90e511a944c549bf1830cb947e84f

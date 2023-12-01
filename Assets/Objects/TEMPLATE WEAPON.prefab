@@ -10553,8 +10553,8 @@ MonoBehaviour:
   WEP_BACKSTEP: 60
   WEP_ELEMENT: 0
   WEP_XP: 0
-  WEP_GROWTH: 1
-  UPGRADE: Assets/Objects/TEMPLATE WEAPON.prefab
+  WEP_GROWTH: 50
+  UPGRADE: L#Mod Template/TEMPLATE WEAPON
   type: 0
   special: 0
   cooling: 0

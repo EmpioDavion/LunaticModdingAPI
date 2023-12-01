@@ -86,6 +86,7 @@ internal class LSceneObjectGroupEditor : ModBaseEditor
 
 					LSceneObjectEditor sceneObjectEditor = (LSceneObjectEditor)editor;
 					sceneObjectEditor.drawHeader = false;
+					sceneObjectEditor.expectedScene = scene.stringValue;
 				}
 
 				editor.OnInspectorGUI();

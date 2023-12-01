@@ -3,9 +3,21 @@ using UnityEngine;
 
 public static class EditorTools
 {
-	public static bool ShowHelp = true;
+	private const string SHOW_HELP_NAME = "Lunatic Show Help";
+
+	private static bool _ShowHelp = true;
+	public static bool ShowHelp
+	{ 
+		get => _ShowHelp; 
+		set => EditorPrefs.SetBool(SHOW_HELP_NAME, _ShowHelp = value);
+	}
 
 	private static string[] ItemTypeNames;
+
+	static EditorTools()
+	{
+		_ShowHelp = EditorPrefs.GetBool(SHOW_HELP_NAME, true);
+	}
 
 	public static float EditorLineSpacing(int lines)
 	{
@@ -23,7 +35,7 @@ public static class EditorTools
 		string bundle = AssetDatabase.GetImplicitAssetBundleName(assetPath);
 		string objectPath = AssetDatabase.GetAssetPath(to);
 		AssetImporter importer = AssetImporter.GetAtPath(objectPath);
-		importer.SetAssetBundleNameAndVariant(bundle, objectPath);
+		importer.SetAssetBundleNameAndVariant(bundle, "");
 	}
 
 	public static T CreateNewAsset<T>(string path) where T : ScriptableObject
@@ -52,7 +64,10 @@ public static class EditorTools
 
 	public static void DrawShowHelpToggle()
 	{
-		ShowHelp = EditorGUILayout.Toggle("Show help", ShowHelp);
+		bool value = EditorGUILayout.Toggle("Show help", _ShowHelp);
+
+		if (value != _ShowHelp)
+			ShowHelp = value;
 	}
 
 	public static void DrawItemTypeProperty(SerializedProperty prop, string help)

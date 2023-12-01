@@ -22,7 +22,7 @@ public class ModProjectileEditor : ModBaseEditor
 
 		UnityEngine.GUI.enabled = pl.boolValue;
 
-		EditorTools.DrawHelpProperty(speedIncrease, "Multiplies the projectile velocity by this amount every 0.1 seconds if launched.");
+		EditorTools.DrawHelpProperty(speedIncrease, "Multiplies the projectile velocity by this amount every 0.1 seconds if launched. Must be positive.");
 		EditorTools.DrawHelpProperty(force, "The initial launch force on spawn.");
 
 		UnityEngine.GUI.enabled = true;

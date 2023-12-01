@@ -15,7 +15,7 @@ public class TemplateGame : ModGame
 
 		public override string ToString()
 		{
-			return $"{someIntValue}, {someFloatValue}, {someStringValue}, {hubMaterialsCollected}";
+			return LJson.Serialise(this);
 		}
 	}
 

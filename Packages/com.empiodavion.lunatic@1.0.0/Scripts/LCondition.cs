@@ -23,6 +23,8 @@ public abstract class LConditionBase : ScriptableObject, IModObject
 	[JsonIgnore]
 	public abstract System.Delegate Method { get; }
 
+	public bool invert;
+
 	protected System.Delegate GetDelegate(System.Type funcType)
 	{
 		if (target != null && !string.IsNullOrEmpty(memberName))
@@ -74,11 +76,17 @@ public abstract class LConditionBase<T> : LConditionBase where T : System.Delega
 	protected T method;
 
 	[JsonIgnore]
-	public override System.Delegate Method => method;
+	protected System.Func<bool> propertyMethod;
+
+	[JsonIgnore]
+	public override System.Delegate Method => method ?? (System.Delegate)propertyMethod;
 
 	public override void Init()
 	{
-		method = (T)GetDelegate(typeof(T));
+		if (memberType == MemberTypes.Property)
+			propertyMethod = (System.Func<bool>)GetDelegate(typeof(System.Func<bool>));
+		else
+			method = (T)GetDelegate(typeof(T));
 	}
 }
 
@@ -87,7 +95,10 @@ public class LCondition : LConditionBase<System.Func<bool>>
 {
 	public bool Invoke()
 	{
-		return method == null || method();
+		if (memberType == MemberTypes.Property)
+			return propertyMethod == null || propertyMethod() != invert;
+
+		return method == null || method() != invert;
 	}
 
 	public override bool MatchMethod(MethodInfo _methodInfo)
@@ -105,8 +116,11 @@ public class LCondition<T> : LConditionBase<System.Func<T, bool>>
 
 	public bool Invoke(T _argument)
 	{
+		if (memberType == MemberTypes.Property)
+			return propertyMethod == null || propertyMethod() != invert;
+
 		argument = _argument;
-		return method == null || method(argument);
+		return method == null || method(argument) != invert;
 	}
 
 	public override bool MatchMethod(MethodInfo _methodInfo)

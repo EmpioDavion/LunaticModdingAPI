@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [CustomEditor(typeof(LSceneObject), true)]
 public class LSceneObjectEditor : ModBaseEditor
@@ -15,6 +17,8 @@ public class LSceneObjectEditor : ModBaseEditor
 	protected SerializedProperty spawnCondition;
 
 	protected Editor spawnConditionEditor;
+
+	public string expectedScene;
 
 	public override SerializedProperty LastProperty => spawnCondition;
 
@@ -155,6 +159,12 @@ public class LSceneObjectEditor : ModBaseEditor
 
 	private void DrawSceneGUI(SceneView sceneView)
 	{
+		if (PrefabStageUtility.GetCurrentPrefabStage() != null)
+			return;
+
+		if (!string.IsNullOrEmpty(expectedScene) && expectedScene != SceneManager.GetActiveScene().name)
+			return;
+
 		serializedObject.Update();
 
 		LSceneObject sceneObject = (LSceneObject)target;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
 [CreateAssetMenu(menuName = "Lunatic/Mod Asset")]
 public class Mod : ScriptableObject
@@ -36,6 +37,7 @@ public class Mod : ScriptableObject
 	public readonly List<ModItem> items = new List<ModItem>();
 	public readonly List<ModMaterial> materials = new List<ModMaterial>();
 	public readonly List<ModItemPickup> itemPickups = new List<ModItemPickup>();
+	public readonly List<ModProjectile> projectiles = new List<ModProjectile>();
 	public readonly List<ModRecipe> recipes = new List<ModRecipe>();
 	public readonly List<ModClass> classes = new List<ModClass>();
 	public readonly List<LSceneObjectGroup> sceneObjectGroups = new List<LSceneObjectGroup>();
@@ -90,46 +92,29 @@ public class Mod : ScriptableObject
 			}
 		}
 
-		games.AddRange(assets.OfType<ModGame>());
-		Debug.Log($"Added {games.Count} games.");
-
-		scenes.AddRange(assets.OfType<ModScene>());
-		Debug.Log($"Added {scenes.Count} scenes.");
-
-		npcs.AddRange(assets.OfType<ModMultipleStates>());
-		Debug.Log($"Added {npcs.Count} NPCS.");
-
-		weapons.AddRange(assets.OfType<ModWeapon>());
-		Debug.Log($"Added {weapons.Count} weapons.");
-
-		magics.AddRange(assets.OfType<ModMagic>());
-		Debug.Log($"Added {magics.Count} magics.");
-
-		items.AddRange(assets.OfType<ModItem>());
-		Debug.Log($"Added {items.Count} items.");
-
-		materials.AddRange(assets.OfType<ModMaterial>());
-		Debug.Log($"Added {materials.Count} materials.");
-
-		itemPickups.AddRange(assets.OfType<ModItemPickup>());
-		Debug.Log($"Added {itemPickups.Count} item pickups.");
-
-		recipes.AddRange(assets.OfType<ModRecipe>());
-		Debug.Log($"Added {recipes.Count} recipes.");
-
-		classes.AddRange(assets.OfType<ModClass>());
-		Debug.Log($"Added {classes.Count} classes.");
-
-		sceneObjectGroups.AddRange(assets.OfType<LSceneObjectGroup>());
-		Debug.Log($"Added {sceneObjectGroups.Count} scene object groups.");
-
-		sceneObjects.AddRange(assets.OfType<LSceneObject>());
-		Debug.Log($"Added {sceneObjects.Count} scene objects.");
-
-		conditions.AddRange(assets.OfType<LConditionBase>());
-		Debug.Log($"Added {conditions.Count} conditions.");
+		Load(games, assets, "games");
+		Load(scenes, assets, "scenes");
+		Load(npcs, assets, "NPCS");
+		Load(weapons, assets, "weapons");
+		Load(magics, assets, "magics");
+		Load(items, assets, "items");
+		Load(materials, assets, "materials");
+		Load(itemPickups, assets, "item pickups");
+		Load(projectiles, assets, "projectiles");
+		Load(recipes, assets, "recipes");
+		Load(classes, assets, "classes");
+		Load(sceneObjectGroups, assets, "scene object groups");
+		Load(sceneObjects, assets, "scene objects");
+		Load(conditions, assets, "conditions");
 
 		// npc states are loaded from save files
+	}
+
+	private void Load<T>(List<T> list, List<IModObject> assets, string typeName)
+	{
+		list.AddRange(assets.OfType<T>());
+		Debug.Log($"Added {list.Count} {typeName}.");
+
 	}
 
 	internal void Init()
@@ -144,6 +129,7 @@ public class Mod : ScriptableObject
 		InitItems();
 		InitMaterials();
 		InitItemPickups();
+		InitProjectiles();
 		InitRecipes();
 		InitClasses();
 		InitSceneObjectGroups();
@@ -168,6 +154,7 @@ public class Mod : ScriptableObject
 		{
 			Lunatic.FixShaders(magic);
 			Lunatic.TrackMagic(magic);
+			magic.Init();
 		}
 
 		Lunatic.ModMagics.AddRange(magics);
@@ -201,6 +188,15 @@ public class Mod : ScriptableObject
 		{
 			Lunatic.FixShaders(itemPickup);
 			itemPickup.Init();
+		}
+	}
+
+	private void InitProjectiles()
+	{
+		foreach (ModProjectile projectile in projectiles)
+		{
+			Lunatic.FixShaders(projectile);
+			Lunatic.TrackProjectile(projectile);
 		}
 	}
 

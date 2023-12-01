@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6578122296224194281}
   - component: {fileID: 3076717398000865834}
   m_Layer: 0
-  m_Name: TemplateMagic
+  m_Name: TEMPLATE MAGIC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
   MAG_TYPE: 0
   MAG_DAMAGE: 20
   MAG_CHARGE_TIME: 1
-  MAG_CHILD: FLAME_FLARE_CAST
+  MAG_CHILD: L#Mod Template/TEMPLATE_PROJECTILE
   MAG_COST: 15
   MAG_COLOR: {r: 1, g: 0.38475233, b: 0, a: 1}
   MAG_FADE: 2
@@ -164,3 +164,4 @@ MonoBehaviour:
   MAG_BL: 0
   MAG_ELEM: 1
   MIN_CHARGE_TIME: 0.5
+  projectile: {fileID: 114773344678912526, guid: 9758ee64ed6e21148b4b8c80e3fdf2cb, type: 3}

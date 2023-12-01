@@ -56,14 +56,19 @@
     <Analyzer Include="E:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModSpawnOnEnableEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModMagicEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModVersionPropertyDrawer.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModDialogEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModItemEditor.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModObjectLimitEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModSceneEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\EditorTools.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModAssetTool.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModBaseEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LSceneObjectEditor.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModProjectileEditor.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModAutoKillEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\DialogLinePropertyDrawer.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModRecipeEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModItemPickupEditor.cs" />
@@ -71,10 +76,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LConditionBaseEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModWeaponEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LSceneObjectGroupEditor.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModProjectileEditor.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModBaseEditor.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModObjectLimitEditor.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModAutoKillEditor.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModDamageTriggerEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LunaticEditor.asmdef" />

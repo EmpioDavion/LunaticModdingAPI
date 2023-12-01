@@ -17,31 +17,8 @@ public class ModItemPickup : Item_Pickup_scr, IModObject
 
 	internal void Init()
 	{
-		if (Name.StartsWith("L#"))
-		{
-			IModObject modObject = null;
-
-			switch ((Lunatic.ItemTypes)type)
-			{
-				case Lunatic.ItemTypes.Weapon:
-					modObject = Mod.weapons.Find(MatchName);
-					break;
-				case Lunatic.ItemTypes.Magic:
-					modObject = Mod.magics.Find(MatchName);
-					break;
-				case Lunatic.ItemTypes.Item:
-					modObject = Mod.items.Find(MatchName);
-					break;
-				case Lunatic.ItemTypes.Material:
-					modObject = Mod.materials.Find(MatchName);
-					break;
-				default:
-					break;
-			}
-
-			if (modObject == null)
-				UnityEngine.Debug.LogError($"Could not find {Name} for item pickup {name}");
-		}
+		if (item != null && item is IModObject modObject)
+			Name = modObject.InternalName;
 	}
 
 	public bool Internal_CheckStart()
@@ -53,11 +30,6 @@ public class ModItemPickup : Item_Pickup_scr, IModObject
 		}
 
 		return false;
-	}
-
-	private bool MatchName<T>(T modObject) where T : IModObject
-	{
-		return modObject.InternalName == Name;
 	}
 
 	public virtual void OnPickup()
