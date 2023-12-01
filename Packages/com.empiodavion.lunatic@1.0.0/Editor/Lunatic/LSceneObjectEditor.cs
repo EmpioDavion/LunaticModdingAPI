@@ -9,6 +9,8 @@ public class LSceneObjectEditor : ModBaseEditor
 {
 	private static readonly Dictionary<Object, Editor> Editors = new Dictionary<Object, Editor>();
 
+	private static GUIStyle LabelStyle;
+
 	protected SerializedProperty gameObject;
 	protected SerializedProperty position;
 	protected SerializedProperty rotation;
@@ -55,8 +57,21 @@ public class LSceneObjectEditor : ModBaseEditor
 		SceneView.duringSceneGui -= DrawSceneGUI;
 	}
 
+	private static void CreateLabelStyle()
+	{
+		LabelStyle = GUI.skin.GetStyle("Label");
+		LabelStyle = new GUIStyle(LabelStyle);
+		LabelStyle.alignment = TextAnchor.UpperCenter;
+		LabelStyle.fixedWidth = 200.0f;
+		LabelStyle.normal.background = Texture2D.whiteTexture;
+		LabelStyle.normal.textColor = Color.black;
+	}
+
 	public override void DrawGUI()
 	{
+		if (LabelStyle == null)
+			CreateLabelStyle();
+
 		EditorGUILayout.LabelField(target.name);
 
 		EditorGUI.indentLevel++;
@@ -165,15 +180,12 @@ public class LSceneObjectEditor : ModBaseEditor
 		if (!string.IsNullOrEmpty(expectedScene) && expectedScene != SceneManager.GetActiveScene().name)
 			return;
 
+		if (LabelStyle == null)
+			CreateLabelStyle();
+
 		serializedObject.Update();
 
 		LSceneObject sceneObject = (LSceneObject)target;
-
-		GUIStyle centeredStyle = GUI.skin.GetStyle("Label");
-		centeredStyle.alignment = TextAnchor.UpperCenter;
-		centeredStyle.fixedWidth = 200.0f;
-		centeredStyle.normal.background = Texture2D.whiteTexture;
-		centeredStyle.normal.textColor = Color.black;
 
 		Vector3 pos = position.vector3Value;
 		Quaternion rot = Quaternion.Euler(rotation.vector3Value);
@@ -244,7 +256,7 @@ public class LSceneObjectEditor : ModBaseEditor
 			}
 		}
 
-		Handles.Label(pos + Vector3.up, sceneObject.gameObject == null ? "[NULL]" : sceneObject.gameObject.name, centeredStyle);
+		Handles.Label(pos + Vector3.up, sceneObject.gameObject == null ? "[NULL]" : sceneObject.gameObject.name, LabelStyle);
 
 		Handles.matrix = Matrix4x4.TRS(pos, rot, Vector3.one);
 
