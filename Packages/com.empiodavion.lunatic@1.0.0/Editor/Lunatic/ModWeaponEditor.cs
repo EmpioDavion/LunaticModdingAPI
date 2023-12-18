@@ -8,8 +8,9 @@ public class ModWeaponEditor : ModBaseEditor
 	private bool idle = true;
 	private bool attack = true;
 	private bool block = true;
+	private string[] elementTypes;
 
-    private SerializedProperty glove;
+	private SerializedProperty glove;
     private SerializedProperty attackAnims;
     private SerializedProperty blockAnims;
     private SerializedProperty idleAnim;
