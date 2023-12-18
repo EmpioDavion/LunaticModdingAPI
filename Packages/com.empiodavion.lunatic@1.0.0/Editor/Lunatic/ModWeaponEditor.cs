@@ -40,6 +40,7 @@ public class ModWeaponEditor : ModBaseEditor
 
 	private void OnEnable()
 	{
+		elementTypes = typeof(Lunatic.ElementIcons).GetEnumNames();
 		glove = serializedObject.FindProperty("Glove");
 		attackAnims = serializedObject.FindProperty("Attack_Anims");
 		blockAnims = serializedObject.FindProperty("Block_Anims");
