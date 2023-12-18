@@ -15,7 +15,7 @@ public class ModMagicEditor : ModBaseEditor
 	public SerializedProperty element;
 	public SerializedProperty chargeTime;
 	public SerializedProperty minChargeTime;
-	public SerializedProperty lifeCost;
+	public SerializedProperty projectileLifetime;
 	public SerializedProperty manaCost;
 	public SerializedProperty colour;
 	public SerializedProperty fadeSpeed;
@@ -39,7 +39,7 @@ public class ModMagicEditor : ModBaseEditor
 		element = serializedObject.FindProperty("MAG_ELEM");
 		chargeTime = serializedObject.FindProperty("MAG_CHARGE_TIME");
 		minChargeTime = serializedObject.FindProperty("MIN_CHARGE_TIME");
-		lifeCost = serializedObject.FindProperty("MAG_LIFE");
+		projectileLifetime = serializedObject.FindProperty("MAG_LIFE");
 		manaCost = serializedObject.FindProperty("MAG_COST");
 		fadeSpeed = serializedObject.FindProperty("MAG_FADE");
 		isBlood = serializedObject.FindProperty("MAG_BL");
@@ -68,8 +68,8 @@ public class ModMagicEditor : ModBaseEditor
 
 		EditorTools.DrawHelpProperty(chargeTime, "How long the magic takes to charge to cast.");
 		EditorTools.DrawHelpProperty(minChargeTime, "The shortest the charge time can become after bonuses from player stats.");
-		EditorTools.DrawHelpProperty(lifeCost, "The health cost to cast the magic (blood magic only).");
-		EditorTools.DrawHelpProperty(manaCost, "The mana cost to cast the magic (non-blood magic only).");
+		EditorTools.DrawHelpProperty(projectileLifetime, "The duration (in seconds) the projectile will exist for.");
+		EditorTools.DrawHelpProperty(manaCost, "The mana or health cost to cast the magic.");
 		EditorTools.DrawHelpProperty(fadeSpeed, "The speed to fade the casting flash.");
 		EditorTools.DrawHelpProperty(isBlood, "If the magic is considered a blood magic.");
 
