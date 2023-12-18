@@ -27,7 +27,7 @@ public class ModMagicEditor : ModBaseEditor
 	private void OnEnable()
 	{
 		magicTypes = typeof(Lunatic.MagicTypes).GetEnumNames();
-		elementTypes = typeof(Lunatic.Elements).GetEnumNames();
+		elementTypes = typeof(Lunatic.ElementIcons).GetEnumNames();
 
 		projectile = serializedObject.FindProperty("projectile");
 		projectileName = serializedObject.FindProperty("MAG_CHILD");
@@ -51,7 +51,7 @@ public class ModMagicEditor : ModBaseEditor
 		DrawProjectile(projectile, projectileName, "The object to spawn on cast.");
 
 		EditorTools.DrawHelpProperty(description, "The description shown in the player's inventory.");
-		EditorTools.DrawHelpProperty(icon, "The sprite shown in the player's inventory and in the active quick item hotbar.");
+		EditorTools.DrawHelpProperty(icon, "The sprite shown on the user interface.");
 		EditorTools.DrawHelpProperty(colour, "The colour to tint the icon.");
 
 		if (EditorTools.ShowHelp)
@@ -59,14 +59,14 @@ public class ModMagicEditor : ModBaseEditor
 
 		type.intValue = EditorGUILayout.Popup(type.displayName, type.intValue, magicTypes);
 
-		EditorTools.DrawHelpProperty(damage, "How much damage the magic projectile inflicts.");
+		EditorTools.DrawHelpProperty(damage, "How much damage the magic projectile inflicts by default.");
 
 		if (EditorTools.ShowHelp)
-			EditorGUILayout.HelpBox("The damage type element of the magic.", MessageType.Info);
+			EditorGUILayout.HelpBox("The element icon displayed on the menu (note that the actual damage type is determined by the damage_trigger on the projectile).", MessageType.Info);
 
 		element.intValue = EditorGUILayout.Popup(element.displayName, element.intValue, elementTypes);
 
-		EditorTools.DrawHelpProperty(chargeTime, "How long the magic takes to charge to cast.");
+		EditorTools.DrawHelpProperty(chargeTime, "How long the magic takes to charge by default.");
 		EditorTools.DrawHelpProperty(minChargeTime, "The shortest the charge time can become after bonuses from player stats.");
 		EditorTools.DrawHelpProperty(projectileLifetime, "The duration (in seconds) the projectile will exist for.");
 		EditorTools.DrawHelpProperty(manaCost, "The mana or health cost to cast the magic.");
