@@ -139,7 +139,7 @@ public class ModWeaponEditor : ModBaseEditor
 			EditorTools.DrawHelpProperty(damage, "How much damage the weapon inflicts on hit.");
 			EditorTools.DrawHelpProperty(reach, "How far the weapon attack reaches.");
 			if (EditorTools.ShowHelp)
-				EditorGUILayout.HelpBox("The elemental type of the weapon's damage. Note that values 6 & 7 have no effect.", MessageType.Info);
+				EditorGUILayout.HelpBox("The elemental type of the weapon's damage. Note that blood and random have no effect.", MessageType.Info);
 			element.intValue = EditorGUILayout.Popup(element.displayName, element.intValue, elementTypes);
 			EditorTools.DrawHelpProperty(chargeSpeed, "How long the attack button must be held before fully charging the weapon attack.");
 			EditorTools.DrawHelpProperty(swingCooldown, "Delay between each swing of the weapon.");
