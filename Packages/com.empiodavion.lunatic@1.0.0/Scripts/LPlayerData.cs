@@ -97,7 +97,7 @@ internal class LPlayerData
 				weapon1 = Lunatic.FindModFromInternalName(playerData.WEP1),
 				weapon2 = Lunatic.FindModFromInternalName(playerData.WEP2),
 				magic1 = Lunatic.FindModFromInternalName(playerData.MAG1),
-				magic2 = Lunatic.FindModFromInternalName(playerData.MAG1),
+				magic2 = Lunatic.FindModFromInternalName(playerData.MAG2),
 				item1 = Lunatic.FindModFromInternalName(playerData.ITEM1),
 				item2 = Lunatic.FindModFromInternalName(playerData.ITEM2),
 				item3 = Lunatic.FindModFromInternalName(playerData.ITEM3),
