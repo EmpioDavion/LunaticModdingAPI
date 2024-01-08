@@ -110,6 +110,22 @@ public static class Lunatic
 		DarkFire
 	}
 
+	public enum ElementIcons
+	{
+		Normal,
+		Fire,
+		Ice,
+		Poison,
+		Light,
+		Dark,
+		Blood,
+		Random,
+		DarkLight,
+		NormalFire,
+		IcePoison,
+		DarkFire
+	}
+
 	public enum WeaponTypes
 	{
 		Melee,

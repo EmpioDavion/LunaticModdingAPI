@@ -114,6 +114,8 @@ public class LSceneObjectEditor : ModBaseEditor
 
 		EditorGUILayout.PropertyField(rotation);
 
+		EditorGUILayout.PropertyField(scale);
+
 		GUI.enabled = false;
 
 		EditorGUILayout.PropertyField(parentTransform);
