@@ -6,9 +6,13 @@
 	public string AssetName { get; set; }
 	public string InternalName => Lunatic.GetInternalName(this);
 
-	// TODO: Supply code for GetCastObject
+    // TODO: Supply code for GetCastObject
+    internal void Init()
+    {
+        ITEM_NAME = InternalName;
+    }
 
-	public virtual void OnUse()
+    public virtual void OnUse()
 	{
 
 	}

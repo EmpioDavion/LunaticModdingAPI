@@ -166,6 +166,7 @@ public class Mod : ScriptableObject
 		{
 			Lunatic.FixShaders(item);
 			Lunatic.TrackItem(item);
+			item.Init();
 		}
 
 		Lunatic.ModItems.AddRange(items);
