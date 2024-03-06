@@ -74,9 +74,9 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModItemPickupEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModMultipleStatesEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LConditionBaseEditor.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModDamageTriggerEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModWeaponEditor.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LSceneObjectGroupEditor.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\ModDamageTriggerEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Editor\Lunatic\LunaticEditor.asmdef" />

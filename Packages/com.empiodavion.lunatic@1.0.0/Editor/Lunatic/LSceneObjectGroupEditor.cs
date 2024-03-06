@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(LSceneObjectGroup), true)]
 internal class LSceneObjectGroupEditor : ModBaseEditor
 {
+	protected string[] scenes;
+
 	protected SerializedProperty scene;
 	protected SerializedProperty sceneObjects;
 	protected SerializedProperty spawnCondition;
@@ -17,6 +20,8 @@ internal class LSceneObjectGroupEditor : ModBaseEditor
 
 	private void OnEnable()
 	{
+		scenes = Lunatic.GameScenes.NameToID.Keys.ToArray();
+
 		scene = serializedObject.FindProperty("scene");
 		sceneObjects = serializedObject.FindProperty("sceneObjects");
 		spawnCondition = serializedObject.FindProperty("spawnCondition");
@@ -42,7 +47,18 @@ internal class LSceneObjectGroupEditor : ModBaseEditor
 
 	public override void DrawGUI()
 	{
-		EditorGUILayout.PropertyField(scene);
+		if (EditorTools.ShowHelp)
+			EditorGUILayout.HelpBox("You can select a Lunacid scene by name here.", MessageType.Info);
+
+		int index = EditorGUILayout.Popup(scene.displayName, -1, scenes);
+
+		if (index != -1)
+			scene.stringValue = Lunatic.GameScenes.NameToID[scenes[index]];
+
+		EditorTools.DrawHelpProperty(scene, "The scene that this LSceneObjectGroup will spawn into.");
+
+		if (EditorTools.ShowHelp)
+			EditorGUILayout.HelpBox("The LSceneObjects that will spawn into the scene under certain conditions.", MessageType.Info);
 
 		EditorGUILayout.BeginHorizontal();
 
