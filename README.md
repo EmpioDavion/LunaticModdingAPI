@@ -30,6 +30,12 @@ I recommend pointing AssetRipper to the LUNACID_Data folder with "File/Open Fold
 
 **You will need to open the exported project in Unity after exporting to generate all the meta files that will be copied later.**
 
+![Adding Unity project to Unity Hub](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/UnityHubProject.png "Adding Unity project to Unity Hub")
+
+**You will also need to open the project in Visual Studio to generate the project and solution files (Assets/Open C# Project) in Unity**
+
+![Generated Files](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/VSFiles.png "Generated Files")
+
 
 ## Opening Lunatic
 
