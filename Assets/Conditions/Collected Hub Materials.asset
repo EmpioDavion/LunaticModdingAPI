@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   memberName: CheckHubMaterialsCollected
   target: {fileID: 11400000, guid: 5d81e076f00319b42b3c92746b697223, type: 2}
-  invert: 0
+  invert: 1
