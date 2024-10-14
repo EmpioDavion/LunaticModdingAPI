@@ -14,15 +14,15 @@ public class DialogLinePropertyDrawer : PropertyDrawer
 		if (!foldout)
 			return EditorTools.EditorHeight(1);
 
-		int lines = 6;
+		int lines = 10;
 
 		if (EditorTools.ShowHelp)
-			lines += 10;
+			lines += 12;
 
 		SerializedProperty special = property.FindPropertyRelative("special");
 
 		if (special.intValue == (int)ModDialog.DialogResponses.YesNo)
-			lines ++;
+			lines++;
 
 		return EditorTools.EditorHeight(lines);
 	}
@@ -32,11 +32,13 @@ public class DialogLinePropertyDrawer : PropertyDrawer
 		position.height = EditorGUIUtility.singleLineHeight;
 
 		SerializedProperty lines = property.serializedObject.FindProperty("LINES");
+		SerializedProperty npcName = property.serializedObject.FindProperty("npc_name");
 
 		SerializedProperty value = property.FindPropertyRelative("value");
 		SerializedProperty nxt = property.FindPropertyRelative("NXT");
 		SerializedProperty newSaid = property.FindPropertyRelative("NEW_SAID");
 		SerializedProperty expression = property.FindPropertyRelative("exprssion");
+		SerializedProperty loadLine = property.FindPropertyRelative("LOAD_LINE");
 		SerializedProperty special = property.FindPropertyRelative("special");
 
 		Foldouts.TryGetValue(property.propertyPath, out bool foldout);
@@ -51,7 +53,7 @@ public class DialogLinePropertyDrawer : PropertyDrawer
 
 			EditorGUI.indentLevel++;
 
-			EditorTools.DrawHelpProperty(ref position, value, "The dialogue text to display.");
+			EditorTools.DrawHelpProperty(ref position, value, "The dialogue text to display. GETS REPLACED WITH LOCALISATION.");
 
 			position.y += EditorTools.EditorLineSpacing(1);
 
@@ -65,7 +67,15 @@ public class DialogLinePropertyDrawer : PropertyDrawer
 
 			EditorTools.DrawHelpProperty(ref position, expression, "The blend shape percentage values for eyes.");
 
-			position.y += EditorTools.EditorLineSpacing(1);
+			string path = loadLine.propertyPath;
+			int open = path.LastIndexOf('[');
+			int close = path.LastIndexOf("]");
+			int index = 0;
+
+			if (open >= 0 && close >= 0)
+				int.TryParse(path.Substring(open + 1, close - open - 1), out index);
+
+			DrawLoadLine(ref position, npcName, loadLine, index);
 
 			if (EditorTools.ShowHelp)
 			{
@@ -203,5 +213,16 @@ public class DialogLinePropertyDrawer : PropertyDrawer
 
 		position.x = pos.x;
 		position.width = pos.width;
+	}
+
+	private void DrawLoadLine(ref Rect position, SerializedProperty npcName,
+		SerializedProperty loadLine, int index)
+	{
+		EditorTools.DrawHelpProperty(ref position, loadLine, "Localisation ID for this line.");
+
+		int id = loadLine.intValue;
+		string term = $"Dialog/{npcName.stringValue} {(id > 0 ? id : index)}";
+
+		EditorTools.DrawTranslation(ref position, term, false);
 	}
 }

@@ -7,7 +7,6 @@ using UnityEngine;
 public class LConditionBaseEditor : ModBaseEditor
 {
 	protected SerializedProperty memberName;
-	protected SerializedProperty memberType;
 	protected SerializedProperty targetObj;
 	protected SerializedProperty invert;
 
@@ -30,7 +29,6 @@ public class LConditionBaseEditor : ModBaseEditor
 		}
 
 		memberName = serializedObject.FindProperty("memberName");
-		memberType = serializedObject.FindProperty("memberType");
 		targetObj = serializedObject.FindProperty("target");
 		invert = serializedObject.FindProperty("invert");
 
@@ -58,7 +56,7 @@ public class LConditionBaseEditor : ModBaseEditor
 
 		EditorGUI.BeginChangeCheck();
 
-		EditorGUILayout.PropertyField(targetObj);
+		EditorTools.DrawHelpProperty(targetObj, "The object to run the condition method on.");
 
 		if (EditorGUI.EndChangeCheck())
 		{
@@ -70,7 +68,6 @@ public class LConditionBaseEditor : ModBaseEditor
 			{
 				methods = null;
 				memberName.stringValue = "";
-				memberType.intValue = 0;
 			}
 		}
 
@@ -94,6 +91,8 @@ public class LConditionBaseEditor : ModBaseEditor
 			{
 				EditorGUI.BeginChangeCheck();
 
+				EditorTools.DrawHelpBox("The component to use as the target object.");
+
 				int componentIndex = EditorGUILayout.Popup("Component", -1, componentNames);
 
 				if (EditorGUI.EndChangeCheck())
@@ -108,23 +107,30 @@ public class LConditionBaseEditor : ModBaseEditor
 
 			EditorGUI.BeginChangeCheck();
 
+			EditorTools.DrawHelpBox("The method or property to use as the condition.");
+
 			methodIndex = EditorGUILayout.Popup("Method", methodIndex, methodNames);
 
 			if (EditorGUI.EndChangeCheck())
 			{
+				MethodInfo methodInfo = methods[methodIndex];
+
 				memberName.stringValue = methodNames[methodIndex];
-				memberType.intValue = (int)methods[methodIndex].MemberType;
+
+				string[] args = System.Array.ConvertAll(methodInfo.GetParameters(), (x) => x.ParameterType.Name);
 			}
 		}
 
-		EditorGUILayout.PropertyField(invert);
+		EditorTools.DrawHelpProperty(invert, "If the condition should be met when the method returns false.");
 
 		EditorGUI.indentLevel--;
 	}
 
 	private bool MatchMethod(MethodInfo method)
 	{
-		return method.Name == memberName.stringValue && method.MemberType == (MemberTypes)memberType.intValue;
+		LConditionBase self = (LConditionBase)target;
+
+		return method.Name == memberName.stringValue && self.MatchMethod(method);
 	}
 
 	private List<MethodInfo> GetMethods(Object obj, out string[] methodNames)

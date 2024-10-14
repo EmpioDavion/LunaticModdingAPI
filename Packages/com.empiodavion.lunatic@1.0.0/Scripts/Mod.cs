@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.ProBuilder;
 
 [CreateAssetMenu(menuName = "Lunatic/Mod Asset")]
 public class Mod : ScriptableObject
@@ -28,6 +27,9 @@ public class Mod : ScriptableObject
 
 	[System.NonSerialized]
 	public AssetBundle bundle;
+
+	[System.NonSerialized]
+	public ModLanguageSourceAsset localisation;
 
 	public readonly List<ModGame> games = new List<ModGame>();
 	public readonly List<ModScene> scenes = new List<ModScene>();
@@ -91,6 +93,17 @@ public class Mod : ScriptableObject
 				}
 			}
 		}
+
+		int locIndex = System.Array.IndexOf(assetNames, "assets/localisation.asset");
+
+		if (locIndex >= 0)
+		{
+			Debug.Log($"Found localisation asset");
+
+			localisation = (ModLanguageSourceAsset)assets[locIndex];
+		}
+		else
+			Debug.LogWarning("Could not find localisation asset.");
 
 		Load(games, assets, "games");
 		Load(scenes, assets, "scenes");

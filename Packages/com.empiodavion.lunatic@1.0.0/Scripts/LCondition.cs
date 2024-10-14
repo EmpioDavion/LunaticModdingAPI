@@ -5,6 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public abstract class LConditionBase : ScriptableObject, IModObject
 {
+	protected static readonly BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
 	public Mod Mod { get; set; }
 	public AssetBundle Bundle { get; set; }
 	public string Name { get; set; }
@@ -14,52 +16,58 @@ public abstract class LConditionBase : ScriptableObject, IModObject
 	[SerializeField, JsonProperty]
 	protected string memberName;
 
-	[SerializeField, JsonProperty]
-	protected MemberTypes memberType;
-
 	[JsonIgnore]
 	public Object target;
 
-	[JsonIgnore]
-	public abstract System.Delegate Method { get; }
-
 	public bool invert;
+
+	protected virtual MethodInfo GetMethod()
+	{
+		System.Type type = target.GetType();
+
+		return type.GetMethod(memberName, flags);
+	}
+
+	protected System.Delegate ConvertMethod(System.Type funcType, MethodInfo methodInfo)
+	{
+		if (!MatchMethod(methodInfo))
+		{
+			string[] args = System.Array.ConvertAll(methodInfo.GetParameters(), (x) => x.ParameterType.Name);
+
+			Debug.LogWarning($"Found method {methodInfo.ReturnType.Name} {methodInfo.Name}({string.Join(", ", args)})");
+
+			args = System.Array.ConvertAll(funcType.GenericTypeArguments, (x) => x.Name);
+			string retType = args.Length > 0 ? args[args.Length - 1] : "System.Void";
+
+			Debug.LogWarning($"Expected type {retType}(${string.Join(", ", args, 0, args.Length - 1)})");
+		}
+
+		return System.Delegate.CreateDelegate(funcType, target, methodInfo);
+	}
+
+	protected T ConvertMethod<T>(MethodInfo methodInfo) where T : System.Delegate
+	{
+		return (T)ConvertMethod(typeof(T), methodInfo);
+	}
 
 	protected System.Delegate GetDelegate(System.Type funcType)
 	{
 		if (target != null && !string.IsNullOrEmpty(memberName))
 		{
-			System.Type type = target.GetType();
-			MethodInfo methodInfo = null;
-			BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
-			if (memberType == MemberTypes.Property)
-			{
-				PropertyInfo propertyInfo = type.GetProperty(memberName, bindingFlags);
-				methodInfo = propertyInfo.GetGetMethod();
-			}
-			else if (memberType == MemberTypes.Method)
-				methodInfo = type.GetMethod(memberName, bindingFlags);
+			MethodInfo methodInfo = GetMethod();
 
 			if (methodInfo != null)
 			{
-				if (!MatchMethod(methodInfo))
-				{
-					string[] args = System.Array.ConvertAll(methodInfo.GetParameters(), (x) => x.ParameterType.Name);
-
-					Debug.LogWarning($"Found method {methodInfo.ReturnType.Name} {methodInfo.Name}({string.Join(", ", args)})");
-					
-					args = System.Array.ConvertAll(funcType.GenericTypeArguments, (x) => x.Name);
-					string retType = args.Length > 0 ? args[args.Length - 1] : "System.Void";
-
-					Debug.LogWarning($"Expected type {retType}(${string.Join(", ", args, 0, args.Length - 1)})");
-				}
-
-				return System.Delegate.CreateDelegate(funcType, target, methodInfo);
+				return ConvertMethod(funcType, methodInfo);
 			}
 		}
 
 		return null;
+	}
+
+	protected T GetDelegate<T>() where T : System.Delegate
+	{
+		return (T)GetDelegate(typeof(T));
 	}
 
 	public abstract void Init();
@@ -75,29 +83,17 @@ public abstract class LConditionBase<T> : LConditionBase where T : System.Delega
 	[JsonIgnore]
 	protected T method;
 
-	[JsonIgnore]
-	protected System.Func<bool> propertyMethod;
-
-	[JsonIgnore]
-	public override System.Delegate Method => method ?? (System.Delegate)propertyMethod;
-
 	public override void Init()
 	{
-		if (memberType == MemberTypes.Property)
-			propertyMethod = (System.Func<bool>)GetDelegate(typeof(System.Func<bool>));
-		else
-			method = (T)GetDelegate(typeof(T));
+		method = (T)GetDelegate(typeof(T));
 	}
 }
 
 [System.Serializable]
 public class LCondition : LConditionBase<System.Func<bool>>
 {
-	public bool Invoke()
+	public virtual bool Invoke()
 	{
-		if (memberType == MemberTypes.Property)
-			return propertyMethod == null || propertyMethod() != invert;
-
 		return method == null || method() != invert;
 	}
 
@@ -109,18 +105,28 @@ public class LCondition : LConditionBase<System.Func<bool>>
 }
 
 [System.Serializable]
-public class LCondition<T> : LConditionBase<System.Func<T, bool>>
+public class LCondition<T> : LConditionBase<System.Func<T, bool>> where T : Object
 {
-	[System.NonSerialized]
-	private T argument;
+	[JsonIgnore]
+	protected System.Func<bool> emptyMethod;
 
-	public bool Invoke(T _argument)
+	public override void Init()
 	{
-		if (memberType == MemberTypes.Property)
-			return propertyMethod == null || propertyMethod() != invert;
+		MethodInfo methodInfo = GetMethod();
+		ParameterInfo[] parameters = methodInfo.GetParameters();
 
-		argument = _argument;
-		return method == null || method(argument) != invert;
+		if (parameters.Length == 0)
+		{
+			emptyMethod = ConvertMethod<System.Func<bool>>(methodInfo);
+			method = RunEmpty;
+		}
+		else
+			base.Init();
+	}
+
+	public virtual bool Invoke(T _argument)
+	{
+		return method == null || method(_argument) != invert;
 	}
 
 	public override bool MatchMethod(MethodInfo _methodInfo)
@@ -129,8 +135,13 @@ public class LCondition<T> : LConditionBase<System.Func<T, bool>>
 			return false;
 
 		ParameterInfo[] parameterInfos = _methodInfo.GetParameters();
-		
-		return parameterInfos.Length == 1 &&
-			parameterInfos[0].ParameterType == typeof(T);
+
+		return parameterInfos.Length == 0 || parameterInfos.Length == 1 &&
+			parameterInfos[0].ParameterType == typeof(LSceneObject);
+	}
+
+	protected bool RunEmpty(T arg)
+	{
+		return emptyMethod == null || emptyMethod() != invert;
 	}
 }

@@ -101,6 +101,8 @@ public class MetaConnect : EditorWindow
 		Scripts
 	}
 
+	private const bool AllowEditing = false;
+
 	private UnityEditor.PackageManager.PackageInfo PackageInfo;
 
 	public bool copyDLLs = true;
@@ -113,6 +115,8 @@ public class MetaConnect : EditorWindow
 	public static string LunacidPath;
 	public static string LunacidDataPath;
 	public static string LunaticPath;
+
+	private static readonly string TextMeshProMeta = "Packages/com.empiodavion.lunatic/Lunacid/Plugins/Unity.TextMeshPro.dll.meta";
 
 	public MetaConnections meta;
 
@@ -160,12 +164,34 @@ public class MetaConnect : EditorWindow
 
 	public void OnGUI()
 	{
-		GUI.enabled = threadData.state != ThreadState.Running;
+		GUI.color = Color.yellow + Color.gray;
+
+		EditorGUILayout.HelpBox(@"Ensure you have opened the 'ExportedProject' from AssetRipper in Unity first!
+Unity will generate the .meta files that Meta Connect requires.
+Every time LUNACID is updated, you will need to export the game project from AssetRipper and open it in Unity, then run Meta Connect.",
+MessageType.Warning);
+
+		GUI.color = Color.white;
+
+		GUI.enabled = AllowEditing;
 
 		meta = (MetaConnections)EditorGUILayout.ObjectField("Meta Connections", meta, typeof(MetaConnections), false);
 
 		if (meta == null)
+		{
+			GUI.enabled = true;
 			return;
+		}
+
+		DrawSearchAndSort();
+		DrawScripts();
+		DrawControls();
+		CheckThreadState();
+	}
+
+	private void DrawSearchAndSort()
+	{
+		GUI.enabled = threadData.state != ThreadState.Running;
 
 		EditorGUILayout.BeginHorizontal();
 
@@ -218,6 +244,12 @@ public class MetaConnect : EditorWindow
 		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.Separator();
+
+	}
+
+	private void DrawScripts()
+	{ 
+		GUI.enabled = AllowEditing;
 
 		scroll = GUILayout.BeginScrollView(scroll);
 
@@ -276,7 +308,10 @@ public class MetaConnect : EditorWindow
 		}
 
 		EditorGUILayout.EndScrollView();
+	}
 
+	private void DrawControls()
+	{
 		EditorGUILayout.BeginHorizontal();
 
 		if (GUILayout.Button("Add New"))
@@ -287,6 +322,8 @@ public class MetaConnect : EditorWindow
 			EditorUtility.SetDirty(meta);
 		}
 
+		GUI.enabled = true;
+
 		if (GUILayout.Button("Run"))
 			BeginRunAssetCopy();
 
@@ -296,17 +333,22 @@ public class MetaConnect : EditorWindow
 
 		EditorGUILayout.EndHorizontal();
 
+		GUI.enabled = true;
+
 		GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(32.0f));
 
 		Rect rect = GUILayoutUtility.GetLastRect();
 		EditorGUI.ProgressBar(rect, threadData.progress, threadData.state.ToString());
+	}
 
-		GUI.enabled = true;
-
+	private void CheckThreadState()
+	{
 		if (threadData.state == ThreadState.Running)
 			Repaint();
 		else if (threadData.state == ThreadState.TaskEnded)
 		{
+			AssetDatabase.ImportAsset(TextMeshProMeta);
+
 			threadData.state = ThreadState.Finished;
 
 			EditorUtility.SetDirty(meta);
@@ -325,12 +367,20 @@ public class MetaConnect : EditorWindow
 	{
 		if (!Directory.Exists(RippedDataPath))
 		{
-			string sln = EditorUtility.OpenFilePanel("AssetRipper Exported Project Solution", LunaticPath, "sln");
+			string folder = EditorUtility.OpenFolderPanel("AssetRipper 'ExportedProject' Folder", LunaticPath, "ExportedProject");
 
-			if (string.IsNullOrEmpty(sln))
+			if (string.IsNullOrEmpty(folder))
 				return;
 
-			RippedDataPath = Path.Combine(Path.GetDirectoryName(sln), "Assets\\");
+			RippedDataPath = Path.Combine(folder, "Assets\\");
+
+			string hub = Path.Combine(RippedDataPath, "Scenes\\HUB_01.unity");
+
+			if (!File.Exists(hub))
+			{
+				Debug.LogError("Could not read project structure, ensure correct folder was selected.");
+				return;
+			}
 		}
 
 		if (!File.Exists(LunacidPath))
@@ -680,8 +730,7 @@ public class MetaConnect : EditorWindow
 
 	private static void ConfigureTextMeshPro()
 	{
-		string path = "Packages/com.empiodavion.lunatic/Lunacid/Plugins/Unity.TextMeshPro.dll.meta";
-		string[] lines = File.ReadAllLines(path);
+		string[] lines = File.ReadAllLines(TextMeshProMeta);
 		bool getID = false;
 		string id = "";
 
@@ -702,8 +751,6 @@ public class MetaConnect : EditorWindow
 				lines[i] = lines[i].Substring(0, lines[i].Length - 1) + '1';
 		}
 
-		File.WriteAllLines(path, lines);
-
-		AssetDatabase.ImportAsset(path);
+		File.WriteAllLines(TextMeshProMeta, lines);
 	}
 }

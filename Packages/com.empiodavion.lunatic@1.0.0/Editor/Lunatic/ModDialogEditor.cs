@@ -38,7 +38,7 @@ public class ModDialogEditor : ModBaseEditor
 		objs2 = serializedObject.FindProperty("OBJS2");
 		jaw = serializedObject.FindProperty("Jaw");
 		music = serializedObject.FindProperty("MUSIC");
-
+		
 		linesList = new ReorderableList(serializedObject, lines)
 		{
 			drawElementCallback = DrawLineListMember,

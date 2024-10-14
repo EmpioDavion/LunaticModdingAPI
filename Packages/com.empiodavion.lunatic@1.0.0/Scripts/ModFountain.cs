@@ -1,0 +1,4 @@
+public class ModFountain : Fountain
+{
+
+}

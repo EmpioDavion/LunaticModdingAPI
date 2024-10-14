@@ -48,21 +48,23 @@ public class ModMagicEditor : ModBaseEditor
 
 	public override void DrawGUI()
 	{
+		EditorTools.DrawReloadLocalisation();
+		EditorTools.DrawTranslation($"Spells/{target.name}", false);
+		EditorTools.DrawTranslation($"Spell Descriptions/{target.name} Details", true);
+
 		DrawProjectile(projectile, projectileName, "The object to spawn on cast.");
 
 		EditorTools.DrawHelpProperty(description, "The description shown in the player's inventory.");
 		EditorTools.DrawHelpProperty(icon, "The sprite shown on the user interface.");
 		EditorTools.DrawHelpProperty(colour, "The colour to tint the icon.");
 
-		if (EditorTools.ShowHelp)
-			EditorGUILayout.HelpBox("The category the magic belongs to.", MessageType.Info);
+		EditorTools.DrawHelpBox("The category the magic belongs to.");
 
 		type.intValue = EditorGUILayout.Popup(type.displayName, type.intValue, magicTypes);
 
 		EditorTools.DrawHelpProperty(damage, "How much damage the magic projectile inflicts by default.");
 
-		if (EditorTools.ShowHelp)
-			EditorGUILayout.HelpBox("The element icon displayed on the menu (note that the actual damage type is determined by the damage_trigger on the projectile).", MessageType.Info);
+		EditorTools.DrawHelpBox("The element icon displayed on the menu (note that the actual damage type is determined by the damage_trigger on the projectile).");
 
 		element.intValue = EditorGUILayout.Popup(element.displayName, element.intValue, elementTypes);
 
@@ -84,8 +86,7 @@ public class ModMagicEditor : ModBaseEditor
 
 	private void DrawProjectile(SerializedProperty prop, SerializedProperty nameProp, string help)
 	{
-		if (EditorTools.ShowHelp)
-			EditorGUILayout.HelpBox(help, MessageType.Info);
+		EditorTools.DrawHelpBox(help);
 
 		EditorTools.DrawRefName(prop, nameProp);
 

@@ -25,6 +25,10 @@ public class ModItemEditor : ModBaseEditor
 
 	public override void DrawGUI()
 	{
+		EditorTools.DrawReloadLocalisation();
+		EditorTools.DrawTranslation($"Items/{target.name}", false);
+		EditorTools.DrawTranslation($"Item Descriptions/{target.name} details", true);
+
 		EditorTools.DrawHelpProperty(itemName, "The name of the item.");
 		EditorTools.DrawHelpProperty(sprite, "The sprite to use for the item's UI graphic.");
 

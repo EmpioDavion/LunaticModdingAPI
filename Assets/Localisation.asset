@@ -1,0 +1,410 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c2287b30090fe94e96f2a694a94b11d, type: 3}
+  m_Name: Localisation
+  m_EditorClassIdentifier: 
+  mSource:
+    UserAgreesToHaveItOnTheScene: 0
+    UserAgreesToHaveItInsideThePluginsFolder: 0
+    GoogleLiveSyncIsUptoDate: 1
+    mTerms:
+    - Term: Dialog/WOLF NAME
+      TermType: 0
+      Languages:
+      - WOLF
+      - WOLF
+      - WOLF
+      - WOLF
+      - WOLF
+      - WOLF
+      - WOLF
+      - WOLF
+      - WOLF
+      - WOLF
+      - WOLF
+      - WOLF
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Dialog/WOLF 0
+      TermType: 0
+      Languages:
+      - Hello /c.
+      - Hello /c.
+      - Hello /c.
+      - Hello /c.
+      - Hello /c.
+      - Hello /c.
+      - Hello /c.
+      - Hello /c.
+      - Hello /c.
+      - Hello /c.
+      - Hello /c.
+      - Hello /c.
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Dialog/WOLF 1
+      TermType: 0
+      Languages:
+      - Hi /c.
+      - Hi /c.
+      - Hi /c.
+      - Hi /c.
+      - Hi /c.
+      - Hi /c.
+      - Hi /c.
+      - Hi /c.
+      - Hi /c.
+      - Hi /c.
+      - Hi /c.
+      - Hi /c.
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Dialog/WOLF 2
+      TermType: 0
+      Languages:
+      - Greetings /c.
+      - Greetings /c.
+      - Greetings /c.
+      - Greetings /c.
+      - Greetings /c.
+      - Greetings /c.
+      - Greetings /c.
+      - Greetings /c.
+      - Greetings /c.
+      - Greetings /c.
+      - Greetings /c.
+      - Greetings /c.
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Dialog/WOLF 3
+      TermType: 0
+      Languages:
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Dialog/WOLF 4
+      TermType: 0
+      Languages:
+      - You said yes.
+      - You said yes.
+      - You said yes.
+      - You said yes.
+      - You said yes.
+      - You said yes.
+      - You said yes.
+      - You said yes.
+      - You said yes.
+      - You said yes.
+      - You said yes.
+      - You said yes.
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Dialog/WOLF 5
+      TermType: 0
+      Languages:
+      - You said no.
+      - You said no.
+      - You said no.
+      - You said no.
+      - You said no.
+      - You said no.
+      - You said no.
+      - You said no.
+      - You said no.
+      - You said no.
+      - You said no.
+      - You said no.
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Dialog/WOLF 6
+      TermType: 0
+      Languages:
+      - '*Woof*'
+      - '*Woof*'
+      - '*Woof*'
+      - '*Woof*'
+      - '*Woof*'
+      - '*Woof*'
+      - '*Woof*'
+      - '*Woof*'
+      - '*Woof*'
+      - '*Woof*'
+      - '*Woof*'
+      - '*Woof*'
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Dialog/WOLF 7
+      TermType: 0
+      Languages:
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Dialog/WOLF 8
+      TermType: 0
+      Languages:
+      - Your selected language is English.
+      - Your selected language is Nyan.
+      - Your selected language is French.
+      - Your selected language is Japanese.
+      - Your selected language is Spanish.
+      - Your selected language is Russian.
+      - Your selected language is Chinese.
+      - Your selected language is German.
+      - Your selected language is Korean.
+      - Your selected language is Polish.
+      - Your selected language is Brazilian Portuguese.
+      - Your selected language is Spanish LATAM.
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Language
+      TermType: 0
+      Languages:
+      - English
+      - Nyan
+      - French
+      - Japanese
+      - Spanish
+      - Russian
+      - Chinese
+      - German
+      - Korean
+      - Polish
+      - Brazilian Portuguese
+      - Spanish LATAM
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Spells/TEMPLATE MAGIC
+      TermType: 0
+      Languages:
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Spell Descriptions/TEMPLATE MAGIC details
+      TermType: 0
+      Languages:
+      - Lunatic mod magic
+      - Lunatic mod magic
+      - Lunatic mod magic
+      - Lunatic mod magic
+      - Lunatic mod magic
+      - Lunatic mod magic
+      - Lunatic mod magic
+      - Lunatic mod magic
+      - Lunatic mod magic
+      - Lunatic mod magic
+      - Lunatic mod magic
+      - Lunatic mod magic
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Items/TEMPLATE ITEM
+      TermType: 0
+      Languages:
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      - TEMPLATE ITEM
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Item Descriptions/TEMPLATE ITEM Details
+      TermType: 0
+      Languages:
+      - Lunatic mod item
+      - Lunatic mod item
+      - Lunatic mod item
+      - Lunatic mod item
+      - Lunatic mod item
+      - Lunatic mod item
+      - Lunatic mod item
+      - Lunatic mod item
+      - Lunatic mod item
+      - Lunatic mod item
+      - Lunatic mod item
+      - Lunatic mod item
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Materials/TEMPLATE MATERIAL
+      TermType: 0
+      Languages:
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      - TEMPLATE MATERIAL
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Material Descriptions/TEMPLATE MATERIAL_Details
+      TermType: 0
+      Languages:
+      - Lunatic mod material
+      - Lunatic mod material
+      - Lunatic mod material
+      - Lunatic mod material
+      - Lunatic mod material
+      - Lunatic mod material
+      - Lunatic mod material
+      - Lunatic mod material
+      - Lunatic mod material
+      - Lunatic mod material
+      - Lunatic mod material
+      - Lunatic mod material
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Weapons/TEMPLATE WEAPON
+      TermType: 0
+      Languages:
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      - TEMPLATE WEAPON
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Weapon Descriptions/TEMPLATE WEAPON details
+      TermType: 0
+      Languages:
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      - Lunatic mod weapon
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    - Term: Items/Template Recipe Recipe
+      TermType: 0
+      Languages:
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      Flags: 000000000000000000000000
+      Languages_Touch: []
+    CaseInsensitiveTerms: 1
+    OnMissingTranslation: 2
+    mTerm_AppName: 
+    mLanguages:
+    - Name: English
+      Code: en
+      Flags: 0
+    - Name: Nyan
+      Code: 
+      Flags: 0
+    - Name: French
+      Code: fr
+      Flags: 0
+    - Name: Japanese
+      Code: ja
+      Flags: 0
+    - Name: Spanish
+      Code: es
+      Flags: 0
+    - Name: Russian
+      Code: ru
+      Flags: 0
+    - Name: Chinese
+      Code: zh
+      Flags: 0
+    - Name: German
+      Code: de
+      Flags: 0
+    - Name: Korean
+      Code: ko
+      Flags: 0
+    - Name: Polish
+      Code: pl
+      Flags: 0
+    - Name: Brazilian Portuguese
+      Code: 
+      Flags: 0
+    - Name: Spanish LATAM
+      Code: es-US
+      Flags: 0
+    IgnoreDeviceLanguage: 1
+    _AllowUnloadingLanguages: 0
+    Google_WebServiceURL: 
+    Google_SpreadsheetKey: 
+    Google_SpreadsheetName: 
+    Google_LastUpdatedVersion: 
+    GoogleUpdateFrequency: 3
+    GoogleInEditorCheckFrequency: 2
+    GoogleUpdateSynchronization: 1
+    GoogleUpdateDelay: 0
+    Assets: []

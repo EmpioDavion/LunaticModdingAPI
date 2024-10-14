@@ -197,7 +197,7 @@ public static class Lunatic
 		Initialised = true;
 
 #if UNITY_EDITOR
-		
+
 		UnityEditor.PackageManager.PackageInfo package;
 		package = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(Lunatic).Assembly);
 
@@ -252,6 +252,7 @@ public static class Lunatic
 		AddShader("Shader Forge/Fake_Caustics");
 		AddShader("Shader Forge/Fish_Shader");
 		AddShader("Shader Forge/flame_bill");
+		AddShader("Shader Forge/FOREST_SKY");
 		AddShader("Shader Forge/Gamma");
 		AddShader("Shader Forge/ghost");
 		AddShader("Shader Forge/GhostDark");
@@ -286,6 +287,7 @@ public static class Lunatic
 		AddShader("Shader Forge/Water_Swirl");
 		AddShader("Shader Forge/Wind");
 		AddShader("Shader Forge/Winder");
+		AddShader("Unlit/Menu Painting");
 		AddShader("VolumetricCloud3");
 
 		foreach (KeyValuePair<string, Shader> kvp in LunacidShaders)
@@ -316,7 +318,7 @@ public static class Lunatic
 			System.Reflection.Assembly.LoadFile(dll);
 
 		string[] manifests = System.IO.Directory.GetFiles("BepInEx/plugins/", "*.manifest", System.IO.SearchOption.AllDirectories);
-		
+
 		Debug.Log($"Loading {manifests.Length} Lunatic mod(s)...");
 
 		foreach (string manifest in manifests)
@@ -330,7 +332,6 @@ public static class Lunatic
 				Debug.Log("Loading AssetBundle " + bundlePath);
 
 				AssetBundle bundle = AssetBundle.LoadFromFile(bundlePath);
-				string[] assetNames = bundle.GetAllAssetNames();
 				Mod[] mods = bundle.LoadAllAssets<Mod>();
 
 				AssetBundles.Add(bundle.name, bundle);
@@ -368,6 +369,8 @@ public static class Lunatic
 
 		foreach (Mod mod in Mods)
 			mod.Init();
+
+
 	}
 
 	// due to truncation, don't need to bother with checking whether it's a mod material or not
@@ -485,7 +488,7 @@ public static class Lunatic
 
 		if (includeNumbers || !EndsWithNumbers(internalName, 2))
 			return internalName.Substring(slash);
-		
+
 		return internalName.Substring(slash, internalName.Length - slash - 2);
 	}
 
@@ -520,6 +523,11 @@ public static class Lunatic
 		Debug.Log("-----------------");
 	}
 
+	public static void AddTranslation()
+	{
+
+	}
+
 	public static void Internal_InitRecipesArray(Alki alki)
 	{
 		int id = alki.GetInstanceID();
@@ -549,6 +557,9 @@ public static class Lunatic
 
 	public static T GetModData<T>(Mod mod)
 	{
+		if (mod == null)
+			throw new System.ArgumentNullException("Mod argument is null");
+
 		if (ModData.TryGetValue(mod.Name, out JObject json))
 			return json.ToObject<T>();
 
@@ -585,7 +596,7 @@ public static class Lunatic
 		return true;
 	}
 
-	private static void SceneManager_activeSceneChanged(Scene current, Scene next)
+	internal static void SceneManager_activeSceneChanged(Scene current, Scene next)
 	{
 		AlchemyTables.Clear();
 
@@ -596,7 +607,7 @@ public static class Lunatic
 				game.OnSceneChange(current, next);
 	}
 
-	private static void SceneManager_sceneLoaded(Scene current, LoadSceneMode loadSceneMode)
+	internal static void SceneManager_sceneLoaded(Scene current, LoadSceneMode loadSceneMode)
 	{
 		Debug.Log("Loaded scene " + current.name);
 
@@ -638,14 +649,14 @@ public static class Lunatic
 		foreach (Mod mod in Mods)
 			foreach (ModGame game in mod.games)
 				game.OnSceneLoaded(LastScene, current);
-		
+
 		foreach (Mod mod in Mods)
 			foreach (ModScene scene in mod.scenes)
 				if (scene.sceneName == current.name)
 					scene.OnSceneLoaded(LastScene);
 	}
 
-	private static void SceneManager_sceneUnloaded(Scene current)
+	internal static void SceneManager_sceneUnloaded(Scene current)
 	{
 		foreach (Mod mod in Mods)
 			foreach (ModScene scene in mod.scenes)
@@ -767,7 +778,7 @@ public static class Lunatic
 		Player_Control_scr player = GetPlayer();
 
 		string eqName = name.Replace(' ', '_');
-	 	Useable_Item item = System.Array.Find(player.CON.EQ_ITEMS, (x) => x.ITEM_NAME == eqName);
+		Useable_Item item = System.Array.Find(player.CON.EQ_ITEMS, (x) => x.ITEM_NAME == eqName);
 
 		if (item != null)
 		{
@@ -1107,5 +1118,17 @@ public static class Lunatic
 		CheckHasNeeded(alki, ref alki.current_1, need1);
 		CheckHasNeeded(alki, ref alki.current_2, need2);
 		CheckHasNeeded(alki, ref alki.current_3, need3);
+	}
+
+	public static void Internal_RegisterModLocalisations(System.Action<I2.Loc.LanguageSourceData> action)
+	{
+		foreach (Mod mod in Mods)
+			if (mod.localisation != null)
+				action(mod.localisation.mSource);
+	}
+
+	public static void Internal_LoadModDialog(Dialog dialog)
+	{
+
 	}
 }

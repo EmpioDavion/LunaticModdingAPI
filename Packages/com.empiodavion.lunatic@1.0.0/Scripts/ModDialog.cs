@@ -25,8 +25,8 @@ public class ModDialog : Dialog, IModObject
 		if (CON == null)
 			CON = Lunatic.Control;
 
-		for (int i = 0; i < LINES.Length; i++)
-			LINES[i].value = LINES[i].value.Replace("/c", CON.CURRENT_PL_DATA.PLAYER_NAME);
+		//for (int i = 0; i < LINES.Length; i++)
+		//	LINES[i].value = LINES[i].value.Replace("/c", CON.CURRENT_PL_DATA.PLAYER_NAME);
 
 		OBJS[0] = Lunatic.UIReferences.PlayerTypedText;
 		OBJS[1] = Lunatic.UIReferences.PlayerName;

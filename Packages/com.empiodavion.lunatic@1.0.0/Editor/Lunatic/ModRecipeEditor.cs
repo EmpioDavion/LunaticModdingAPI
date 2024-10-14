@@ -43,6 +43,9 @@ public class ModRecipeEditor : ModBaseEditor
 		if (materials == null)
 			materials = Lunatic.MaterialNames.ToArray();
 
+		EditorTools.DrawReloadLocalisation();
+		EditorTools.DrawTranslation($"Items/{target.name} Recipe", true);
+
 		EditorTools.DrawHelpProperty(description, "The description displayed in the alchemy table UI.");
 		EditorTools.DrawHelpProperty(startsUnlocked, "If the recipe should already be unlocked on a fresh character.");
 

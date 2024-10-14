@@ -79,6 +79,10 @@ public class ModWeaponEditor : ModBaseEditor
 
 	public override void DrawGUI()
 	{
+		EditorTools.DrawReloadLocalisation();
+		EditorTools.DrawTranslation($"Weapons/{target.name}", false);
+		EditorTools.DrawTranslation($"Weapon Descriptions/{target.name} details", true);
+
 		if (misc = EditorGUILayout.Foldout(misc, "Misc"))
 		{
 			EditorGUI.indentLevel++;

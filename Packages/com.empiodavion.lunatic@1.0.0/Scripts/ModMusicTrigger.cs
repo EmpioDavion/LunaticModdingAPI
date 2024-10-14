@@ -1,4 +1,4 @@
-public class ModMusicTrigger : Muse_fire
+public class ModMusicTrigger : MUSE_TRIG
 {
 
 }

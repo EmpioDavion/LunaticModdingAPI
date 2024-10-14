@@ -1,0 +1,4 @@
+public class ModGoddy : GODDY
+{
+
+}

@@ -1,1 +1,4 @@
-public class LSceneObjectGroupCondition : LCondition<LSceneObjectGroup> { }
+public class LSceneObjectGroupCondition : LCondition<LSceneObjectGroup>
+{
+
+}

@@ -1,0 +1,4 @@
+public class ModDynamicBoneColliderBase : DynamicBoneColliderBase
+{
+
+}

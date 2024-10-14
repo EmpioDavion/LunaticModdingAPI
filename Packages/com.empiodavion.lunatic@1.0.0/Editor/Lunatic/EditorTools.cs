@@ -1,9 +1,11 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
 public static class EditorTools
 {
 	private const string SHOW_HELP_NAME = "Lunatic Show Help";
+	private const string LOCALISATION_ASSET = "Assets/Localisation.asset";
 
 	private static bool _ShowHelp = true;
 	public static bool ShowHelp
@@ -59,7 +61,6 @@ public static class EditorTools
 		AssetDatabase.ImportAsset(assetPath);
 
 		return AssetDatabase.LoadAssetAtPath<T>(assetPath);
-		//return obj;
 	}
 
 	public static void DrawShowHelpToggle()
@@ -70,18 +71,7 @@ public static class EditorTools
 			ShowHelp = value;
 	}
 
-	public static void DrawItemTypeProperty(SerializedProperty prop, string help)
-	{
-		if (ShowHelp)
-			EditorGUILayout.HelpBox(help, MessageType.Info);
-
-		if (ItemTypeNames == null)
-			ItemTypeNames = typeof(Lunatic.ItemTypes).GetEnumNames();
-
-		prop.intValue = EditorGUILayout.Popup(prop.displayName, prop.intValue, ItemTypeNames);
-	}
-
-	public static void DrawHelpProperty(ref Rect position, SerializedProperty prop, string help)
+	public static void DrawHelpBox(ref Rect position, string help)
 	{
 		if (ShowHelp)
 		{
@@ -92,37 +82,73 @@ public static class EditorTools
 
 			position.y += EditorLineSpacing(2);
 		}
+	}
+
+	public static void DrawHelpBox(string help)
+	{
+		if (ShowHelp)
+			EditorGUILayout.HelpBox(help, MessageType.Info);
+	}
+
+	public static void DrawItemTypeProperty(SerializedProperty prop, string help)
+	{
+		DrawHelpBox(help);
+
+		if (ItemTypeNames == null)
+			ItemTypeNames = typeof(Lunatic.ItemTypes).GetEnumNames();
+
+		prop.intValue = EditorGUILayout.Popup(prop.displayName, prop.intValue, ItemTypeNames);
+	}
+
+	public static void DrawHelpProperty(ref Rect position, SerializedProperty prop, string help)
+	{
+		DrawHelpBox(ref position, help);
 
 		EditorGUI.PropertyField(position, prop);
+		position.y += EditorGUI.GetPropertyHeight(prop) + EditorGUIUtility.standardVerticalSpacing;
+	}
+
+	public static void DrawHelpProperty(ref Rect position, SerializedProperty prop, bool drawChildren, string help)
+	{
+		DrawHelpBox(ref position, help);
+
+		EditorGUI.PropertyField(position, prop, true);
+		position.y += EditorGUI.GetPropertyHeight(prop, true) + EditorGUIUtility.standardVerticalSpacing;
 	}
 
 	public static void DrawHelpProperty(SerializedProperty prop, string help)
 	{
-		if (ShowHelp)
-			EditorGUILayout.HelpBox(help, MessageType.Info);
+		DrawHelpBox(help);
 
 		EditorGUILayout.PropertyField(prop);
+	}
+
+	public static void DrawHelpProperty(SerializedProperty prop, bool drawChildren, string help)
+	{
+		DrawHelpBox(help);
+
+		EditorGUILayout.PropertyField(prop, drawChildren);
 	}
 
 	public static void DrawArrayElement(SerializedProperty arrayProp, int index, string displayName, string help)
 	{
 		SerializedProperty element = arrayProp.GetArrayElementAtIndex(index);
 
-		if (ShowHelp)
-			EditorGUILayout.HelpBox(help, MessageType.Info);
+		DrawHelpBox(help);
 
 		EditorGUILayout.PropertyField(element, new GUIContent(displayName));
 	}
 
 	public static void DrawRemainingProperties(SerializedObject obj, SerializedProperty propsAfter)
 	{
-		SerializedProperty prop = obj.GetIterator();
+		SerializedProperty prop = obj.FindProperty(propsAfter.name);
 
-		while (prop.NextVisible(true) && prop.name != propsAfter.name)
-			;
-
-		while (prop.NextVisible(true))
-			EditorGUILayout.PropertyField(prop);
+		if (prop != null && prop.NextVisible(false))
+		{
+			do
+				EditorGUILayout.PropertyField(prop);
+			while (prop.NextVisible(true));
+		}
 	}
 
 	public static void CheckLunaticRef(SerializedProperty prop, SerializedProperty nameProp)
@@ -164,5 +190,65 @@ public static class EditorTools
 			EditorGUILayout.TextField("Object Name", nameProp.stringValue);
 
 		GUI.enabled = true;
+	}
+
+	public static bool GetTranslation(string term, out string result)
+	{
+		ModLanguageSourceAsset asset = AssetDatabase.LoadAssetAtPath<ModLanguageSourceAsset>(LOCALISATION_ASSET);
+
+		if (asset != null)
+		{
+			I2.Loc.LanguageSourceAsset gameLang = Resources.Load<I2.Loc.LanguageSourceAsset>("I2Languages");
+			
+			I2.Loc.TermData termData = asset.mSource.GetTermData(term) ??
+				gameLang.mSource.GetTermData(term);
+
+			if (termData == null)
+				result = asset.mSource.GetTranslation(term);
+			else
+				result = termData.GetTranslation(0);
+
+			return result != null;
+		}
+
+		result = null;
+		return false;
+	}
+
+	public static void DrawTranslation(string term, bool isDescription)
+	{
+		GetTranslation(term, out string result);
+
+		string prefix = isDescription ? "Description " : "";
+
+		EditorGUILayout.LabelField($"{prefix}Localisation Term", term);
+		EditorGUILayout.LabelField($"{prefix}Localisation Result", result);
+	}
+
+	public static void DrawTranslation(ref Rect position, string term, bool isDescription)
+	{
+		GetTranslation(term, out string result);
+
+		string prefix = isDescription ? "Description " : "";
+
+		EditorGUI.LabelField(position, $"{prefix}Localisation Term", term);
+		position.y += EditorLineSpacing(1);
+
+		EditorGUI.LabelField(position, "{prefix}Localisation Result", result);
+		position.y += EditorLineSpacing(1);
+	}
+
+	public static void ReloadLocalisation()
+	{
+		ModLanguageSourceAsset asset = AssetDatabase.LoadAssetAtPath<ModLanguageSourceAsset>(LOCALISATION_ASSET);
+
+		if (asset != null)
+			asset.mSource.UpdateDictionary(true);
+	}
+
+	public static void DrawReloadLocalisation()
+	{
+		if (GUILayout.Button("Reload Localisation"))
+			ReloadLocalisation();
 	}
 }

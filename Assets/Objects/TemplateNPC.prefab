@@ -1005,13 +1005,13 @@ MonoBehaviour:
   use_z: 0
   LINES:
   - value: Hello /c.
-    NXT: 6
+    NXT: 5
     NEW_SAID: 0
     exprssion: {x: 0, y: 0, z: 0}
     LOAD_LINE: 0
     special: 0
   - value: Hi /c.
-    NXT: 6
+    NXT: 5
     NEW_SAID: 0
     exprssion: {x: 0, y: 0, z: 0}
     LOAD_LINE: 0
@@ -1023,29 +1023,23 @@ MonoBehaviour:
     LOAD_LINE: 0
     special: 0
   - value: Hello /c, welcome back.
-    NXT: 6
+    NXT: 5
     NEW_SAID: 1
     exprssion: {x: 0, y: 0, z: 0}
-    LOAD_LINE: 0
+    LOAD_LINE: 7
     special: 0
-  - value: You said yes.
+  - value: Your selected language is {[Language]}.
     NXT: -1
-    NEW_SAID: 6
+    NEW_SAID: 5
     exprssion: {x: 0, y: 0, z: 0}
-    LOAD_LINE: 0
-    special: 4
-  - value: You said no.
-    NXT: -1
-    NEW_SAID: 6
-    exprssion: {x: 0, y: 0, z: 0}
-    LOAD_LINE: 0
-    special: 4
+    LOAD_LINE: 8
+    special: 0
   - value: '*Woof*'
     NXT: 4
     NEW_SAID: 0
     exprssion: {x: 0, y: 0, z: 0}
-    LOAD_LINE: 0
-    special: 2
+    LOAD_LINE: 6
+    special: 3
   Current_Line:
     value: 
     NXT: 0
