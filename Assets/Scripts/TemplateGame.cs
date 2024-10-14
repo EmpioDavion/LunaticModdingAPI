@@ -30,6 +30,8 @@ public class TemplateGame : ModGame
 	// you can then build them by going to "Assets/Build AssetBundles" in the top menu
 	public static AssetBundle MyAssets;
 
+	public bool HubMaterialsCollected => ModData.hubMaterialsCollected;
+
 	// when a save file is loaded
 	public override void OnSaveFileLoaded()
 	{
@@ -96,10 +98,5 @@ public class TemplateGame : ModGame
 			Texture2D texture = MyAssets.LoadAsset<Texture2D>("Demi_FaceLift");	// load our new texture
 			mat.mainTexture = texture; // setting mainTexture is the same as mat.SetTexture("_MainTex", texture);
 		}
-	}
-
-	public bool CheckHubMaterialsCollected(LSceneObject sceneObject)
-	{
-		return !ModData.hubMaterialsCollected;
 	}
 }

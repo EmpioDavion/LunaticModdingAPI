@@ -142,6 +142,6 @@ public class LCondition<T> : LConditionBase<System.Func<T, bool>> where T : Obje
 
 	protected bool RunEmpty(T arg)
 	{
-		return emptyMethod == null || emptyMethod() != invert;
+		return emptyMethod == null ? !invert : emptyMethod();
 	}
 }
