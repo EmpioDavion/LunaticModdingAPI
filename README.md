@@ -24,17 +24,13 @@ Before starting modding, you'll want to download and run [AssetRipper](https://g
 
 This will extract out all of the game assets to a folder that the Lunatic mod template will use.
 
-I recommend pointing AssetRipper to the LUNACID_Data folder with "File/Open Folder" then clicking "Export/Export all Files".
+Point AssetRipper to the LUNACID_Data folder with "File/Open Folder" then click "Export/Export All Files", select the output folder, then click "Export Unity Project".
 
 ![AssetRipper](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/AssetRipper.png "AssetRipper")
 
 **You will need to open the exported project in Unity after exporting to generate all the meta files that will be copied later.**
 
 ![Adding Unity project to Unity Hub](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/UnityHubProject.png "Adding Unity project to Unity Hub")
-
-**You will also need to open the project in Visual Studio to generate the project and solution files (Assets/Open C# Project) in Unity**
-
-![Generated Files](https://raw.githubusercontent.com/EmpioDavion/LunaticModdingAPI/main/Images/VSFiles.png "Generated Files")
 
 
 ## Opening Lunatic
