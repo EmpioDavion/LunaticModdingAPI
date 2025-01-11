@@ -10,8 +10,9 @@ public class ModItemEditor : ModBaseEditor
 	protected SerializedProperty effectName;
 	protected SerializedProperty effect;
 	protected SerializedProperty itemCast;
+	protected SerializedProperty spawnOnUse;
 
-	public override SerializedProperty LastProperty => itemCast;
+	public override SerializedProperty LastProperty => spawnOnUse;
 
 	private void OnEnable()
 	{
@@ -21,6 +22,7 @@ public class ModItemEditor : ModBaseEditor
 		description = serializedObject.FindProperty("desc");
 		effectName = serializedObject.FindProperty("effect");
 		itemCast = serializedObject.FindProperty("ITM_CAST");
+		spawnOnUse = serializedObject.FindProperty("spawnOnUse");
 	}
 
 	public override void DrawGUI()
@@ -43,6 +45,13 @@ public class ModItemEditor : ModBaseEditor
 
 		EditorTools.DrawHelpProperty(description, "The description of the item to display in the inventory.");
 		EditorTools.DrawHelpProperty(effectName, "The name of the particle effect to use.");
+
+		UnityEngine.GUI.enabled = spawnOnUse.objectReferenceValue == null;
+
 		EditorTools.DrawHelpProperty(itemCast, "The path to the resource that will be spawned on use. 0 = nothing.");
+
+		UnityEngine.GUI.enabled = true;
+
+		EditorTools.DrawHelpProperty(spawnOnUse, "The object to spawn when using the item. Overrides ITM_CAST");
 	}
 }

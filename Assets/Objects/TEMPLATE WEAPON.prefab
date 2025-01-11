@@ -5186,7 +5186,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 0}
-  - {fileID: 2100000, guid: cb75654d08fcb1349a5cbde14717f29a, type: 2}
+  - {fileID: 2100000, guid: a704538eefcaf994aabf84931aab5462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10269,7 +10269,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 0}
-  - {fileID: 2100000, guid: 02709447ac03c4348bcd205499653b52, type: 2}
+  - {fileID: 2100000, guid: 567e4bfee835a3746884280343ba7e87, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10358,7 +10358,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7124211558951234573}
-  m_Mesh: {fileID: 4300000, guid: 086ac3c096f43eb4a8ded951aa261b71, type: 2}
+  m_Mesh: {fileID: 4686849319519084627, guid: 7a62dce338e3cd244b3e3f63e01e668c, type: 3}
 --- !u!23 &4573315411377523634
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10378,7 +10378,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ae6b3b904abda5441942ac3db9a88155, type: 2}
+  - {fileID: 2100000, guid: 9ae28e53e2c3bda42b7daa2782b13412, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10511,28 +10511,28 @@ MonoBehaviour:
   Player: {fileID: 0}
   Glove: {fileID: 7304747133053830832}
   Attack_Anims:
-  - {fileID: 7400000, guid: 810210c0997cc7c4e9dbe649c04feae7, type: 2}
-  - {fileID: 7400000, guid: 347192f53e70dc74fb42de71eee2f2a8, type: 2}
-  - {fileID: 7400000, guid: a5e63cb41e262f1488ec66b5e25aa3a5, type: 2}
-  - {fileID: 7400000, guid: b8d7949b8ce3ce643a3ddb172404de6d, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   Block_Anims:
-  - {fileID: 7400000, guid: e77db859b8e7e594a8ed2c5044c2d65c, type: 2}
-  - {fileID: 7400000, guid: 4bc9408199247754a83c4b657ead4a73, type: 2}
-  - {fileID: 7400000, guid: 0074e41bffffbc846bda80d2e55fdaac, type: 2}
-  - {fileID: 7400000, guid: 4355fab22c078de40b3b264974a656d6, type: 2}
-  Idle: {fileID: 7400000, guid: 36daa9793c694634cbde19ce3a3d79ef, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  Idle: {fileID: 0}
   Idle_Speed: 0.25
-  Ready_anim: {fileID: 7400000, guid: e553a5259c512964e80e635fe161e94b, type: 2}
+  Ready_anim: {fileID: 0}
   Swing_snds:
-  - {fileID: 8300000, guid: dcc202c0fdb558747b03f654ef7955ac, type: 3}
-  - {fileID: 8300000, guid: cb181be180407f946bff821301850cc6, type: 3}
-  - {fileID: 8300000, guid: f8fe824ae09f12845815c086b5827ef0, type: 3}
-  - {fileID: 8300000, guid: c6a1e6b45f90339439bcc0f570015f4d, type: 3}
-  - {fileID: 8300000, guid: fce838ab41476b3449676392522fae23, type: 3}
-  - {fileID: 8300000, guid: 47084e6a8aec1a94b94cd4c2b1437914, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   Block_snds:
-  - {fileID: 8300000, guid: c589bad9ceef0e540bdf6af6fca78832, type: 3}
-  - {fileID: 8300000, guid: 65c7fd55e56a0ab45ac751032dfe50ae, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
   snd_pitch:
   - 1
   - 1
@@ -10562,6 +10562,12 @@ MonoBehaviour:
   CHARGE_SPEED: 2
   anim_speed_adjust: 1
   upgradeWeapon: {fileID: 4231693432828122559}
+  projectileSpawner: {fileID: 0}
+  idleAnimSet: 51
+  attackAnimSet: 51
+  swingSoundSet: 51
+  blockAnimSet: 51
+  blockSoundSet: 51
 --- !u!1 &7245264569525668648
 GameObject:
   m_ObjectHideFlags: 0
@@ -10635,7 +10641,7 @@ GameObject:
   - component: {fileID: 1084742938806285250}
   - component: {fileID: 8523863230372981710}
   m_Layer: 9
-  m_Name: HAND 1
+  m_Name: HAND
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10674,7 +10680,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5c86214e6ba8a784aaa67370e9296e8a, type: 2}
+  - {fileID: 2100000, guid: eb496b7b8abd150439e676b2b60f89e6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10699,7 +10705,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300000, guid: 5059935bdbbd80342b5300f5c960c6e1, type: 2}
+  m_Mesh: {fileID: 4300000, guid: ec7b3e05182a7424999ae5994f9d3825, type: 2}
   m_Bones:
   - {fileID: 7675748583355847649}
   - {fileID: 2009753860428189061}

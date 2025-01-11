@@ -51,6 +51,11 @@ public static class LJson
 		return obj.ToObject<T>();
 	}
 
+	public static void Populate<T>(string json, T obj)
+	{
+		JsonConvert.PopulateObject(json, obj);
+	}
+
 	private class FieldContractResolver : DefaultContractResolver
 	{
 		protected override IList<JsonProperty> CreateProperties(System.Type type, MemberSerialization memberSerialization)

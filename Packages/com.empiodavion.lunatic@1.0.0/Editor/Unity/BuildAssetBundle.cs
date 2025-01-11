@@ -52,6 +52,8 @@ public class BuildAssetBundle
 		File.Delete($"{BUILD_DIR}/{BUILD_DIR}");
 		File.Delete($"{BUILD_DIR}/{BUILD_DIR}.manifest");
 
+		CopyAllFilter("Assets/Copy/", BUILD_DIR, (str) => !str.EndsWith(".meta"));
+
 		string[] dlls = Directory.GetFiles("Assets/Scripts/", "*.asmdef", SearchOption.AllDirectories);
 		string assemblyDir = Path.Combine(Application.dataPath, "../Library/ScriptAssemblies/");
 
@@ -131,8 +133,8 @@ public class BuildAssetBundle
 		string deployFolder = Path.Combine(pluginsFolder, PlayerSettings.productName);
 		string lunaticFolder = Path.Combine(pluginsFolder, "Lunatic");
 
-		CopyFiles(BUILD_DIR, deployFolder, "*");
-		CopyFiles(LUNATIC_BUILD_DIR, lunaticFolder, "*.dll");
+		CopyFiles($"{BUILD_DIR}/", deployFolder, "*");
+		CopyFiles($"{LUNATIC_BUILD_DIR}/", lunaticFolder, "*.dll");
 		File.Copy($"{LUNATIC_BUILD_DIR}/lunatic", Path.Combine(lunaticFolder, "lunatic"), true);
 		File.Copy($"{LUNATIC_BUILD_DIR}/lunatic.manifest", Path.Combine(lunaticFolder, "lunatic.manifest"), true);
 
@@ -143,10 +145,72 @@ public class BuildAssetBundle
 	{
 		Directory.CreateDirectory(destFolder);
 
-		string[] files = Directory.GetFiles(sourceFolder, searchPattern);
+		ShallowCopyDir(sourceFolder, destFolder, searchPattern);
+
+		IEnumerable<string> dirs = Directory.EnumerateDirectories(sourceFolder, "*", SearchOption.AllDirectories);
+
+		foreach (string dir in dirs)
+		{
+			string destDir = destFolder;
+
+			if (dir.Length > sourceFolder.Length)
+			{
+				string relative = dir.Substring(sourceFolder.Length);
+				destDir = Path.Combine(destFolder, relative);
+				Directory.CreateDirectory(destDir);
+			}
+
+			ShallowCopyDir(dir, destDir, searchPattern);
+		}
+	}
+
+	private static void CopyAllFilter(string sourceFolder, string destFolder, 
+		System.Predicate<string> filter)
+	{
+		Directory.CreateDirectory(destFolder);
+
+		ShallowCopyDirFilter(sourceFolder, destFolder, filter);
+
+		IEnumerable<string> dirs = Directory.EnumerateDirectories(sourceFolder, "*", SearchOption.AllDirectories);
+
+		foreach (string dir in dirs)
+		{
+			string destDir = destFolder;
+
+			if (dir.Length > sourceFolder.Length)
+			{
+				string relative = dir.Substring(sourceFolder.Length);
+				destDir = Path.Combine(destFolder, relative);
+				Directory.CreateDirectory(destDir);
+			}
+
+			ShallowCopyDirFilter(dir, destDir, filter);
+		}
+	}
+
+	private static void ShallowCopyDir(string dir, string destFolder, string searchPattern)
+	{
+		IEnumerable<string> files = Directory.GetFiles(dir, searchPattern);
 
 		foreach (string file in files)
 		{
+			string filename = Path.GetFileName(file);
+			string dest = Path.Combine(destFolder, filename);
+
+			File.Copy(file, dest, true);
+		}
+	}
+
+	private static void ShallowCopyDirFilter(string dir, string destFolder,
+		System.Predicate<string> filter)
+	{
+		IEnumerable<string> files = Directory.GetFiles(dir);
+
+		foreach (string file in files)
+		{
+			if (!filter(file))
+				continue;
+
 			string filename = Path.GetFileName(file);
 			string dest = Path.Combine(destFolder, filename);
 

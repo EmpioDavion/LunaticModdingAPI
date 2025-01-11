@@ -6,19 +6,12 @@
 	public string AssetName { get; set; }
 	public string InternalName => Lunatic.GetInternalName(this);
 
-    // TODO: Supply code for GetCastObject
+	public UnityEngine.GameObject spawnOnUse;
+
     internal void Init()
     {
         ITEM_NAME = InternalName;
     }
 
-    public virtual void OnUse()
-	{
-
-	}
-
-	public virtual UnityEngine.Object GetCastObject()
-	{
-		return null;
-	}
+    public virtual void OnUse() { }
 }

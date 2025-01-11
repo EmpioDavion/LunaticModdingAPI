@@ -6,7 +6,7 @@ public class TemplateGame : ModGame
 {
 	// example mod data class to save/load
 	// data that is stored should be types that will be able to be serialised to json
-	public class MyModData
+	public class MyModData : ModData
 	{
 		public int someIntValue;
 		public float someFloatValue;
@@ -93,8 +93,14 @@ public class TemplateGame : ModGame
 	public override void EditMaterial(Material mat)
 	{
 		// replace Demi's face texture with our own
-		if (mat.name == "demi_face_mat")
+		if (mat != null && mat.name == "demi_face_mat")
 		{
+			if (MyAssets == null)
+			{
+				Debug.LogWarning("MyAssets is null");
+				return;
+			}
+
 			Texture2D texture = MyAssets.LoadAsset<Texture2D>("Demi_FaceLift");	// load our new texture
 			mat.mainTexture = texture; // setting mainTexture is the same as mat.SetTexture("_MainTex", texture);
 		}

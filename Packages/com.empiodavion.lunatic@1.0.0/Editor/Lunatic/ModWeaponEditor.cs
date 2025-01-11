@@ -36,8 +36,13 @@ public class ModWeaponEditor : ModBaseEditor
 	private SerializedProperty special;
     private SerializedProperty chargeSpeed;
     private SerializedProperty animationSpeed;
+	private SerializedProperty idleAnimSet;
+	private SerializedProperty attackAnimSet;
+	private SerializedProperty swingSoundSet;
+	private SerializedProperty blockAnimSet;
+	private SerializedProperty blockSoundSet;
 
-	public override SerializedProperty LastProperty => upgradeWeapon;
+	public override SerializedProperty LastProperty => blockSoundSet;
 
 	private void OnEnable()
 	{
@@ -68,6 +73,11 @@ public class ModWeaponEditor : ModBaseEditor
 		special = serializedObject.FindProperty("special");
 		chargeSpeed = serializedObject.FindProperty("CHARGE_SPEED");
 		animationSpeed = serializedObject.FindProperty("anim_speed_adjust");
+		idleAnimSet = serializedObject.FindProperty("idleAnimSet");
+		attackAnimSet = serializedObject.FindProperty("attackAnimSet");
+		swingSoundSet = serializedObject.FindProperty("swingSoundSet");
+		blockAnimSet = serializedObject.FindProperty("blockAnimSet");
+		blockSoundSet = serializedObject.FindProperty("blockSoundSet");
 	}
 
 	//[Tooltip("0 = normal, 1 fire, 2 ice, 3 poison, 4 light, 5 dark, 8 dark/light, 9 norm/fire, 10 ice/poi, 11 dark/fire")]
@@ -128,9 +138,20 @@ public class ModWeaponEditor : ModBaseEditor
 		{
 			EditorGUI.indentLevel++;
 
-			EditorTools.DrawHelpProperty(idleAnim, "Animation to use when the weapon is not swinging or blocking.");
 			EditorTools.DrawHelpProperty(idleSpeed, "Speed multiplier for the idle animation.");
+
+			EditorTools.DrawHelpProperty(idleAnimSet, "Use Lunacid weapon idle animation set.");
+
+			UnityEngine.GUI.enabled = idleAnimSet.intValue == 0;
+
+			EditorGUI.indentLevel++;
+			
+			EditorTools.DrawHelpProperty(idleAnim, "Animation to use when the weapon is not swinging or blocking.");
 			EditorTools.DrawHelpProperty(readyAnim, "The animation to play when the weapon is first pulled out on equip.");
+
+			EditorGUI.indentLevel--;
+
+			UnityEngine.GUI.enabled = true;
 
 			EditorGUI.indentLevel--;
 		}
@@ -147,8 +168,30 @@ public class ModWeaponEditor : ModBaseEditor
 			element.intValue = EditorGUILayout.Popup(element.displayName, element.intValue, elementTypes);
 			EditorTools.DrawHelpProperty(chargeSpeed, "How long the attack button must be held before fully charging the weapon attack.");
 			EditorTools.DrawHelpProperty(swingCooldown, "Delay between each swing of the weapon.");
+
+			EditorTools.DrawHelpProperty(attackAnimSet, "Use Lunacid weapon attack animation set.");
+
+			UnityEngine.GUI.enabled = attackAnimSet.intValue == 0;
+
+			EditorGUI.indentLevel++;
+
 			EditorTools.DrawHelpProperty(attackAnims, "Animations to use for the attacking combo chain.");
+
+			EditorGUI.indentLevel--;
+
+			UnityEngine.GUI.enabled = true;
+
+			EditorTools.DrawHelpProperty(swingSoundSet, "Use Lunacid weapon swing sound set.");
+
+			UnityEngine.GUI.enabled = swingSoundSet.intValue == 0;
+
+			EditorGUI.indentLevel++;
+
 			EditorTools.DrawHelpProperty(swingSounds, "Sounds to randomly use for each attack animation.");
+
+			EditorGUI.indentLevel--;
+
+			UnityEngine.GUI.enabled = true;
 
 			EditorGUI.indentLevel--;
 		}
@@ -162,16 +205,36 @@ public class ModWeaponEditor : ModBaseEditor
 			if (blockAnims.arraySize != 4)
 				blockAnims.arraySize = 4;
 
+			EditorTools.DrawHelpProperty(blockAnimSet, "Use Lunacid weapon block animation set.");
+
+			UnityEngine.GUI.enabled = blockAnimSet.intValue == 0;
+
+			EditorGUI.indentLevel++;
+
 			EditorTools.DrawArrayElement(blockAnims, 0, "Successful Block Anim", "Animation to play on a successful block.");
 			EditorTools.DrawArrayElement(blockAnims, 1, "Mid Block Anim", "Animation to play when the player is hit before the weapon cooldown finishes from a previous block.");
 			EditorTools.DrawArrayElement(blockAnims, 2, "Deflect Block Anim", "Animation to play when the player is hit when blocking.");
 			EditorTools.DrawArrayElement(blockAnims, 3, "Guard Broken Anim", "Animation to play when the player's guard is broken.");
 
+			EditorGUI.indentLevel--;
+
+			UnityEngine.GUI.enabled = true;
+
 			if (blockSounds.arraySize != 2)
 				blockSounds.arraySize = 2;
 
+			EditorTools.DrawHelpProperty(blockSoundSet, "Use Lunacid weapon block sound set.");
+
+			UnityEngine.GUI.enabled = blockSoundSet.intValue == 0;
+
+			EditorGUI.indentLevel++;
+
 			EditorTools.DrawArrayElement(blockSounds, 0, "Block Deflect Sound", "Sound to play on successful blocking of an attack.");
 			EditorTools.DrawArrayElement(blockSounds, 1, "Guard Broken Sound", "Sound to play when the player's guard is broken.");
+
+			EditorGUI.indentLevel--;
+
+			UnityEngine.GUI.enabled = true;
 
 			EditorGUI.indentLevel--;
 		}

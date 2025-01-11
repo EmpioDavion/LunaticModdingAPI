@@ -25,6 +25,8 @@ public class Mod : ScriptableObject
 	public string Name;
 	public Version version;
 
+	public string folder;
+
 	[System.NonSerialized]
 	public AssetBundle bundle;
 
@@ -45,6 +47,7 @@ public class Mod : ScriptableObject
 	public readonly List<LSceneObjectGroup> sceneObjectGroups = new List<LSceneObjectGroup>();
 	public readonly List<LSceneObject> sceneObjects = new List<LSceneObject>();
 	public readonly List<LConditionBase> conditions = new List<LConditionBase>();
+	public readonly List<LJsonAsset> jsonAssets = new List<LJsonAsset>();
 
 	public readonly Dictionary<string, int> npcStates = new Dictionary<string, int>();
 
@@ -67,13 +70,43 @@ public class Mod : ScriptableObject
 
 		loaded = true;
 
-		string[] assetNames = bundle.GetAllAssetNames();
 		List<IModObject> assets = new List<IModObject>();
+
+		if (bundle != null)
+			InitBundle(assets);
+
+		Load(games, assets, "games");
+		Load(scenes, assets, "scenes");
+		Load(npcs, assets, "NPCS");
+		Load(projectiles, assets, "projectiles");
+		Load(weapons, assets, "weapons");
+		Load(magics, assets, "magics");
+		Load(items, assets, "items");
+		Load(materials, assets, "materials");
+		Load(itemPickups, assets, "item pickups");
+		Load(recipes, assets, "recipes");
+		Load(classes, assets, "classes");
+		Load(sceneObjectGroups, assets, "scene object groups");
+		Load(sceneObjects, assets, "scene objects");
+		Load(conditions, assets, "conditions");
+
+		LoadJson<Item_Emit, ModProjectile, LJsonProjectile>(projectiles, assets, "Projectiles/", "json projectiles");
+		LoadJson<Weapon_scr, ModWeapon, LJsonWeapon>(weapons, assets, "Weapons/", "json weapons");
+		LoadJson<Magic_scr, ModMagic, LJsonMagic>(magics, assets, "Magics/", "json magics");
+		LoadJson<Useable_Item, ModItem, LJsonItem>(items, assets, "Items/", "json items");
+		LoadJson<BaseMaterial, ModMaterial, LJsonMaterial>(materials, assets, "Materials/", "json materials");
+
+		// npc states are loaded from save files
+	}
+
+	private void InitBundle(List<IModObject> assets)
+	{
+		string[] assetNames = bundle.GetAllAssetNames();
 
 		foreach (string assetName in assetNames)
 		{
 			Object asset = bundle.LoadAsset(assetName);
-			
+
 			if (asset is GameObject gameObject)
 			{
 				IModObject[] modObjects = gameObject.GetComponentsInChildren<IModObject>(true);
@@ -104,30 +137,71 @@ public class Mod : ScriptableObject
 		}
 		else
 			Debug.LogWarning("Could not find localisation asset.");
-
-		Load(games, assets, "games");
-		Load(scenes, assets, "scenes");
-		Load(npcs, assets, "NPCS");
-		Load(weapons, assets, "weapons");
-		Load(magics, assets, "magics");
-		Load(items, assets, "items");
-		Load(materials, assets, "materials");
-		Load(itemPickups, assets, "item pickups");
-		Load(projectiles, assets, "projectiles");
-		Load(recipes, assets, "recipes");
-		Load(classes, assets, "classes");
-		Load(sceneObjectGroups, assets, "scene object groups");
-		Load(sceneObjects, assets, "scene objects");
-		Load(conditions, assets, "conditions");
-
-		// npc states are loaded from save files
 	}
 
 	private void Load<T>(List<T> list, List<IModObject> assets, string typeName)
 	{
 		list.AddRange(assets.OfType<T>());
 		Debug.Log($"Added {list.Count} {typeName}.");
+	}
 
+	private void LoadJson<T, U, V>(List<U> list, List<IModObject> assets, string subFolder, string typeName)
+		where T : Object where U : T, IModObject where V : LJsonAsset<T>
+	{
+		// load from bundle
+		IEnumerable<V> jsonObjs = assets.OfType<V>();
+		int countNew = 0;
+		int countOld = 0;
+
+		foreach (V jsonAsset in jsonObjs)
+		{
+			T asset = jsonAsset.Init(out bool newAsset);
+
+			if (asset != null)
+			{
+				if (asset is U modAsset)
+					list.Add(modAsset);
+
+				if (newAsset)
+					countNew++;
+				else
+					countOld++;
+			}
+		}
+
+		string dir = System.IO.Path.Combine(folder, subFolder);
+
+		if (System.IO.Directory.Exists(dir))
+		{
+			string[] files = System.IO.Directory.GetFiles(dir, "*.json", System.IO.SearchOption.AllDirectories);
+
+			foreach (string filePath in files)
+			{
+				string fileText = System.IO.File.ReadAllText(filePath);
+				V jsonAsset = LJson.Deserialise<V>(fileText);
+				jsonAsset.Name = System.IO.Path.GetFileNameWithoutExtension(filePath);
+				InitModObject(jsonAsset, filePath);
+				T asset = jsonAsset.Init(out bool newAsset);
+
+				if (asset != null)
+				{
+					if (asset is U modAsset)
+					{
+						InitModObject(modAsset, filePath);
+						list.Add(modAsset);
+					}
+
+					if (newAsset)
+						countNew++;
+					else
+						countOld++;
+
+					jsonAssets.Add(jsonAsset);
+				}
+			}
+		}
+
+		Debug.Log($"Added {countNew} {typeName}, modified {countOld}.");
 	}
 
 	internal void Init()
@@ -156,6 +230,7 @@ public class Mod : ScriptableObject
 		{
 			Lunatic.FixShaders(weapon);
 			Lunatic.TrackWeapon(weapon);
+			weapon.Init();
 		}
 
 		Lunatic.ModWeapons.AddRange(weapons);

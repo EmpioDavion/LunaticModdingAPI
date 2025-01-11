@@ -14,12 +14,14 @@ public class TermDataPropertyDrawer : PropertyDrawer
 		"Japanese",
 		"Spanish",
 		"Russian",
-		"Chinese",
+		"Chinese Simplified",
 		"German",
 		"Korean",
 		"Polish",
 		"Brazilian Portuguese",
-		"Spanish LATAM"
+		"Spanish LATAM",
+		"Chinese Traditional",
+		"Chinese"
 	};
 
 	[System.Flags]

@@ -19,7 +19,19 @@ public class ModMultipleStatesEditor : ModBaseEditor
 	public override void DrawGUI()
 	{
 		EditorTools.DrawReloadLocalisation();
-		EditorTools.DrawTranslation($"Dialog/{id.stringValue} NAME", false);
+		
+		string trans = id.stringValue;
+
+		if (string.IsNullOrEmpty(trans))
+		{
+			ModMultipleStates ms = (ModMultipleStates)target;
+			ModDialog md = ms.GetComponentInChildren<ModDialog>(true);
+
+			if (md != null)
+				trans = md.npc_name;
+		}
+
+		EditorTools.DrawTranslation($"Dialog/{trans} NAME", false);
 
 		EditorTools.DrawHelpProperty(id, "The id to use for saving and loading the state.");
 		EditorTools.DrawHelpProperty(value, "Sets which GameObject in STATES is active. Lunacid objects read this value from a zone string. Mod objects set it directly.");

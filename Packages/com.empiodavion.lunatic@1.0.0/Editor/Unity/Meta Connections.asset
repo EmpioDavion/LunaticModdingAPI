@@ -460,6 +460,9 @@ MonoBehaviour:
   - lunacidScript: Item_Pickup_scr
     lunaticScript: ModItemPickup
     isFirstPass: 0
+  - lunacidScript: KanjiText\KanjiText
+    lunaticScript: ModKanjiText
+    isFirstPass: 0
   - lunacidScript: KeyBindTest
     lunaticScript: ModKeyBindTest
     isFirstPass: 0

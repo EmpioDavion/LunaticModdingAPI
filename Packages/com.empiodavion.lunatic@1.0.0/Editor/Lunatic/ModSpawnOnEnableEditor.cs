@@ -26,15 +26,15 @@ public class ModSpawnOnEnableEditor : ModBaseEditor
 
 	public override void DrawGUI()
 	{
-		UnityEngine.GUI.enabled = false;
+		UnityEngine.GUI.enabled = Override.objectReferenceValue == null;
 		
-		EditorGUILayout.PropertyField(item);
+		EditorTools.DrawHelpProperty(item, "The resource asset to spawn.");
 		
 		UnityEngine.GUI.enabled = true;
 
 		EditorGUI.BeginChangeCheck();
 
-		EditorTools.DrawHelpProperty(Override, "The object to spawn.");
+		EditorTools.DrawHelpProperty(Override, "The object to spawn. Overrides Item.");
 
 		if (EditorGUI.EndChangeCheck())
 		{

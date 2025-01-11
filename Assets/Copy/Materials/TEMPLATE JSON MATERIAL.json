@@ -1,0 +1,123 @@
+{
+	// you can use the json system to modify base-game Lunacid materials by naming your 
+	// json material the same as the Lunacid material you want to modify
+
+	// ID that is used to determine if this object should spawn, kept in Lunatic save data
+	// if no ID is set, the material will always spawn, even if the player has already collected it
+	"spawnID": "Example Json Material",
+
+	// the gltf model to replace the pickup prefab 3D model
+	// will use the default mod pickup bag if not overwritten
+	//"pickupModel": "",
+
+	// the name displayed for this material, per language
+	"displayName": {
+		"English": "TEMPLATE JSON MATERIAL",
+		"Nyan": "",
+		"French": "",
+		"Japanese": "",
+		"Spanish": "",
+		"Russian": "",
+		"German": "",
+		"Korean": "",
+		"Polish": "",
+		"BrazilianPortuguese": "",
+		"SpanishLATAM": "",
+		"ChineseTraditional": "",
+		"ChineseSimplified": ""
+	},
+
+	// the description of the material in the game menu, per language
+	"description": {
+		"English": "Example of a JSON material for Lunatic.",
+		"Nyan": "",
+		"French": "",
+		"Japanese": "",
+		"Spanish": "",
+		"Russian": "",
+		"German": "",
+		"Korean": "",
+		"Polish": "",
+		"BrazilianPortuguese": "",
+		"SpanishLATAM": "",
+		"ChineseTraditional": "",
+		"ChineseSimplified": ""
+	},
+
+	"sources": [
+		{
+			// where the object is found
+			// 0 = World (on ground), 1 = Drop (from enemy), 2 = Shop
+			"location": 0,
+
+			// the game scene/level that the object is found in
+			/*
+				AccursedTomb = "HAUNT"
+				AHolyBattleground = "CAS_PITT"
+				BoilingGrotto = "CAVE"
+				CastleLeFanu = "CAS_1"
+				ChamberOfFate = "ARENA2"
+				CharacterCreation = "CHAR_CREATE"
+				DeathLand = "DETHLAND"
+				EndingA = "END_A"
+				EndingB = "END_B"
+				EndingE = "END_EVID"
+				EndingPuddle = "WhatWillBeAtTheEnd"
+				ForbiddenArchives = "ARCHIVES"
+				ForestCanopy = "FOREST_B1"
+				ForlornArena = "ARENA"
+				GameOver = "Gameover"
+				GraveOfTheSleeper = "END_TOWN"
+				GreatWellSurface = "PITT_B1"
+				HollowBasin = "PITT_A1"
+				LabyrinthOfAsh = "VOID"
+				LaetusChasm = "WALL_01"
+				MainMenu = "MainMenu"
+				PlayerDimension = "END_E"
+				SealedBallroom = "CAS_3"
+				TerminusPrison = "PRISON"
+				TheFetidMire = "SEWER_A1"
+				TheMausoleum = "HAUNT"
+				TheSanguineSea = "LAKE"
+				ThroneChamber = "CAS_2"
+				TowerOfAbyss = "TOWER"
+				WingsRest = "HUB_01"
+				YoseiForest = "FOREST_A1"
+			*/
+			"scene": "HUB_01",
+
+			// World = not used
+			// Drop = name of enemy that drops the material
+			// Shop = the shop owner
+			"owner": "",
+			
+			// identifier used to indicate whether this source has been collected/bought
+			// this source will not be used if the current save data contains this ID
+			// if no spawnID is specified, the material will always spawn or be available to buy via this source
+			"spawnID": "Found template json material",
+
+			// location of the material if location == World
+			"position": {
+				"x": 12.0,
+				"y": 0.1,
+				"z": 12.0
+			},
+
+			// World = not used
+			// Drop = weighted chance to drop
+			// Shop = how much the material costs
+			"value": 0,
+
+			// how many of the material are in the pickup, or available to buy, not used by items/magic
+			"count": 1
+		},
+		{
+			"location": 3,
+			"scene": "HUB_01",
+			"owner": "Sheryl",
+			"spawnID": "Bought template json material",
+			"value": 8,
+			"count": 5
+		}
+	]
+}

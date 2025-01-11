@@ -219,7 +219,9 @@ MonoBehaviour:
       - TEMPLATE MAGIC
       - TEMPLATE MAGIC
       - TEMPLATE MAGIC
-      Flags: 000000000000000000000000
+      - TEMPLATE MAGIC
+      - TEMPLATE MAGIC
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Spell Descriptions/TEMPLATE MAGIC details
       TermType: 0
@@ -355,7 +357,9 @@ MonoBehaviour:
       - Lunatic mod recipe
       - Lunatic mod recipe
       - Lunatic mod recipe
-      Flags: 000000000000000000000000
+      - Lunatic mod recipe
+      - Lunatic mod recipe
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     CaseInsensitiveTerms: 1
     OnMissingTranslation: 2
@@ -380,7 +384,7 @@ MonoBehaviour:
       Code: ru
       Flags: 0
     - Name: Chinese
-      Code: zh
+      Code: zh-CN
       Flags: 0
     - Name: German
       Code: de
@@ -396,6 +400,12 @@ MonoBehaviour:
       Flags: 0
     - Name: Spanish LATAM
       Code: es-US
+      Flags: 0
+    - Name: Chinese traditional
+      Code: zh-TW
+      Flags: 0
+    - Name: Chinese
+      Code: zh
       Flags: 0
     IgnoreDeviceLanguage: 1
     _AllowUnloadingLanguages: 0

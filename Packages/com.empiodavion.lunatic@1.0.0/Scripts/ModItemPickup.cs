@@ -15,6 +15,8 @@ public class ModItemPickup : Item_Pickup_scr, IModObject
 
 	public UnityEngine.Object item;
 
+	public UnityEngine.GameObject model;
+
 	internal void Init()
 	{
 		if (item != null && item is IModObject modObject)

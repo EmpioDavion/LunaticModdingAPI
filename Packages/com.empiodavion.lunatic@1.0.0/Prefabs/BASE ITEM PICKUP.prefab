@@ -66,6 +66,7 @@ MonoBehaviour:
   inChest: 0
   SAVED: {fileID: 0}
   item: {fileID: 0}
+  model: {fileID: 1662310802953285}
 --- !u!1 &1402035011492690
 GameObject:
   m_ObjectHideFlags: 0

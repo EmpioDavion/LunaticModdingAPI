@@ -1,0 +1,172 @@
+{
+	// you can use the json system to modify base-game Lunacid magics by naming your 
+	// json magic the same as the Lunacid magic you want to modify
+
+	// ID that is used to determine if this object should spawn, kept in Lunatic save data
+	// if no ID is set, the magic will always spawn, even if the player has already collected it
+	"spawnID": "Example Json Magic",
+
+	// the model to replace the pickup prefab 3D model
+	// if the value ends with ".gltf", the model will attempt to load from [ModFolder]/WEPS/*.gltf
+	// otherwise it will attempt to load an asset from the mod asset bundle
+	//"pickupModel": "",
+
+	// the name displayed for this magic, per language
+	"displayName": {
+		"English": "TEMPLATE JSON MAGIC",
+		"Nyan": "",
+		"French": "",
+		"Japanese": "",
+		"Spanish": "",
+		"Russian": "",
+		"German": "",
+		"Korean": "",
+		"Polish": "",
+		"BrazilianPortuguese": "",
+		"SpanishLATAM": "",
+		"ChineseTraditional": "",
+		"ChineseSimplified": ""
+	},
+
+	// the description of the magic in the game menu, per language
+	"description": {
+		"English": "Example of a JSON magic for Lunatic.",
+		"Nyan": "",
+		"French": "",
+		"Japanese": "",
+		"Spanish": "",
+		"Russian": "",
+		"German": "",
+		"Korean": "",
+		"Polish": "",
+		"BrazilianPortuguese": "",
+		"SpanishLATAM": "",
+		"ChineseTraditional": "",
+		"ChineseSimplified": ""
+	},
+
+	// the sprite to use for the magic in menus, jpg or png file
+	"icon": "Sprites/swirl.png",
+
+	// the colour to tint the magic icon
+	"colour": {
+		"r": 1.0,
+		"g": 1.0,
+		"b": 1.0,
+		"a": 1.0
+	},
+
+	// the amount of damage/healing inflicted by the magic
+	"damage": 10.0,
+
+	// the element of the magic, only affects UI
+	// the spawned projectiles have their own pre-set element
+	/*
+		0  = Normal
+		1  = Fire
+		2  = Ice
+		3  = Poison
+		4  = Light
+		5  = Dark
+		6  = Bleed? (Red Poison)
+		7  = Unknown? (Question Mark)
+		8  = Light/Dark
+		9  = Normal/Fire
+		10 = Ice/Poison
+		11 = Dark/Fire
+	*/
+	"element": 0,
+
+	// magic charge time may instead become instant cast if the charge time is less than 0.3
+
+	// the time (seconds) it takes to charge the magic, reduced by player Intelligence stat
+	"maxChargeTime": 2.0,
+
+	// the minimum time (seconds) it can take to charge the magic
+	"minChargeTime": 1.0,
+
+	// the projectile to spawn on cast - check Resources/MAGIC/CAST/
+	// must be a Lunacid resource in MAGIC/CAST/ if this json is overwriting an existing Lunacid magic
+	// if this is a new magic, then it can also refer to a json projectile specified by the same mod
+	"projectileName": "DARK_LIGHT_CAST",
+
+	// the duration (seconds) that spawned projectiles will last before disappearing
+	"projectileLifetime": 5.0,
+
+	// how much mana or health it costs to cast the magic
+	"cost": 5,
+
+	// the duration (seconds) that the screen flashes when casting the magic
+	"flashFade": 1.0,
+
+	// if it costs health instead of mana, to cast the magic
+	// the game currently has no functionality for a magic to cost both health and mana to cast
+	"costsHealth": false,
+
+	"sources": [
+		{
+			// where the object is found
+			// 0 = World (on ground), 1 = Drop (from enemy), 2 = Shop
+			"location": 0,
+
+			// the game scene/level that the object is found in
+			/*
+				AccursedTomb = "HAUNT";
+				AHolyBattleground = "CAS_PITT";
+				BoilingGrotto = "CAVE";
+				CastleLeFanu = "CAS_1";
+				ChamberOfFate = "ARENA2";
+				CharacterCreation = "CHAR_CREATE";
+				DeathLand = "DETHLAND";
+				EndingA = "END_A";
+				EndingB = "END_B";
+				EndingE = "END_EVID";
+				EndingPuddle = "WhatWillBeAtTheEnd";
+				ForbiddenArchives = "ARCHIVES";
+				ForestCanopy = "FOREST_B1";
+				ForlornArena = "ARENA";
+				GameOver = "Gameover";
+				GraveOfTheSleeper = "END_TOWN";
+				GreatWellSurface = "PITT_B1";
+				HollowBasin = "PITT_A1";
+				LabyrinthOfAsh = "VOID";
+				LaetusChasm = "WALL_01";
+				MainMenu = "MainMenu";
+				PlayerDimension = "END_E";
+				SealedBallroom = "CAS_3";
+				TerminusPrison = "PRISON";
+				TheFetidMire = "SEWER_A1";
+				TheMausoleum = "HAUNT";
+				TheSanguineSea = "LAKE";
+				ThroneChamber = "CAS_2";
+				TowerOfAbyss = "TOWER";
+				WingsRest = "HUB_01";
+				YoseiForest = "FOREST_A1";
+			*/
+			"scene": "HUB_01",
+
+			// World = not used
+			// Drop = name of enemy that drops the magic
+			// Shop = the shop owner
+			"owner": "",
+
+			// location of the magic if location == World
+			"position": {
+				"x": 14.0,
+				"y": 0.1,
+				"z": 12.0
+			},
+
+			// World = not used
+			// Drop = weighted chance to drop
+			// Shop = how much the magic costs
+			"value": 0
+		},
+		{
+			"location": 3,
+			"scene": "HUB_01",
+			"owner": "Sheryl",
+			"value": 20
+		}
+	]
+}

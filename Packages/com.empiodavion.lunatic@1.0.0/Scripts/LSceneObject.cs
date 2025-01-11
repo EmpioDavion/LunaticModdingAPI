@@ -39,6 +39,8 @@ public class LSceneObject : ScriptableObject, IModObject, ISerializationCallback
 		GameObject clone = Instantiate(gameObject, localPosition, Quaternion.Euler(localRotation), parentTr);
 		clone.transform.localScale = localScale;
 
+		Lunatic.RemoveCloneSuffix(clone);
+
 		IModObject[] modObjects = clone.GetComponentsInChildren<IModObject>(true);
 
 		foreach (IModObject modObject in modObjects)

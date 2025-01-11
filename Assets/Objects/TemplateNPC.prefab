@@ -810,6 +810,7 @@ MonoBehaviour:
   pitch:
   - 0.8
   - 1
+  channel: 1
 --- !u!82 &3781627645175156038
 AudioSource:
   m_ObjectHideFlags: 0
@@ -819,7 +820,7 @@ AudioSource:
   m_GameObject: {fileID: 3781627645175158907}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300006, guid: 070beddfc525d3145b407374e9faa229, type: 2}
+  OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -1566,6 +1567,7 @@ MonoBehaviour:
   pitch:
   - 0.8
   - 1
+  channel: 1
 --- !u!82 &4276368934508551470
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1575,7 +1577,7 @@ AudioSource:
   m_GameObject: {fileID: 4276368934508546411}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300006, guid: 070beddfc525d3145b407374e9faa229, type: 2}
+  OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8

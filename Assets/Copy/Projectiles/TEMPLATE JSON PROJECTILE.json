@@ -1,0 +1,90 @@
+{
+	// you can use the json system to modify base-game Lunacid projectiles by naming your 
+	// json projectile the same as the Lunacid projectile you want to modify
+
+	// the rate the projectile should increase in speed
+	// speed grows exponentially every 0.1 seconds (velocity *= speedIncrease)
+	"speedIncrease": -1.0,
+
+	// the forward-facing force applied to the projectile on spawn
+	"initialForce": 1.0,
+
+	// the amount of damage/healing inflicted by the projectile
+	// healing (negative damage) will still be affected by elemental defenses
+	"damage": 10.0,
+
+	// the element of the projectile, a value of -100 will pick a random element 0-5
+	/*
+		0  = Normal
+		1  = Fire
+		2  = Ice
+		3  = Poison
+		4  = Light
+		5  = Dark
+		6  = Bleed? (Red Poison)
+		7  = Unknown? (Question Mark)
+		8  = Light/Dark
+		9  = Normal/Fire
+		10 = Ice/Poison
+		11 = Dark/Fire
+	*/
+	"element": 0,
+
+	// the amount the screen shakes when the projectile hits the player
+	"shake": 0.0,
+
+	// the duration (seconds) the screen shakes when the projectile hits a player
+	"shakeLength": 0.0,
+
+	// the visual and audio effect to play when the projectile collides with an object
+	// this can generally be thought of what the projectile is made of
+	// WATER will not process "physical", and will not process "spawnOnHit"
+	// MAGIC will not process "spawnOnHit"
+	/*
+		ASH
+		DEAD
+		DIRT
+		FIRE
+		FLESH
+		FLESH_BACKUP
+		GHOST
+		MAGIC
+		METAL
+		PAPER
+		Player
+		SLIME
+		SNAIL
+		STONE
+		WATER
+		WATER2
+		WOOD
+	*/
+	"impactEffect": "SLIME",
+
+	// if the projectile should be destroyed when hitting an object
+	// incompatible with "impactEffect": "WATER"
+	"physical": true,
+
+	// if the projectile can hit and damage/heal the player
+	"affectsPlayer": false,
+
+	// if the projectile can hit enemies, and objects like barrels and crates
+	"affectsNonPlayer": true,
+
+	// if the projectile continues to damage/heal objects that maintain contact with the projectile
+	// an example is a fire wall or slime puddle
+	"constantDamage": false,
+
+	// the delay (seconds) between which ticks of damage/healing is applied to objects maintaining contact with the projectile
+	// requires "constantDamage": true
+	"tickDelay": 0.0,
+
+	// the name of the gltf model to spawn when the projectile hits something
+	// for example - arrows delete the projectile and spawn a replacement arrow model 
+	"spawnOnHit": "Models/WaterBottle.gltf",
+
+	// if the object specified by "spawnOnHit" should attach to the object it hit
+	// for example - arrows stick to whatever is hit, while most magic hit effects don't
+	// requires "spawnOnHit": "*.gltf"
+	"stickToHit": true
+}

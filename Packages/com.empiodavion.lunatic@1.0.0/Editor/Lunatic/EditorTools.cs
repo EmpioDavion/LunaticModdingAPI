@@ -234,7 +234,7 @@ public static class EditorTools
 		EditorGUI.LabelField(position, $"{prefix}Localisation Term", term);
 		position.y += EditorLineSpacing(1);
 
-		EditorGUI.LabelField(position, "{prefix}Localisation Result", result);
+		EditorGUI.LabelField(position, $"{prefix}Localisation Result", result);
 		position.y += EditorLineSpacing(1);
 	}
 

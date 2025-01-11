@@ -87,6 +87,13 @@ public abstract class LConditionBase<T> : LConditionBase where T : System.Delega
 	{
 		method = (T)GetDelegate(typeof(T));
 	}
+
+	internal virtual void SetMethod(T _method, Object _target)
+	{
+		target = _target;
+		method = _method;
+		memberName = _method.Method.Name;
+	}
 }
 
 [System.Serializable]

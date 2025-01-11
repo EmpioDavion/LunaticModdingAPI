@@ -1,0 +1,165 @@
+{
+	// you can use the json system to modify base-game Lunacid weapons by naming your 
+	// json weapon the same as the Lunacid weapon you want to modify
+
+	// ID that is used to determine if this object should spawn, kept in Lunatic save data
+	// if no ID is set, the weapon will always spawn, even if the player has already collected it
+	"spawnID": "Example Json Weapon",
+
+	// the 3D gltf model to replace the pickup prefab 3D model
+	//"pickupModel": "",
+
+	// the name displayed for this weapon, per language
+	"displayName": {
+		"English": "TEMPLATE JSON WEAPON",
+		"Nyan": "",
+		"French": "",
+		"Japanese": "",
+		"Spanish": "",
+		"Russian": "",
+		"German": "",
+		"Korean": "",
+		"Polish": "",
+		"BrazilianPortuguese": "",
+		"SpanishLATAM": "",
+		"ChineseTraditional": "",
+		"ChineseSimplified": ""
+	},
+
+	// the description of the weapon in the game menu, per language
+	"description": {
+		"English": "Example of a JSON weapon for Lunatic.",
+		"Nyan": "Example of a JSON weapon for Lunatic.",
+		"French": "Example of a JSON weapon for Lunatic.",
+		"Japanese": "Example of a JSON weapon for Lunatic.",
+		"Spanish": "Example of a JSON weapon for Lunatic.",
+		"Russian": "Example of a JSON weapon for Lunatic.",
+		"German": "Example of a JSON weapon for Lunatic.",
+		"Korean": "Example of a JSON weapon for Lunatic.",
+		"Polish": "Example of a JSON weapon for Lunatic.",
+		"BrazilianPortuguese": "Example of a JSON weapon for Lunatic.",
+		"SpanishLATAM": "Example of a JSON weapon for Lunatic.",
+		"ChineseTraditional": "Example of a JSON weapon for Lunatic.",
+		"ChineseSimplified": "Example of a JSON weapon for Lunatic."
+	},
+
+	// what this weapon changes to once it has enough experience and is taken to the Wing's Rest forge
+	// if upgrade is specified as an empty string "", weapon experience will be disabled
+	"upgrade": "DARK GREATSWORD",
+
+	// delay between attacks in seconds
+	"attackCooldown": 0.3,
+
+	// the base damage of the weapon
+	"damage": 14.0,
+
+	// the maximum distance the weapon can hit from the player's position
+	"reach": 3.0,
+
+	// the amount of damage the player will take when blocking with this weapon (1.0 = 100%)
+	"guard": 0.4,
+
+	// adds force to the player when they attack, pushing them forward
+	"weight": 5.0,
+
+	// adds force to the player when they backstep, pushing them backward
+	"backstep": 60.0,
+
+	// how much experience the player gets per hit with this weapon
+	"growth": 1.0,
+
+	// the element of the damage that the weapon inflicts
+	// 0 = normal, 1 = fire, 2 = ice, 3 = poison, 4 = light, 5 = dark,
+	// 8 = dark/light, 9 = normal/fire, 10 = ice/poison, 11 = dark/fire
+	"element": 0,
+
+	// if the weapon is ranged (crossbow/bow/slingshot/etc)
+	"ranged": false,
+
+	// the name of projectile that will spawn when firing a ranged weapon
+	// requires "ranged": 1
+	//"projectileName": "",
+	
+	// the position that the projectile gltf model should spawn relative to the weapon when firing
+	// requires "spawnOnHit": "*.gltf"
+	"spawnPosition": { "x": 0.0, "y": 0.0, "z": 0.0 },
+	
+	// the rotation that the projectile gltf model should spawn relative to the weapon when firing
+	// requires "spawnOnHit": "*.gltf"
+	"spawnRotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+	
+	// the model to replace the weapon 3D model
+	// if the value ends with ".gltf", the model will attempt to load from [ModFolder]/WEPS/*.gltf
+	// otherwise it will attempt to load an asset from the mod asset bundle
+	"model": "Models/BarramundiFish.gltf",
+
+	"sources": [
+		{
+			// where the object is found
+			// 0 = World (on ground), 1 = Drop (from enemy), 2 = Shop
+			"location": 0,
+
+			// the game scene/level that the object is found in
+			/*
+				AccursedTomb = "HAUNT";
+				AHolyBattleground = "CAS_PITT";
+				BoilingGrotto = "CAVE";
+				CastleLeFanu = "CAS_1";
+				ChamberOfFate = "ARENA2";
+				CharacterCreation = "CHAR_CREATE";
+				DeathLand = "DETHLAND";
+				EndingA = "END_A";
+				EndingB = "END_B";
+				EndingE = "END_EVID";
+				EndingPuddle = "WhatWillBeAtTheEnd";
+				ForbiddenArchives = "ARCHIVES";
+				ForestCanopy = "FOREST_B1";
+				ForlornArena = "ARENA";
+				GameOver = "Gameover";
+				GraveOfTheSleeper = "END_TOWN";
+				GreatWellSurface = "PITT_B1";
+				HollowBasin = "PITT_A1";
+				LabyrinthOfAsh = "VOID";
+				LaetusChasm = "WALL_01";
+				MainMenu = "MainMenu";
+				PlayerDimension = "END_E";
+				SealedBallroom = "CAS_3";
+				TerminusPrison = "PRISON";
+				TheFetidMire = "SEWER_A1";
+				TheMausoleum = "HAUNT";
+				TheSanguineSea = "LAKE";
+				ThroneChamber = "CAS_2";
+				TowerOfAbyss = "TOWER";
+				WingsRest = "HUB_01";
+				YoseiForest = "FOREST_A1";
+			*/
+			"scene": "HUB_01",
+
+			// World = not used
+			// Drop = name of enemy that drops the item
+			// Shop = the shop owner
+			"owner": "",
+
+			// location of the item if location == World
+			"position": {
+				"x": 15.0,
+				"y": 0.1,
+				"z": 12.0
+			},
+
+			// World = not used
+			// Drop = weighted chance to drop
+			// Shop = how much the item costs
+			"value": 0,
+
+			// how many of the item are in the pickup, or available to buy, not used by weapons/magic
+			"count": 1
+		},
+		{
+			"location": 3,
+			"scene": "HUB_01",
+			"owner": "Sheryl",
+			"value": 35
+		}
+	]
+}

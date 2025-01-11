@@ -1,6 +1,6 @@
 ﻿// material used for alchemy
 // Lunacid seems to only store alchemy materials as strings with appended numbers
-public class ModMaterial : UnityEngine.ScriptableObject, IModObject
+public class ModMaterial : BaseMaterial, IModObject
 {
 	public Mod Mod { get; set; }
 	public UnityEngine.AssetBundle Bundle { get; set; }
@@ -13,6 +13,6 @@ public class ModMaterial : UnityEngine.ScriptableObject, IModObject
 
 	public string description;
 
-	[UnityEngine.HideInInspector]
-	public int count = 1;
+	public static explicit operator ModMaterial(string materialName) =>
+		Convert<ModMaterial>(materialName);
 }

@@ -5,6 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// TODO: test/implement custom scenes
+
 public static class Lunatic
 {
 	public enum ItemTypes
@@ -13,7 +15,16 @@ public static class Lunatic
 		Magic,
 		Gold,
 		Item,
-		Material
+		Material,
+		None
+	}
+
+	public enum ShopItemTypes
+	{
+		Weapon,
+		Ring,
+		Item,
+		None
 	}
 
 	public static class GameScenes
@@ -24,9 +35,11 @@ public static class Lunatic
 		public const string CastleLeFanu = "CAS_1";
 		public const string ChamberOfFate = "ARENA2";
 		public const string CharacterCreation = "CHAR_CREATE";
+		public const string DeathLand = "DETHLAND";
 		public const string EndingA = "END_A";
 		public const string EndingB = "END_B";
 		public const string EndingE = "END_EVID";
+		public const string EndingPuddle = "WhatWillBeAtTheEnd";
 		public const string ForbiddenArchives = "ARCHIVES";
 		public const string ForestCanopy = "FOREST_B1";
 		public const string ForlornArena = "ARENA";
@@ -48,8 +61,6 @@ public static class Lunatic
 		public const string WingsRest = "HUB_01";
 		public const string YoseiForest = "FOREST_A1";
 
-		public const string Unused = "WhatWillBeAtTheEnd";
-
 		public static readonly Dictionary<string, string> NameToID = new Dictionary<string, string>()
 		{
 			{ nameof(AccursedTomb), AccursedTomb },
@@ -58,9 +69,11 @@ public static class Lunatic
 			{ nameof(CastleLeFanu), CastleLeFanu },
 			{ nameof(ChamberOfFate), ChamberOfFate },
 			{ nameof(CharacterCreation), CharacterCreation },
+			{ nameof(DeathLand), DeathLand },
 			{ nameof(EndingA), EndingA },
 			{ nameof(EndingB), EndingB },
 			{ nameof(EndingE), EndingE },
+			{ nameof(EndingPuddle), EndingPuddle },
 			{ nameof(ForbiddenArchives), ForbiddenArchives },
 			{ nameof(ForestCanopy), ForestCanopy },
 			{ nameof(ForlornArena), ForlornArena },
@@ -80,9 +93,8 @@ public static class Lunatic
 			{ nameof(ThroneChamber), ThroneChamber },
 			{ nameof(TowerOfAbyss), TowerOfAbyss },
 			{ nameof(WingsRest), WingsRest },
-			{ nameof(YoseiForest), YoseiForest },
+			{ nameof(YoseiForest), YoseiForest }
 
-			{ nameof(Unused), Unused }
 		};
 	}
 
@@ -151,7 +163,7 @@ public static class Lunatic
 		MoveForward
 	}
 
-	private static readonly Dictionary<string, Object> AssetReplacement = new Dictionary<string, Object>();
+	private static readonly Dictionary<string, GameObject> AssetReplacement = new Dictionary<string, GameObject>();
 
 	internal static readonly List<Mod> Mods = new List<Mod>();
 
@@ -326,29 +338,40 @@ public static class Lunatic
 			Debug.Log("Found manifest " + manifest);
 
 			string bundlePath = manifest.Substring(0, manifest.LastIndexOf('.'));
+			string folder = System.IO.Path.GetDirectoryName(manifest);
 
 			try
 			{
-				Debug.Log("Loading AssetBundle " + bundlePath);
-
-				AssetBundle bundle = AssetBundle.LoadFromFile(bundlePath);
-				Mod[] mods = bundle.LoadAllAssets<Mod>();
-
-				AssetBundles.Add(bundle.name, bundle);
-
-				if (mods.Length == 0)
+				if (!System.IO.File.Exists(bundlePath))
 				{
-					Debug.LogError("AssetBundle contains no Mod asset, cannot load.");
+					Debug.Log("Creating dummy mod. No AssetBundle at " + bundlePath);
+					AddDummyMod(folder);
 				}
 				else
 				{
-					// add mods, load assets from bundles and count totals
-					foreach (Mod mod in mods)
-					{
-						Debug.Log("Loading mod assets " + mod.Name);
+					Debug.Log("Loading AssetBundle " + bundlePath);
 
-						mod.bundle = bundle;
-						Mods.Add(mod);
+					AssetBundle bundle = AssetBundle.LoadFromFile(bundlePath);
+					Mod[] mods = bundle.LoadAllAssets<Mod>();
+
+					AssetBundles.Add(bundle.name, bundle);
+
+					if (mods.Length == 0)
+					{
+						Debug.LogError("AssetBundle contains no Mod asset, creating dummy mod.");
+						AddDummyMod(folder);
+					}
+					else
+					{
+						// add mods, load assets from bundles and count totals
+						foreach (Mod mod in mods)
+						{
+							Debug.Log("Loading mod " + mod.Name);
+
+							mod.bundle = bundle;
+							mod.folder = folder;
+							Mods.Add(mod);
+						}
 					}
 				}
 			}
@@ -361,16 +384,58 @@ public static class Lunatic
 		MainMod = FindModByName("Lunatic");
 		Bundle = MainMod.bundle;
 
+		FixHand();
+
 		MainMod.Load();
 		MainMod.Init();
 
 		foreach (Mod mod in Mods)
+		{
+			Debug.Log("Loading mod assets for " + mod.Name);
+
 			mod.Load();
+		}
 
 		foreach (Mod mod in Mods)
+		{
+			Debug.Log("Initialising mod assets for " + mod.Name);
+
 			mod.Init();
+		}
+	}
 
+	private static void FixHand()
+	{
+		GameObject baseWeapon = Bundle.LoadAsset<GameObject>("BASE WEAPON");
 
+		if (baseWeapon == null)
+			throw new System.NullReferenceException("baseWeapon");
+
+		Transform hand = baseWeapon.transform.Find("HAND/HAND_new/HAND");
+
+		if (hand == null)
+			throw new System.NullReferenceException("hand");
+
+		SkinnedMeshRenderer handRend = hand.GetComponent<SkinnedMeshRenderer>();
+
+		if (handRend == null)
+			throw new System.NullReferenceException("handRend");
+
+		Material handMat = handRend.sharedMaterial;
+
+		if (handMat == null)
+			throw new System.NullReferenceException("handMat");
+
+		handMat.shader = Shader.Find("Shader Forge/Object");
+		handMat.SetTexture("_Emission", Texture2D.blackTexture);
+
+	}
+
+	private static void AddDummyMod(string folder)
+	{
+		Mod mod = ScriptableObject.CreateInstance<Mod>();
+		mod.folder = folder;
+		Mods.Add(mod);
 	}
 
 	// due to truncation, don't need to bother with checking whether it's a mod material or not
@@ -523,11 +588,6 @@ public static class Lunatic
 		Debug.Log("-----------------");
 	}
 
-	public static void AddTranslation()
-	{
-
-	}
-
 	public static void Internal_InitRecipesArray(Alki alki)
 	{
 		int id = alki.GetInstanceID();
@@ -555,7 +615,7 @@ public static class Lunatic
 		}
 	}
 
-	public static T GetModData<T>(Mod mod)
+	public static T GetModData<T>(Mod mod) where T : ModData
 	{
 		if (mod == null)
 			throw new System.ArgumentNullException("Mod argument is null");
@@ -566,7 +626,7 @@ public static class Lunatic
 		return default;
 	}
 
-	public static void SetModData(Mod mod, object data)
+	public static void SetModData(Mod mod, ModData data)
 	{
 		ModData[mod.Name] = LJson.SerialiseObject(data);
 	}
@@ -596,6 +656,38 @@ public static class Lunatic
 		return true;
 	}
 
+	public static void Internal_AddLoot(Loot_scr loot)
+	{
+		string scene = SceneManager.GetActiveScene().name;
+		string owner = loot.name;
+
+		List<Loot_scr.Reward> rewards = new List<Loot_scr.Reward>(loot.LOOTS);
+
+		foreach (Mod mod in Mods)
+			foreach (LJsonAsset asset in mod.jsonAssets)
+				asset.AddToShop(scene, owner, rewards);
+
+		if (rewards.Count > loot.LOOTS.Length)
+			loot.LOOTS = rewards.ToArray();
+	}
+
+	public static void Internal_DamageTriggerEnter(Damage_Trigger dmg, Collider obj, int which)
+	{
+		if (dmg is ModDamageTrigger modDamageTrigger)
+		{
+			if (which == 0)
+			{
+				if (obj.TryGetComponent(out Player_Control_scr player))
+					modDamageTrigger.HitPlayer(player, true);
+			}
+			else if (which == 1)
+			{
+				if (obj.TryGetComponent(out OBJ_HEALTH health))
+					modDamageTrigger.HitObject(health, true);
+			}
+		}
+	}
+
 	internal static void SceneManager_activeSceneChanged(Scene current, Scene next)
 	{
 		AlchemyTables.Clear();
@@ -614,8 +706,8 @@ public static class Lunatic
 		Control = GetControl();
 		Player = GetPlayer();
 
-		UIReferences.PlayerName = GameObject.Find("PLAYER/Canvas/HUD/DIALOG/NAME").GetComponent<TextMeshProUGUI>();
-		UIReferences.PlayerTypedText = GameObject.Find("PLAYER/Canvas/HUD/DIALOG/TYPED_TEXT").GetComponent<TextMeshProUGUI>();
+		UIReferences.PlayerName = GetTMP("PLAYER/Canvas/HUD/DIALOG/NAME");
+		UIReferences.PlayerTypedText = GetTMP("PLAYER/Canvas/HUD/DIALOG/TYPED_TEXT");
 
 		UIReferences.PlayerResponseYes = GameObject.Find("PLAYER/Canvas/HUD/DIALOG/YES");
 		UIReferences.PlayerResponseNo = GameObject.Find("PLAYER/Canvas/HUD/DIALOG/NO");
@@ -624,12 +716,17 @@ public static class Lunatic
 		LoadMods();
 
 		foreach (Mod mod in Mods)
+		{
 			foreach (LSceneObjectGroup sceneObjectGroup in mod.sceneObjectGroups)
 				if (sceneObjectGroup.scene == current.name)
 					sceneObjectGroup.Spawn();
 
+			foreach (LJsonAsset asset in mod.jsonAssets)
+				asset.SpawnAssets(current.name);
+		}
+
 		Renderers.Clear();
-		Renderers.AddRange(Object.FindObjectsOfType<Renderer>());
+		Renderers.AddRange(Object.FindObjectsOfType<Renderer>(true));
 
 		Materials.Clear();
 
@@ -662,6 +759,16 @@ public static class Lunatic
 			foreach (ModScene scene in mod.scenes)
 				if (scene.name == current.name)
 					scene.OnSceneLeave(current);
+	}
+
+	private static TextMeshProUGUI GetTMP(string path)
+	{
+		GameObject go = GameObject.Find("PLAYER/Canvas/HUD/DIALOG/NAME");
+
+		if (go != null)
+			return go.GetComponent<TextMeshProUGUI>();
+
+		return null;
 	}
 
 	public static AssetBundle GetAssetBundle()
@@ -711,6 +818,19 @@ public static class Lunatic
 	internal static void TrackProjectile(ModProjectile projectile)
 	{
 		AssetReplacement.Add("MAGIC/CAST/" + projectile.InternalName, projectile.gameObject);
+	}
+
+	internal static void TrackJsonAsset(LJsonAsset jsonAsset)
+	{
+		GameObject go = jsonAsset.GetGameObject();
+
+		if (go != null)
+			AssetReplacement.Add(jsonAsset.VanillaFolder + jsonAsset.InternalName, go);
+
+		GameObject pickup = jsonAsset.GetPickup();
+
+		if (pickup != null)
+			AssetReplacement.Add(pickup.name, pickup);
 	}
 
 	internal static void FixShaders(Component component)
@@ -827,6 +947,12 @@ public static class Lunatic
 
 			array[index] = name + total.ToString("00");
 		}
+	}
+
+	public static void RemoveCloneSuffix(Object obj)
+	{
+		if (obj.name.EndsWith("(Clone)"))
+			obj.name = obj.name.Substring(0, obj.name.Length - "(Clone)".Length);
 	}
 
 	// Patch functions
@@ -970,13 +1096,13 @@ public static class Lunatic
 	{
 		Debug.Log("Loading resource " + path);
 
-		if (AssetReplacement.TryGetValue(path, out Object obj))
+		if (AssetReplacement.TryGetValue(path, out GameObject obj))
 		{
 			__result = obj;
 
 			return true;
 		}
-
+		
 		return false;
 	}
 
@@ -1035,7 +1161,9 @@ public static class Lunatic
 
 	public static void Internal_OnPlayerJump(Player_Control_scr player)
 	{
-
+		//foreach (Mod mod in Mods)
+		//	foreach (ModPlayer player in mod.players)
+		//		player.OnJump();
 	}
 
 	public static void Internal_SetSkills(CONTROL control)
@@ -1125,10 +1253,5 @@ public static class Lunatic
 		foreach (Mod mod in Mods)
 			if (mod.localisation != null)
 				action(mod.localisation.mSource);
-	}
-
-	public static void Internal_LoadModDialog(Dialog dialog)
-	{
-
 	}
 }

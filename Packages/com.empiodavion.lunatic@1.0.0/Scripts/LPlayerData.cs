@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-internal class LPlayerData
+internal class LPlayerData : ModData
 {
 	public class ObjectData
 	{

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1533683193
+CRC: 2081147264
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 59e5fb4f022dc27d2d031419936fc422
+    Hash: 8b0e2cac63817ff902f02f850e34c6ea
   TypeTreeHash:
     serializedVersion: 2
-    Hash: fb9efdc0bb625eb649d00383103b5993
+    Hash: c085ca7daaaeec247d706e20a9b5f821
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,7 +25,7 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
-- Class: 74
+- Class: 54
   Script: {instanceID: 0}
 - Class: 82
   Script: {instanceID: 0}
@@ -34,15 +34,25 @@ ClassTypes:
 - Class: 111
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: acdc25758cae55c32862930293b2be06, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: a73cd9d367416cba19803144949929f3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4c4b25631e409485cf79282043d1c1fa, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 70d79ee0f2172b2aee15ae420f227914, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 90ef3f36f251a2b7951bf7aef34b0fd9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 40dbde2f88ecc8ba5336df808c828c1e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 81a07ab2b4507a5428aa784f25f8601b, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: eb23ed46aa7549e49ab39f4eff6430a5, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 047fa371b6674e6d5a85da91090d4c5c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9dec0c5a119341d94a0173b68e1e5d5c, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 135
@@ -55,21 +65,36 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
-- Class: 241
-  Script: {instanceID: 0}
-- Class: 243
-  Script: {instanceID: 0}
-- Class: 245
-  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Packages/com.empiodavion.lunatic/Textures/Hand.png
+- Packages/com.empiodavion.lunatic/Prefabs/BASE PROJECTILE.prefab
 - Packages/com.empiodavion.lunatic/Materials/Debug.mat
+- Packages/com.empiodavion.lunatic/Materials/Sword.mat
+- Packages/com.empiodavion.lunatic/Textures/Wolf_Eyes_1.jpg
 - Packages/com.empiodavion.lunatic/Lunatic.asset
 - Packages/com.empiodavion.lunatic/Prefabs/BASE MAGIC.prefab
+- Packages/com.empiodavion.lunatic/Materials/Trail.mat
+- Packages/com.empiodavion.lunatic/Materials/WolfFur.mat
 - Packages/com.empiodavion.lunatic/Prefabs/BASE ITEM.prefab
+- Packages/com.empiodavion.lunatic/Textures/Wolf_Eyes_2.jpg
+- Packages/com.empiodavion.lunatic/Materials/WolfEyes.mat
+- Packages/com.empiodavion.lunatic/Materials/WolfClaws.mat
+- Packages/com.empiodavion.lunatic/Materials/Hand.mat
+- Packages/com.empiodavion.lunatic/Textures/ItemPickup_Diffuse.png
+- Packages/com.empiodavion.lunatic/Materials/WolfTeeth.mat
 - Packages/com.empiodavion.lunatic/Prefabs/BASE WEAPON.prefab
+- Packages/com.empiodavion.lunatic/Textures/Sword.png
+- Packages/com.empiodavion.lunatic/Textures/Black.png
 - Packages/com.empiodavion.lunatic/Prefabs/BASE ITEM PICKUP.prefab
+- Packages/com.empiodavion.lunatic/Textures/Wolf_Fur.png
+- Packages/com.empiodavion.lunatic/Materials/Particle.mat
 - Packages/com.empiodavion.lunatic/Materials/VertexLit.mat
+- Packages/com.empiodavion.lunatic/Materials/NPC.mat
+- Packages/com.empiodavion.lunatic/Textures/Gradient.png
 - Packages/com.empiodavion.lunatic/Materials/Inverted.mat
+- Packages/com.empiodavion.lunatic/Materials/WolfBody.mat
+- Packages/com.empiodavion.lunatic/Textures/Wolf_Body.jpg
+- Packages/com.empiodavion.lunatic/Materials/Bag.mat
 - Packages/com.empiodavion.lunatic/Shaders/Inverted.shader
 Dependencies: []

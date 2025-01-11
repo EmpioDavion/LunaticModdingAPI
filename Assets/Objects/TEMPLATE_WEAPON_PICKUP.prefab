@@ -2254,7 +2254,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: db60f5387444f33418d40e14f486251c, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2344,7 +2344,7 @@ GameObject:
   - component: {fileID: 870105476266188000}
   - component: {fileID: 4515597391189312585}
   m_Layer: 0
-  m_Name: Bag
+  m_Name: Sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2371,7 +2371,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3732033325663546556}
-  m_Mesh: {fileID: 4300000, guid: 8f54999de6dae2e42a36b52bdc8e6011, type: 2}
+  m_Mesh: {fileID: 4686849319519084627, guid: 7a62dce338e3cd244b3e3f63e01e668c, type: 3}
 --- !u!23 &4515597391189312585
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2391,7 +2391,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8478602b3ef5a49428b4c395e442aabb, type: 2}
+  - {fileID: 2100000, guid: 9ae28e53e2c3bda42b7daa2782b13412, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4654,7 +4654,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0242d716322990949b12a19e648c694d, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
