@@ -116,7 +116,7 @@ public class MetaConnect : EditorWindow
 	public static string LunacidDataPath;
 	public static string LunaticPath;
 
-	private static readonly string TextMeshProMeta = "Packages/com.empiodavion.lunatic/Lunacid/Plugins/Unity.TextMeshPro.dll.meta";
+	private static string TextMeshProMeta = "Lunacid\\Plugins\\Unity.TextMeshPro.dll.meta";
 
 	public MetaConnections meta;
 
@@ -150,6 +150,7 @@ public class MetaConnect : EditorWindow
 		LunacidPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\..\\\\LUNACID.exe";
 		LunacidDataPath = $"{PackageInfo.resolvedPath}\\..\\..\\..\\..\\\\LUNACID_Data\\Managed\\";
 		LunaticPath = $"{PackageInfo.resolvedPath}\\";
+		TextMeshProMeta = $"{PackageInfo.resolvedPath}\\Lunacid\\Plugins\\Unity.TextMeshPro.dll.meta";
 
 		RippedDataPath = Path.GetFullPath(RippedDataPath);
 		LunacidPath = Path.GetFullPath(LunacidPath);

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connections:
   - lunacidScript: Ach_On_Enable
-    lunaticScript: ModAchOnEnable
+    lunaticScript: ModAchievementOnEnable
     isFirstPass: 0
   - lunacidScript: Act_Button_scr
     lunaticScript: ModProximityActivator
@@ -149,7 +149,7 @@ MonoBehaviour:
     lunaticScript: ModBreakFromParent
     isFirstPass: 0
   - lunacidScript: Bridge_scr
-    lunaticScript: ModBridge_scr
+    lunaticScript: ModBridge
     isFirstPass: 0
   - lunacidScript: But_wait
     lunaticScript: ModButtonCooldown
@@ -365,7 +365,7 @@ MonoBehaviour:
     lunaticScript: ModCoroutineManager
     isFirstPass: 0
   - lunacidScript: I2\Loc\CustomLocalizeCallback
-    lunaticScript: ModCustomLocalizeCallback
+    lunaticScript: ModCustomLocaliseCallback
     isFirstPass: 0
   - lunacidScript: I2\Loc\LanguageSource
     lunaticScript: ModLanguageSource
@@ -515,7 +515,7 @@ MonoBehaviour:
     lunaticScript: ModLoadRebinds
     isFirstPass: 0
   - lunacidScript: LocalizationSetting
-    lunaticScript: ModLocalizationSetting
+    lunaticScript: ModLocalisationSetting
     isFirstPass: 0
   - lunacidScript: LocalTextHolder
     lunaticScript: ModLocalTextHolder

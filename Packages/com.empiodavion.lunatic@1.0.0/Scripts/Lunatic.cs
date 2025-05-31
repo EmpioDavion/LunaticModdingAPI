@@ -299,7 +299,7 @@ public static class Lunatic
 		AddShader("Shader Forge/Water_Swirl");
 		AddShader("Shader Forge/Wind");
 		AddShader("Shader Forge/Winder");
-		AddShader("Unlit/Menu Painting");
+		AddShader("Unlit/MenuPainting");
 		AddShader("VolumetricCloud3");
 
 		foreach (KeyValuePair<string, Shader> kvp in LunacidShaders)
