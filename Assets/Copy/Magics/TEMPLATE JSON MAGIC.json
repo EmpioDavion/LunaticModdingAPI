@@ -160,13 +160,32 @@
 			// World = not used
 			// Drop = weighted chance to drop
 			// Shop = how much the magic costs
-			"value": 0
+			"value": 0,
+
+			// how many of the item are in the pickup, or available to buy
+			// must be included and more than zero for shop sources, even for magic/rings
+			"count": 1
 		},
 		{
-			"location": 3,
+			"location": 2,
 			"scene": "HUB_01",
 			"owner": "Sheryl",
-			"value": 20
+			"value": 20,
+			"count": 1
+		},
+		{
+			"location": 2,
+			"scene": "HUB_01",
+			"owner": "Sheryl2",
+			"value": 20,
+			"count": 1
+		},
+		{
+			"location": 2,
+			"scene": "HUB_01",
+			"owner": "Sheryl3",
+			"value": 20,
+			"count": 1
 		}
 	]
 }

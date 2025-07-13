@@ -11,20 +11,21 @@ public static class Lunatic
 {
 	public enum ItemTypes
 	{
+		None = -1,
 		Weapon,
 		Magic,
 		Gold,
 		Item,
-		Material,
-		None
+		Material
 	}
 
 	public enum ShopItemTypes
 	{
+		None = -1,
 		Weapon,
 		Ring,
 		Item,
-		None
+		Material
 	}
 
 	public static class GameScenes
@@ -665,7 +666,7 @@ public static class Lunatic
 
 		foreach (Mod mod in Mods)
 			foreach (LJsonAsset asset in mod.jsonAssets)
-				asset.AddToShop(scene, owner, rewards);
+				asset.AddToLoot(scene, owner, rewards);
 
 		if (rewards.Count > loot.LOOTS.Length)
 			loot.LOOTS = rewards.ToArray();
@@ -866,6 +867,31 @@ public static class Lunatic
 		GameObject playerGO = GameObject.Find("PLAYER");
 
 		return playerGO.GetComponentInChildren<Player_Control_scr>();
+	}
+
+	internal static List<GameObject> FindGameObjects(string name)
+	{
+		Scene scene = SceneManager.GetActiveScene();
+
+		GameObject[] roots = scene.GetRootGameObjects();
+
+		List<GameObject> list = new List<GameObject>();
+
+		foreach (GameObject root in roots)
+			Internal_FindGameObject(root.transform, name, list);
+
+		return list;
+	}
+
+	internal static void Internal_FindGameObject(Transform root, string name, List<GameObject> list)
+	{
+		if (root.name == name)
+			list.Add(root.gameObject);
+
+		int childCount = root.childCount;
+
+		for (int i = 0; i < childCount; i++)
+			Internal_FindGameObject(root.GetChild(i), name, list);
 	}
 
 	private static void Give(string name, string[] array, string type, int index = -1)

@@ -6,7 +6,7 @@ public class LJsonMaterial : LJsonPickup<BaseMaterial>
 	public override string DefaultAsset => "BASE MATERIAL";
 	public override string LanguageFolder => "Material";
 	public override string LanguageDetailsSuffix => "_Details";
-	public override Lunatic.ShopItemTypes ShopType => Lunatic.ShopItemTypes.None;
+	public override Lunatic.ShopItemTypes ShopType => Lunatic.ShopItemTypes.Material;
 	public override Lunatic.ItemTypes PickupType => Lunatic.ItemTypes.Material;
 	protected override System.Type SubType => typeof(ModMaterial);
 

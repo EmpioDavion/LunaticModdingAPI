@@ -108,13 +108,34 @@
 			// Shop = how much the material costs
 			"value": 0,
 
-			// how many of the material are in the pickup, or available to buy, not used by items/magic
+			// how many of the material are in the pickup, or available to buy
+			// must be included and more than zero
+			// NOTE: world and drop sources with a "count" greater than 1 currently only works for gold
+			// I will need to make patches for the game code to allow material and item stacks
 			"count": 1
 		},
 		{
-			"location": 3,
+			// NOTE: materials are not currently supported for shops
+			// I will need to make patches for the game code to allow materials in shops
+			"location": 2,
 			"scene": "HUB_01",
 			"owner": "Sheryl",
+			"spawnID": "Bought template json material",
+			"value": 8,
+			"count": 5
+		},
+		{
+			"location": 2,
+			"scene": "HUB_01",
+			"owner": "Sheryl2",
+			"spawnID": "Bought template json material",
+			"value": 8,
+			"count": 5
+		},
+		{
+			"location": 2,
+			"scene": "HUB_01",
+			"owner": "Sheryl3",
 			"spawnID": "Bought template json material",
 			"value": 8,
 			"count": 5

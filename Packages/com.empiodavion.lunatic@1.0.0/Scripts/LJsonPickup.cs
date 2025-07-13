@@ -26,68 +26,90 @@ public abstract class LJsonPickup<T> : LJsonAsset<T> where T : Object
 		}
 
 		foreach (AssetSource source in sources.value)
-		{
 			if (source.scene == currentScene)
 				SpawnAssetSource(source);
-		}
 	}
 
 	public void SpawnAssetSource(AssetSource assetSource)
 	{
+		if (pickupPrefab == null)
+		{
+			Debug.LogWarning($"Pickup prefab for {Name} is null");
+			return;
+		}
+
 		switch (assetSource.location)
 		{
 			case SourceLocation.World:
 				{
-					if (pickupPrefab == null)
-						Debug.LogWarning($"Pickup prefab for {Name} is null");
-					else
-					{
-						Debug.Log($"Spawning {Name} pickup at position {assetSource.position}");
+					Debug.Log($"Spawning {Name} pickup at position {assetSource.position}");
 
-						ModItemPickup clone = Object.Instantiate(pickupPrefab, assetSource.position, Quaternion.identity);
-						clone.gameObject.SetActive(true);
-					}
+					ModItemPickup clone = Object.Instantiate(pickupPrefab, assetSource.position, Quaternion.identity);
+
+					if (PickupType == Lunatic.ItemTypes.Gold)
+						clone.Name = assetSource.count.ToString();
+
+					clone.gameObject.SetActive(true);
 				}
 				break;
 			case SourceLocation.Drop:
-				// handled in Loot_scr patch
+				// handled in Loot_scr patch, see Lunatic.Internal_AddLoot
 				break;
 			case SourceLocation.Shop:
 				{
-					GameObject owner = GameObject.Find(assetSource.owner);
+					Debug.Log("Looking for potential shop owners with the name " + assetSource.owner);
 
-					if (owner != null)
+					List<GameObject> owners = Lunatic.FindGameObjects(assetSource.owner);
+
+					if (owners.Count == 0)
+						Debug.LogWarning("Could not find any object(s) named" + assetSource.owner);
+					else
+						Debug.Log($"Found {owners.Count} object(s) with the name {assetSource.owner}");
+
+					for (int i = 0; i < owners.Count; i++)
 					{
+						GameObject owner = owners[i];
 						Shop_Inventory shop = owner.GetComponentInChildren<Shop_Inventory>(true);
 
-						if (shop != null)
+						if (shop == null)
 						{
-							string altName = "";
-
-							if (this is LJsonWeapon weapon && weapon.upgrade != null)
-								altName = weapon.upgrade.value;
-
-							Shop_Inventory.INV_ITEMS[] newInv = new Shop_Inventory.INV_ITEMS[shop.INV.Length + 1];
-							shop.INV.CopyTo(newInv, 0);
-							newInv[shop.INV.Length] = new Shop_Inventory.INV_ITEMS
-							{
-								item = GetPrefab().name,
-								alt_name = altName,
-								OBJ = pickupPrefab.gameObject,
-								count = assetSource.count,
-								cost = assetSource.value,
-								saved_slot = -1,
-								type = (int)ShopType,
-								Model = null
-							};
-							shop.INV = newInv;
+							Debug.LogWarning($"Could not find shop owned by {assetSource.owner} ({i} of {owners.Count})");
+							continue;
 						}
-						else
-							Debug.LogWarning("Could not find shop owned by " + assetSource.owner);
+
+						Object prefab = GetPrefab();
+
+						if (prefab == null)
+						{
+							Debug.LogWarning($"Prefab for {Name} is null");
+							return;
+						}
+
+						string prefabName = prefab.name;
+						string altName = "";
+
+						if (this is LJsonWeapon weapon && weapon.upgrade != null)
+							altName = weapon.upgrade.value;
+
+						Shop_Inventory.INV_ITEMS[] newInv = new Shop_Inventory.INV_ITEMS[shop.INV.Length + 1];
+						shop.INV.CopyTo(newInv, 0);
+						newInv[shop.INV.Length] = new Shop_Inventory.INV_ITEMS
+						{
+							item = prefabName,
+							alt_name = altName,
+							OBJ = pickupPrefab.gameObject,
+							count = assetSource.count,
+							cost = assetSource.value,
+							saved_slot = -1,
+							type = (int)ShopType,
+							Model = null
+						};
+						shop.INV = newInv;
+
+						Debug.Log($"Added {prefabName} to {assetSource.owner}'s shop.");
 					}
-					else
-						Debug.LogWarning("Could not find shop owner " + assetSource.owner);
 				}
+				
 				break;
 		}
 	}
@@ -156,7 +178,7 @@ public abstract class LJsonPickup<T> : LJsonAsset<T> where T : Object
 		}
 	}
 
-	protected internal override void AddToShop(string scene, string owner, List<Loot_scr.Reward> rewards)
+	protected internal override void AddToLoot(string scene, string owner, List<Loot_scr.Reward> rewards)
 	{
 		if (sources == null)
 			return;
@@ -166,9 +188,17 @@ public abstract class LJsonPickup<T> : LJsonAsset<T> where T : Object
 			if (source.location == SourceLocation.Drop && source.owner == owner &&
 				string.IsNullOrEmpty(source.scene) || source.scene == scene)
 			{
+				ModItemPickup pref = pickupPrefab;
+
+				if (PickupType == Lunatic.ItemTypes.Gold)
+				{
+					pref = Object.Instantiate(pref);
+					pref.Name = source.count.ToString();
+				}
+
 				rewards.Add(new Loot_scr.Reward
 				{
-					ITEM = pickupPrefab.gameObject,
+					ITEM = pref.gameObject,
 					CHANCE = source.value
 				});
 			}

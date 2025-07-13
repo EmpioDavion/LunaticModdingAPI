@@ -37,7 +37,7 @@ public class LJsonProjectile : LJsonAsset<Item_Emit>
 
 	protected internal override void SpawnAssets(string scene) { }
 
-	protected internal override void AddToShop(string scene, string owner, List<Loot_scr.Reward> rewards) { }
+	protected internal override void AddToLoot(string scene, string owner, List<Loot_scr.Reward> rewards) { }
 
 	protected override void Set(Item_Emit obj)
 	{

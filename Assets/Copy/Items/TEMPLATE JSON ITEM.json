@@ -114,14 +114,32 @@
 			// Shop = how much the item costs
 			"value": 0,
 
-			// how many of the item are in the pickup, or available to buy, not used by items/magic
+			// how many of the item are in the pickup, or available to buy
+			// must be included and more than zero
+			// NOTE: world and drop sources with a "count" greater than 1 currently only works for gold
+			// I will need to make patches for the game code to allow material and item stacks
 			"count": 1
 		},
 		{
-			"location": 3,
+			"location": 2,
 			"scene": "HUB_01",
 			"owner": "Sheryl",
-			"value": 10
+			"value": 10,
+			"count": 1
+		},
+		{
+			"location": 2,
+			"scene": "HUB_01",
+			"owner": "Sheryl2",
+			"value": 35,
+			"count": 1
+		},
+		{
+			"location": 2,
+			"scene": "HUB_01",
+			"owner": "Sheryl3",
+			"value": 35,
+			"count": 1
 		}
 	]
 }

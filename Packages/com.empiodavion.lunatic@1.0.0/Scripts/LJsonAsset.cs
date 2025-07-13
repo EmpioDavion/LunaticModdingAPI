@@ -32,6 +32,17 @@ public struct AssetSource
 
 	// how many of the item is in the pickup or available to buy
 	public int count;
+
+	public override string ToString()
+	{
+		return @$"Asset Source {{
+	Location: {location}
+	Scene: {scene}
+	Owner: {owner}
+	Position: {position}
+	Value: {value}
+}}";
+	}
 }
 
 [System.Serializable]
@@ -84,7 +95,7 @@ public abstract class LJsonAsset : IModObject
 
 	protected internal abstract void SpawnAssets(string scene);
 
-	protected internal abstract void AddToShop(string scene, string owner, List<Loot_scr.Reward> rewards);
+	protected internal abstract void AddToLoot(string scene, string owner, List<Loot_scr.Reward> rewards);
 
 	protected Sprite LoadSprite(LJsonParamString str)
 	{

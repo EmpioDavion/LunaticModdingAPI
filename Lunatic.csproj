@@ -273,6 +273,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModSetRotation.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModScene.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\LJsonMaterial.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModInterpolationFactorController.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModPressurePlate.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModDynamicBoneCollider.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModWaitAMonth.cs" />
@@ -320,6 +321,7 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLeadMan.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModNPCDialog.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModLocaliseChild.cs" />
+    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModHighScoreUIManager.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModSpawnAfterTime.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModRandomAnimList.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModCutsceneDialog.cs" />
@@ -397,8 +399,6 @@
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModPlayAnimsInOrder.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\BaseMaterial.cs" />
     <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModAlertTrigger.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModHighScoreUIManager.cs" />
-    <Compile Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\ModInterpolationFactorController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.empiodavion.lunatic@1.0.0\Scripts\Lunatic.asmdef" />
