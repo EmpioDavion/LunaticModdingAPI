@@ -49,6 +49,8 @@ public class LJsonWeapon : LJsonPickup<Weapon_scr>
 
 		if (upgrade != null && upgrade.value == "")
 			obj.WEP_XP = -1.0f;
+		else
+			obj.WEP_XP = 0.0f;
 
 		if (projectileName != null)
 		{
@@ -65,7 +67,7 @@ public class LJsonWeapon : LJsonPickup<Weapon_scr>
 
 			if (spawnRotation != null)
 				shoot.localRotation = Quaternion.Euler(spawnRotation.value);
-        }
+		}
 
 		GameObject go = LoadModel(model);
 
