@@ -764,7 +764,7 @@ public static class Lunatic
 
 	private static TextMeshProUGUI GetTMP(string path)
 	{
-		GameObject go = GameObject.Find("PLAYER/Canvas/HUD/DIALOG/NAME");
+		GameObject go = GameObject.Find(path);
 
 		if (go != null)
 			return go.GetComponent<TextMeshProUGUI>();

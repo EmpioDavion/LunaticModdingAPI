@@ -32,7 +32,9 @@ MonoBehaviour:
       - WOLF
       - WOLF
       - WOLF
-      Flags: 000000000000000000000000
+      - WOLF
+      - WOLF
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Dialog/WOLF 0
       TermType: 0
@@ -49,7 +51,9 @@ MonoBehaviour:
       - Hello /c.
       - Hello /c.
       - Hello /c.
-      Flags: 000000000000000000000000
+      - Hello /c.
+      - Hello /c.
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Dialog/WOLF 1
       TermType: 0
@@ -66,7 +70,9 @@ MonoBehaviour:
       - Hi /c.
       - Hi /c.
       - Hi /c.
-      Flags: 000000000000000000000000
+      - Hi /c.
+      - Hi /c.
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Dialog/WOLF 2
       TermType: 0
@@ -83,7 +89,9 @@ MonoBehaviour:
       - Greetings /c.
       - Greetings /c.
       - Greetings /c.
-      Flags: 000000000000000000000000
+      - Greetings /c.
+      - Greetings /c.
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Dialog/WOLF 3
       TermType: 0
@@ -100,7 +108,9 @@ MonoBehaviour:
       - Hello /c, this is my first greeting.
       - Hello /c, this is my first greeting.
       - Hello /c, this is my first greeting.
-      Flags: 000000000000000000000000
+      - Hello /c, this is my first greeting.
+      - Hello /c, this is my first greeting.
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Dialog/WOLF 4
       TermType: 0
@@ -117,7 +127,9 @@ MonoBehaviour:
       - You said yes.
       - You said yes.
       - You said yes.
-      Flags: 000000000000000000000000
+      - You said yes.
+      - You said yes.
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Dialog/WOLF 5
       TermType: 0
@@ -134,7 +146,9 @@ MonoBehaviour:
       - You said no.
       - You said no.
       - You said no.
-      Flags: 000000000000000000000000
+      - You said no.
+      - You said no.
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Dialog/WOLF 6
       TermType: 0
@@ -151,7 +165,9 @@ MonoBehaviour:
       - '*Woof*'
       - '*Woof*'
       - '*Woof*'
-      Flags: 000000000000000000000000
+      - '*Woof*'
+      - '*Woof*'
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Dialog/WOLF 7
       TermType: 0
@@ -168,7 +184,9 @@ MonoBehaviour:
       - Hello /c, welcome back.
       - Hello /c, welcome back.
       - Hello /c, welcome back.
-      Flags: 000000000000000000000000
+      - Hello /c, welcome back.
+      - Hello /c, welcome back.
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Dialog/WOLF 8
       TermType: 0
@@ -185,7 +203,9 @@ MonoBehaviour:
       - Your selected language is Polish.
       - Your selected language is Brazilian Portuguese.
       - Your selected language is Spanish LATAM.
-      Flags: 000000000000000000000000
+      - Your selected language is Chinese Traditional.
+      - Your selected language is Chinese.
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Language
       TermType: 0
@@ -202,7 +222,9 @@ MonoBehaviour:
       - Polish
       - Brazilian Portuguese
       - Spanish LATAM
-      Flags: 000000000000000000000000
+      - Chinese Traditional
+      - Chinese
+      Flags: 0000000000000000000000000000
       Languages_Touch: []
     - Term: Spells/TEMPLATE MAGIC
       TermType: 0

@@ -64,7 +64,7 @@ public class ModWeapon : Weapon_scr, IModObject
 
 	private void AssignSet<T>(LWeapons weapon, ref T[] set, System.Func<Weapon_scr, T[]> getSet)
 	{
-		Debug.Log(name + " assigning set " + weapon);
+		Debug.Log(name + " assigning animation set from " + weapon);
 
 		if (weapon == LWeapons.None)
 			return;
